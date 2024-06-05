@@ -57,4 +57,13 @@ public class BoardService {
         return null;
     }
 
+    public Board getBoard(Long id) {
+        Optional<Board> board = this.boardRepository.findById(id);
+        if (board.isPresent()) {
+            return board.get();
+        } else {
+            throw new DataNotFoundException("company not found");
+        }
+    }
+
 }
