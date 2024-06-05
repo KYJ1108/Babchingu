@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <!-- 질문 -->
+    <div>
+        <div style="width:800px; height:250px;">
+            <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
+            <div th:text="${board.title}"></div>
+            <div th:text="${board.restName}"></div>
+            <div th:text="${board.address}"></div>
+            <div th:text="${board.jibun}"></div>
+            <div th:text="${board.content}"></div>
+        </div>
+    </div>
+</div>
+</html>
