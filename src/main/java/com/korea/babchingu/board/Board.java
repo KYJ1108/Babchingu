@@ -17,6 +17,10 @@ public class Board {
     private String title;
     private String content;
 
+    private String address; // 식당 주소
+    private String jibun; // 지번 주소
+    private String restName;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Image> images;
 }
