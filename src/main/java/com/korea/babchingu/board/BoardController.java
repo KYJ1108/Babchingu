@@ -3,10 +3,12 @@ package com.korea.babchingu.board;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,13 +22,15 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid BoardForm boardForm, BindingResult bindingResult) {
+    public String create(@Valid BoardForm boardForm, BindingResult bindingResult, @RequestParam("images") List<MultipartFile> images) {
         if (bindingResult.hasErrors()) {
             return "board_form";
         }
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent());
+        boardService.create(boardForm.getTitle(), boardForm.getContent(), images);
 
         return "redirect:/";
     }
+
+
 }

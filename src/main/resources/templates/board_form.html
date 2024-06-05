@@ -1,10 +1,12 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content" class="w-[800px] mx-auto flex flex-col gap-7">
-    <form th:action="@{/board/create}" th:object="${boardForm}" class="flex flex-col gap-7" method="post">
+    <form th:action="@{/board/create}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
         <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
         <textarea name="content" class="input" th:field="*{content}" th:vlaue="*{content}" placeholder="내용을 입력해주세요"></textarea>
         <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+        <label for="images">이미지:</label>
+        <input type="file" id="images" name="images" multiple><br>
         <input type="submit" class="btn" value="게시물 등록">
     </form>
 </div>
