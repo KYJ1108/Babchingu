@@ -2,5 +2,58 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
 
+    <div class="slider">
+        <div class="content">
+            <div class="text">
+                <h1>맛집 추천부터 리뷰까지, 모두가 함께 만드는 맛집 지도, 밥친구!</h1>
+            </div>
+            <div class="slides">
+                <div class="slide">
+                    <img src="/foodImg/res1.jpg" alt="이미지 1">
+                </div>
+                <div class="slide">
+                    <img src="image2.jpg" alt="이미지 2">
+                </div>
+                <div class="slide">
+                    <img src="image3.jpg" alt="이미지 3">
+                </div>
+            </div>
+        </div>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+    </div>
+
 </div>
+
+<script>
+    let currentSlide = 0;
+    const slidesContainer = document.querySelector('.slides');
+    const slides = document.querySelectorAll('.slide');
+    const slideCount = slides.length;
+    const nextButton = document.querySelector('.next');
+    const prevButton = document.querySelector('.prev');
+
+    function showSlide(n) {
+        slidesContainer.style.transform = `translateX(-${n * 100}%)`;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentSlide);
+        setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
+
+        nextButton.addEventListener('click', nextSlide);
+        prevButton.addEventListener('click', prevSlide);
+    });
+</script>
+
 </html>
