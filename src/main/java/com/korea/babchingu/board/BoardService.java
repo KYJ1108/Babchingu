@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Board create(String title, String content) {
-        Board board = new Board();
-        board.setTitle(title);
-        board.setContent(content);
+//    public Board create(String title, String content) {
+//        Board board = new Board();
+//        board.setTitle(title);
+//        board.setContent(content);
+//
+//        boardRepository.save(board);
+//
+//        return board;
+//    }
 
+    public void create(Board board) {
         boardRepository.save(board);
-
-        return board;
     }
 }

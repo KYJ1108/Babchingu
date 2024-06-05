@@ -25,7 +25,17 @@ public class BoardController {
             return "board_form";
         }
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent());
+//        boardService.create(boardForm.getTitle(), boardForm.getContent());
+
+        // 주소 정보 설정
+        Board board = new Board();
+        board.setTitle(boardForm.getTitle());
+        board.setContent(boardForm.getContent());
+        board.setAddress(boardForm.getAddress());
+        board.setJibun(boardForm.getJibun());
+        board.setRestName(boardForm.getRestName());
+
+        boardService.create(board);
 
         return "redirect:/";
     }
