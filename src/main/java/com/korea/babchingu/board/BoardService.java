@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,5 +67,10 @@ public class BoardService {
             throw new DataNotFoundException("company not found");
         }
     }
+
+    public List<Board> getSearchList(String keyword) {
+        return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
+    }
+
 
 }
