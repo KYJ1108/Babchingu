@@ -22,11 +22,13 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
-    public Board create(String title, String content, List<MultipartFile> images) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
-
+        board.setAddress(address);
+        board.setJibun(jibun);
+        board.setRestName(restName);
 
         boardRepository.save(board);
 
@@ -37,7 +39,6 @@ public class BoardService {
 
             imageRepository.save(img);
         }
-
         return board;
     }
 

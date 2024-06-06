@@ -27,7 +27,7 @@ public class BoardController {
             return "board_form";
         }
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent(), images);
+        boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
 
         return "redirect:/";
     }
