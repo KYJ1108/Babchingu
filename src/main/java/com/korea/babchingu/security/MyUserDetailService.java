@@ -16,8 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailService implements UserDetailsService {
-    public final MemberRepository memberRepository;
-    public final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,13 +26,8 @@ public class MyUserDetailService implements UserDetailsService {
         );
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("USER");
-        List<SimpleGrantedAuthority> authorities = List.of(authority);
+        List<SimpleGrantedAuthority> authorities = List.of(authority); // 권한이 여러개일 경우 List.of()로 추가 가능
 
-//        if(username.equals("youshin")) {
-//            authority = new SimpleGrantedAuthority("ADMIN");
-//            authorities.add(authority);
-//        }
-
-        return new User(member.getLoginId(), member.getPassword(), authorities);
+        return new User(member.getLoginId(), member.getPassword(), authorities); // 3가지 필수 인증 정보. 아이디, 비밀번호, 권한
     }
 }
