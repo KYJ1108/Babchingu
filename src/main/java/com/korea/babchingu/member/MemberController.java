@@ -34,7 +34,7 @@ public class MemberController {
         @NotEmpty(message = "비밀번호를 동일하게 입력해주세요.")
         private String password2;
         @NotEmpty(message = "이메일을 입력해주세요.")
-        @Email
+        @Email(message = "이메일 형식이 아닙니다.")
         private String email;
     }
 
