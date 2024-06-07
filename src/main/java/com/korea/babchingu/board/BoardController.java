@@ -43,4 +43,9 @@ public class BoardController {
         return "board_detail";
     }
 
+    // 장소 검색
+    @GetMapping("/placeSearchPopup")
+    public String placeSearchPopup() {
+        return "find_rest_form";
+    }
 }
