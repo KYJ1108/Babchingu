@@ -27,6 +27,7 @@
 
     <!--     댓글 작성 폼 -->
     <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" method="post">
+        <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
         <input type="text" name="content" placeholder="댓글작성">
         <input type="submit" value="댓글 등록">
     </form>

@@ -3,6 +3,7 @@ package com.korea.babchingu.board;
 import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.image.Image;
 import com.korea.babchingu.image.ImageRepository;
+import com.korea.babchingu.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,14 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
-    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
         board.setAddress(address);
         board.setJibun(jibun);
         board.setRestName(restName);
+        board.setMember(member);
 
         boardRepository.save(board);
 
@@ -64,7 +66,7 @@ public class BoardService {
         if (board.isPresent()) {
             return board.get();
         } else {
-            throw new DataNotFoundException("company not found");
+            throw new DataNotFoundException("board not found");
         }
     }
 
