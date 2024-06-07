@@ -91,4 +91,3 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         return new MySocialUser(sub, pass, name, email);
     }
 }
-
