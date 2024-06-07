@@ -13,23 +13,43 @@
         </div>
     </div>
 
+    <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
+
     <!--댓글 반복-->
     <div th:each="comment : ${board.commentList}">
         <div>
-            <span th:text="${comment.content}"></span>
-            <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
-                <input type="text" name="content">
-                <input type="submit" value="댓글 수정">
-            </form>
-            <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
-                <input type="submit" value="삭제">
+            <span th:text="${comment.content}" class="font-bold"></span>
+            <div class="flex flex-row">
+                <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
+                    <input type="text" name="content" placeholder="댓글 수정">
+                    <input type="submit" style="color: blue;" value="댓글 수정">
+                </form>
+                <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
+                    <input type="submit" style="color: red;" value="삭제">
+                </form>
+            </div>
+            <!-- 대댓글 반복 -->
+            <div th:each="answer : ${comment.answerList}">
+                <span th:text="${answer.content}"></span>
+                <div class="flex flex-row">
+                    <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">
+                        <input type="text" name="content" placeholder="대댓글 수정">
+                        <input type="submit" style="color: blue;" value="대댓글 수정">
+                    </form>
+                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post">
+                        <input type="submit" style="color: red;" value="삭제">
+                    </form>
+                </div>
+            </div>
+            <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" method="post">
+                <input type="text" name="content" placeholder="대댓글작성">
+                <input type="submit" value="대댓글 등록">
             </form>
         </div>
     </div>
 
     <!--     댓글 작성 폼 -->
     <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" method="post">
-        <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
         <input type="text" name="content" placeholder="댓글작성">
         <input type="submit" value="댓글 등록">
     </form>
