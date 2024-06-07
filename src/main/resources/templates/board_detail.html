@@ -5,14 +5,25 @@
     <div>
         <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:200px%;">
         <div th:text="${board.title}"></div>
-        <div th:text="${board.title}"></div>
         <div th:text="${board.restName}"></div>
         <div th:text="${board.address}"></div>
         <div th:text="${board.jibun}"></div>
         <div th:text="${board.content}"></div>
     </div>
 
-    <div th:each="comment : ${board.commentList}" th:text="${comment.content}"></div>
+    <!--댓글 반복-->
+    <div th:each="comment : ${board.commentList}">
+        <div>
+            <span th:text="${comment.content}"></span>
+            <form th:action="@{|/comment/modify/${id}|}" th:object="${commentForm}" method="post">
+                <input type="text" name="content">
+                <input type="submit" value="댓글 수정">
+            </form>
+            <form th:action="@{|/comment/delete/${id}|}" method="post">
+               <input type="submit" value="삭제">
+            </form>
+        </div>
+    </div>
 
     <!--     댓글 작성 폼 -->
     <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" method="post">
