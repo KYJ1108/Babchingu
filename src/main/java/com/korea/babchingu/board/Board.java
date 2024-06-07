@@ -2,6 +2,7 @@ package com.korea.babchingu.board;
 
 import com.korea.babchingu.comment.Comment;
 import com.korea.babchingu.image.Image;
+import com.korea.babchingu.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,4 +28,7 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
+    @ManyToOne
+    private Member member;
 }

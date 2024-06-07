@@ -1,5 +1,7 @@
 package com.korea.babchingu.board;
 
+import com.korea.babchingu.member.Member;
+import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -15,6 +18,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping("/create")
     public String create(BoardForm boardForm) {
@@ -22,14 +26,17 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid BoardForm boardForm, BindingResult bindingResult, @RequestParam("images") List<MultipartFile> images) {
+    public String create(@Valid BoardForm boardForm, BindingResult bindingResult,
+                         @RequestParam("images") List<MultipartFile> images,
+                         Principal principal) {
+        Member member = this.memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "board_form";
         }
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
 
-        return "redirect:/";
+        return "redirect:/board/%d".formatted(board.getId());
     }
 
     @GetMapping("/{id}")

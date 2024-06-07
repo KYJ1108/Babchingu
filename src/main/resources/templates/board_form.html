@@ -27,6 +27,9 @@
         <label for="images">이미지:</label>
         <input type="file" id="images" name="images" multiple>
         <input type="submit" class="btn" value="게시물 등록">
+
+        <!-- 회원 정보 -->
+        <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
     </form>
 
     <!-- 주소 검색 script -->

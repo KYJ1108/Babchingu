@@ -1,8 +1,12 @@
 package com.korea.babchingu.member;
 
+import com.korea.babchingu.DataNotFoundException;
+import com.korea.babchingu.board.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +31,14 @@ public class MemberService {
         member.setEmail(email);
 
         return memberRepository.save(member);
+    }
+
+    public Member getMember(String loginId) {
+        Optional<Member> member = this.memberRepository.findByLoginId(loginId);
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new DataNotFoundException("member not found");
+        }
     }
 }
