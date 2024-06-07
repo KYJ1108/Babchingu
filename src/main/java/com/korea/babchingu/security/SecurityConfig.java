@@ -21,7 +21,7 @@ public class SecurityConfig {
                 )
                 .formLogin(formLogin ->
                         formLogin.loginPage("/login")
-                                .defaultSuccessUrl("/")
+                                .defaultSuccessUrl("/", true)
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
