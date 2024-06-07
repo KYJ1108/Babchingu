@@ -15,11 +15,11 @@
     <div th:each="comment : ${board.commentList}">
         <div>
             <span th:text="${comment.content}"></span>
-            <form th:action="@{|/comment/modify/${id}|}" th:object="${commentForm}" method="post">
+            <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
                 <input type="text" name="content">
                 <input type="submit" value="댓글 수정">
             </form>
-            <form th:action="@{|/comment/delete/${id}|}" method="post">
+            <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
                <input type="submit" value="삭제">
             </form>
         </div>
