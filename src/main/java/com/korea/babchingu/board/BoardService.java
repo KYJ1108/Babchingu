@@ -71,6 +71,4 @@ public class BoardService {
     public List<Board> getSearchList(String keyword) {
         return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
     }
-
-
 }

@@ -1,5 +1,9 @@
 package com.korea.babchingu.board;
 
+import com.korea.babchingu.tag.BoardTagService;
+import com.korea.babchingu.tag.tag.Tag;
+import com.korea.babchingu.tag.tag.TagRepository;
+import com.korea.babchingu.tag.tag.TagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,8 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final TagService tagService;
+    private final BoardTagService boardTagService;
 
     @GetMapping("/create")
     public String create(BoardForm boardForm) {
@@ -22,14 +28,19 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid BoardForm boardForm, BindingResult bindingResult, @RequestParam("images") List<MultipartFile> images) {
+    public String create(@Valid BoardForm boardForm, BindingResult bindingResult, @RequestParam("images") List<MultipartFile> images, @RequestParam("tags") String tags) {
         if (bindingResult.hasErrors()) {
             return "board_form";
         }
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
-
-        return "redirect:/";
+        // 해시태그 저장
+        String[] tagNames = tags.split(",");
+        for (String tagName : tagNames){
+            Tag tag = tagService.saveTag(tagName.trim());
+            boardTagService.saveBoardTag(board, tag);
+        }
+        return "redirect:/board/%d".formatted(board.getId());
     }
 
     @GetMapping("/{id}")
