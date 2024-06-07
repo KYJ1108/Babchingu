@@ -1,7 +1,9 @@
-package com.korea.babchingu.comment;
+package com.korea.babchingu.answer;
 
 import com.korea.babchingu.board.Board;
-import com.korea.babchingu.board.BoardService;
+import com.korea.babchingu.comment.Comment;
+import com.korea.babchingu.comment.CommentForm;
+import com.korea.babchingu.comment.CommentService;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
@@ -18,33 +20,33 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/comment")
-public class CommentController {
-    private final CommentService commentService;
-    private final BoardService boardService;
+@RequestMapping("/answer")
+public class AnswerController {
+    private final AnswerService answerService;
     private final MemberService memberService;
+    private final CommentService commentService;
     @PostMapping("/create/{id}")
-    public String create(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult, Principal principal) {
+    public String create(Model model, @PathVariable("id") Long id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
         Member member = memberService.getMember(principal.getName());
-        Board board = boardService.getBoard(id);
+        Comment comment = commentService.getComment(id);
         if (bindingResult.hasErrors()) {
             return "board_detail";
         }
-        model.addAttribute("board", board);
-        Comment comment = this.commentService.create(board, commentForm.getContent(), member);
+        model.addAttribute("comment", comment);
+        Answer answer = this.answerService.create(comment, answerForm.getContent(), member);
 
-        return "redirect:/board/%d".formatted(comment.getBoard().getId());
+        return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
     }
 
     @PostMapping("/modify/{id}")
     public String update(@PathVariable("id") Long id, @RequestParam("content") String content) {
-        Comment comment = commentService.update(id, content);
-        return "redirect:/board/%d".formatted(comment.getBoard().getId());
+        Answer answer = answerService.update(id, content);
+        return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
-        commentService.delete(id);
+        answerService.delete(id);
         return "redirect:/";
     }
 }

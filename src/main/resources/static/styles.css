@@ -93,3 +93,11 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+// board_form에서
+li {
+    display: flex; /* 요소를 수평으로 배치합니다 */
+    list-style-type: none; /* 목록 점 제거*/
+}
+.option-icon {
+    margin-right: 5px; /* 이미지와 텍스트 사이의 간격을 조절합니다 */
+}

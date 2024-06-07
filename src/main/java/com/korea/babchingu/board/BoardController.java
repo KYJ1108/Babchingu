@@ -1,5 +1,9 @@
 package com.korea.babchingu.board;
 
+import com.korea.babchingu.tag.BoardTagService;
+import com.korea.babchingu.tag.tag.Tag;
+import com.korea.babchingu.tag.tag.TagRepository;
+import com.korea.babchingu.tag.tag.TagService;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
@@ -18,6 +22,8 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final TagService tagService;
+    private final BoardTagService boardTagService;
     private final MemberService memberService;
 
     @GetMapping("/create")
@@ -28,6 +34,7 @@ public class BoardController {
     @PostMapping("/create")
     public String create(@Valid BoardForm boardForm, BindingResult bindingResult,
                          @RequestParam("images") List<MultipartFile> images,
+                         @RequestParam("tags") String tags,
                          Principal principal) {
         Member member = this.memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
@@ -36,6 +43,12 @@ public class BoardController {
 
         Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
 
+        // 해시태그 저장
+        String[] tagNames = tags.split(",");
+        for (String tagName : tagNames){
+            Tag tag = tagService.saveTag(tagName.trim());
+            boardTagService.saveBoardTag(board, tag);
+        }
         return "redirect:/board/%d".formatted(board.getId());
     }
 
