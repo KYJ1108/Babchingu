@@ -21,6 +21,7 @@ public class Member {
     private String loginId;
     private String password;
     private String nickname;
+    private String email;
     private String sex;
     @CreatedDate
     private LocalDateTime createDate;
