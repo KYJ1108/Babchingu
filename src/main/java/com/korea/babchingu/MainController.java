@@ -27,7 +27,7 @@ public class MainController {
         return "map";
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public String search(Model model,@RequestParam String searchInput) {
 
         List<Board> searchBoard = mainService.getSearchList(searchInput);

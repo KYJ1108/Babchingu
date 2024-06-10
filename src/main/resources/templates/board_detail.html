@@ -3,6 +3,12 @@
 <div layout:fragment="content">
     <!-- 질문 -->
     <div>
+        <div class="flex flex-row">
+            <a th:href="@{|/board/modify/${id}|}" style="color: blue;">수정</a>
+            <form th:action="@{|/board/delete/${id}|}" method="post">
+                <input type="submit" style="color: red;" value="삭제">
+            </form>
+        </div>
         <div>
             <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
             <div th:text="${board.title}"></div>
