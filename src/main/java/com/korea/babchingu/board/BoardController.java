@@ -58,7 +58,7 @@ public class BoardController {
         return "board_detail";
     }
 
-    // 장소 검색
+    // 장소 검색 - 지도 팝업창
     @GetMapping("/placeSearchPopup")
     public String placeSearchPopup() {
         return "find_rest_form";
