@@ -222,7 +222,7 @@ li {
     background-color: white;
     margin-bottom: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border: 2px solid #333;
+    border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -250,6 +250,12 @@ li {
 .post-details {
     margin-bottom: 10px;
 }
+/*
+.post-details span {
+    display: block;
+    margin-bottom: 5px;
+}
+*/
 
 .post-details div {
     margin-bottom: 5px;
@@ -274,4 +280,56 @@ li {
 .post-footer span {
     margin-left: 20px;
     color: #777;
+}
+
+/*메시지*/
+.message-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.message-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.message-box-content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.message-box-footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.message-box button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.message-box button:hover {
+    background-color: #0056b3;
 }
