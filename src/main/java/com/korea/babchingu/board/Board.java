@@ -1,5 +1,6 @@
 package com.korea.babchingu.board;
 
+import com.korea.babchingu.answer.Answer;
 import com.korea.babchingu.comment.Comment;
 import com.korea.babchingu.image.Image;
 import com.korea.babchingu.member.Member;
@@ -28,6 +29,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Answer> answerList;
 
     @ManyToOne
     private Member member;

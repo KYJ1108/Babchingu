@@ -1,6 +1,6 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content" class="w-[800px] mx-auto flex flex-col gap-7">
-    <form th:action="@{/board/create}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
+    <form th:action="@{|/board/modify/${id}|}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
         <!--  제목 & 내용  -->
         <div>
             <img class="option-icon" src="/img/w.png" style="width:20px;height:20px;">
@@ -38,18 +38,18 @@
         </div>
 
         <!--  해시태그  -->
-<!--        <div class="mb-3">-->
-<!--            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">-->
-<!--            <div class="mb-3">-->
-<!--                <label for="hashtags" class="form-label">해시태그</label>-->
-<!--                <div>-->
-<!--                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">-->
-<!--                    <div id="hashtags-container"></div>-->
-<!--                    <input type="hidden" id="hashtags-hidden" name="tags" />-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-        <input type="submit" class="btn" value="게시물 등록">
+        <!--        <div class="mb-3">-->
+        <!--            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">-->
+        <!--            <div class="mb-3">-->
+        <!--                <label for="hashtags" class="form-label">해시태그</label>-->
+        <!--                <div>-->
+        <!--                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">-->
+        <!--                    <div id="hashtags-container"></div>-->
+        <!--                    <input type="hidden" id="hashtags-hidden" name="tags" />-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <input type="submit" class="btn" value="게시물 수정">
 
         <!-- 회원 정보 -->
         <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">

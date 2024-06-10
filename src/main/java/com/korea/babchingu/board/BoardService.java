@@ -73,4 +73,29 @@ public class BoardService {
     public List<Board> getSearchList(String keyword) {
         return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
     }
+
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
+        Board board = getBoard(id);
+        board.setTitle(title);
+        board.setContent(content);
+        board.setAddress(address);
+        board.setJibun(jibun);
+        board.setRestName(restName);
+
+        boardRepository.save(board);
+
+        for (MultipartFile image : images) {
+            Image img = new Image();
+            img.setBoard(board);
+            img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+
+            imageRepository.save(img);
+        }
+        return board;
+    }
+
+    public void delete(Long id) {
+        Board board = getBoard(id);
+        boardRepository.delete(board);
+    }
 }

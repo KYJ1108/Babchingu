@@ -22,5 +22,8 @@ public class Answer {
     private Comment comment;
 
     @ManyToOne
+    private Board board;
+
+    @ManyToOne
     private Member member;
 }
