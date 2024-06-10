@@ -1,9 +1,5 @@
 package com.korea.babchingu.board;
 
-import com.korea.babchingu.tag.BoardTagService;
-import com.korea.babchingu.tag.tag.Tag;
-import com.korea.babchingu.tag.tag.TagRepository;
-import com.korea.babchingu.tag.tag.TagService;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
@@ -22,8 +18,8 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
-    private final TagService tagService;
-    private final BoardTagService boardTagService;
+//    private final TagService tagService;
+//    private final BoardTagService boardTagService;
     private final MemberService memberService;
 
     @GetMapping("/create")
@@ -44,11 +40,11 @@ public class BoardController {
         Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
 
         // 해시태그 저장
-        String[] tagNames = tags.split(",");
-        for (String tagName : tagNames){
-            Tag tag = tagService.saveTag(tagName.trim());
-            boardTagService.saveBoardTag(board, tag);
-        }
+//        String[] tagNames = tags.split(",");
+//        for (String tagName : tagNames){
+//            Tag tag = tagService.saveTag(tagName.trim());
+//            boardTagService.saveBoardTag(board, tag);
+//        }
         return "redirect:/board/%d".formatted(board.getId());
     }
 
@@ -61,6 +57,19 @@ public class BoardController {
         }
         model.addAttribute("board", board);
         return "board_detail";
+    }
+
+
+    // 더보기
+    @GetMapping("/list")
+    public String boardList(Model model) {
+        // 게시물 목록 가져오기
+        List<Board> boards = boardService.getAllBoards();
+
+        // 모델에 게시물 목록 추가
+        model.addAttribute("boards", boards);
+
+        return "boardList_form";
     }
 
     // 장소 검색 - 지도 팝업창

@@ -73,4 +73,8 @@ public class BoardService {
     public List<Board> getSearchList(String keyword) {
         return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
     }
+
+    public List<Board> getAllBoards() {
+        return boardRepository.findAll();
+    }
 }
