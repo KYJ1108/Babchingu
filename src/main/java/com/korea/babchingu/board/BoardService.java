@@ -74,6 +74,9 @@ public class BoardService {
         return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
     }
 
+    public List<Board> getAllBoards() {
+        return boardRepository.findAll();
+    }
     public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
         Board board = getBoard(id);
         board.setTitle(title);
