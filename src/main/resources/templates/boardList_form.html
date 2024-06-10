@@ -12,7 +12,7 @@
 
     <div class="post-container">
         <th:block th:each="board : ${boards}">
-            <div class="post">
+            <a class="post" th:href="@{|/board/${board.id}|}">
                 <div th:if="${!#lists.isEmpty(board.images)}">
                     <img th:src="${board.images[0].url}" alt="음식사진" style="width:200px; height:100%;">
                 </div>
@@ -30,7 +30,7 @@
 <!--                        <span th:text="'💬 ' + ${board.comments}"></span>-->
                     </div>
                 </div>
-            </div>
+            </a>
         </th:block>
     </div>
 </div>
