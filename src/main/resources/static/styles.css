@@ -222,6 +222,7 @@ li {
     background-color: white;
     margin-bottom: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -255,6 +256,11 @@ li {
     margin-bottom: 5px;
 }
 */
+
+.post-details div {
+    margin-bottom: 5px;
+}
+
 .post-tags {
     margin-bottom: 10px;
 }
