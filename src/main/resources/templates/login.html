@@ -10,6 +10,9 @@
         <li>
             <a th:href="@{/login}">RESET</a>
         </li>
+        <li>
+            <a th:href="@{/findId}">FIND ID</a>
+        </li>
     </ul>
 
     <!-- Form -->
@@ -42,7 +45,14 @@
     <button class="naver__btn">
         <a class="fa fa-naver" href="/oauth2/authorization/naver"> Sign in with naver</a>
     </button>
+
+    <ul class="links2">
+        <li>
+            <a th:href="@{/findPw}">비밀번호 찾기</a>
+        </li>
+    </ul>
 </div>
+
 
 <style>
     body{
@@ -277,31 +287,31 @@
 
 
     footer{
-    p{
-    text-align:center;
-    .fa{
-    color: #e91e63;
-    }
-    a{
-    text-decoration:none;
-    font-size:17px;
-    margin:0 5px;
-    .fa-facebook{
-    color:#3b5998;
-    }
-    .fa-twitter{
-    color:#1da1f2;
-    }
-    .fa-instagram{
-    color:#f77737;
-    }
-    .fa-linkedin{
-    color:#0077b5;
-    }
-    .fa-behance{
-    color:#1769ff;
-    }
-    }
-    }
-    }
+        p{
+        text-align:center;
+            .fa{
+                color: #e91e63;
+                }
+            a{
+                text-decoration:none;
+                font-size:17px;
+                margin:0 5px;
+                .fa-facebook{
+                    color:#3b5998;
+                }
+                .fa-twitter{
+                    color:#1da1f2;
+                }
+                .fa-instagram{
+                    color:#f77737;
+                }
+                .fa-linkedin{
+                    color:#0077b5;
+                }
+                .fa-behance{
+                    color:#1769ff;
+                }
+            }
+        }
+   }
 </style>
