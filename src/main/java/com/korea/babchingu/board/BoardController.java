@@ -37,7 +37,7 @@ public class BoardController {
             return "board_form";
         }
 
-        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member, boardForm.getCreateDate());
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
 
         // 해시태그 저장
 //        String[] tagNames = tags.split(",");
@@ -110,7 +110,7 @@ public class BoardController {
                          @Valid BoardForm boardForm,
                          @RequestParam("images") List<MultipartFile> images,
                          Model model) {
-        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCreateDate());
+        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }

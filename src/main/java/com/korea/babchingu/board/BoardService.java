@@ -25,7 +25,7 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
-    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member, LocalDateTime createDate) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
@@ -33,7 +33,6 @@ public class BoardService {
         board.setJibun(jibun);
         board.setRestName(restName);
         board.setMember(member);
-        board.setCreateDate(LocalDateTime.now());
 
         boardRepository.save(board);
 
@@ -79,14 +78,13 @@ public class BoardService {
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
-    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, LocalDateTime createDate) {
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
         Board board = getBoard(id);
         board.setTitle(title);
         board.setContent(content);
         board.setAddress(address);
         board.setJibun(jibun);
         board.setRestName(restName);
-        board.setCreateDate(LocalDateTime.now());
 
         boardRepository.save(board);
 

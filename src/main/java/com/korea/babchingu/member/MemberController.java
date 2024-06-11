@@ -87,4 +87,22 @@ public class MemberController {
         // 인증 성공한 경우에 대한 처리
         return "redirect:/"; // 또는 다른 페이지로 리다이렉트
     }
+
+    @GetMapping("/findId")
+    public String findId(){
+        return "findId";
+    }
+
+    @PostMapping("/findId")
+    public String findId(@RequestParam String name, @RequestParam String email, Model model) {
+        // 여기에 사용자의 이름과 이메일로 아이디를 찾는 로직을 구현하세요.
+        // 예를 들어, MemberService 클래스의 findId 메소드를 호출하여 사용자의 아이디를 가져올 수 있어요.
+        String userId = memberService.findId(name, email);
+
+        // 사용자 아이디를 모델에 추가하여 HTML 페이지로 전달합니다.
+        model.addAttribute("userId", userId);
+
+        // 결과를 보여줄 페이지로 이동합니다. 예를 들어, find/id-result.html 페이지를 만들어서 결과를 보여줄 수 있어요.
+        return "findId_result";
+    }
 }
