@@ -295,6 +295,21 @@ li {
     border-radius: 10px;
     border: 1px solid #ccc;
 }
+
+.message-box.visible {
+    display: block;
+}
+
+.toggle-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #ccc;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
 /*
 .message-box-header {
     display: flex;
@@ -334,21 +349,3 @@ li {
 .message-box button:hover {
     background-color: #0056b3;
 }*/
-
-.message-box button:hover {
-    background-color: #0056b3;
-}
-
-.message-box.visible {
-    display: block;
-}
-.toggle-button {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    background: #ccc;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-}
