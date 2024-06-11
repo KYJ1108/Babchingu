@@ -98,4 +98,9 @@ public class BoardService {
         Board board = getBoard(id);
         boardRepository.delete(board);
     }
+
+    public void vote(Board board, Member member) {
+        board.getVoter().add(member);
+        this.boardRepository.save(board);
+    }
 }
