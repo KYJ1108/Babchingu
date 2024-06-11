@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
-//    private final TagService tagService;
+    //    private final TagService tagService;
 //    private final BoardTagService boardTagService;
     private final MemberService memberService;
 
@@ -37,7 +37,7 @@ public class BoardController {
             return "board_form";
         }
 
-        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member, boardForm.getCreateDate());
 
         // 해시태그 저장
 //        String[] tagNames = tags.split(",");
@@ -110,7 +110,7 @@ public class BoardController {
                          @Valid BoardForm boardForm,
                          @RequestParam("images") List<MultipartFile> images,
                          Model model) {
-        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
+        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCreateDate());
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }

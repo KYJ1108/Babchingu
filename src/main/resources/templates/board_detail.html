@@ -16,6 +16,8 @@
             <div th:text="${board.address}"></div>
             <div th:text="${board.jibun}"></div>
             <div th:text="${board.content}"></div>
+            <!--            <div th:text="${board.createDate}"></div>-->
+            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
     </div>
 
