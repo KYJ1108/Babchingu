@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,4 +36,10 @@ public class Board {
 
     @ManyToOne
     private Member member;
+
+    private LocalDateTime createDate; // 시간
+
+    public Board() {
+        this.createDate = LocalDateTime.now(); // 현재 시간으로 설정
+    }
 }
