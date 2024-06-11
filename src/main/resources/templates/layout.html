@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <title>밥친구</title>
 </head>
 <body>
@@ -30,7 +30,7 @@
 </div>
 
 <!-- 메시지 창을 표시하는 버튼 -->
-<button class="toggle-button" id="toggleButton">∧</button>
+<button class="toggle-button" id="toggleButton">DM</button>
 
 <script>
     // 메시지 박스 관련 스크립트
@@ -48,7 +48,7 @@
         const messageBox = document.getElementById('messageBox');
         if (messageBox.classList.contains('visible')) {
             messageBox.classList.remove('visible');
-            this.textContent = '∧';
+            this.textContent = 'DM';
         } else {
             messageBox.classList.add('visible');
             this.textContent = '∨';
