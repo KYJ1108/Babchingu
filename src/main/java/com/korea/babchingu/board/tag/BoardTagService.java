@@ -1,7 +1,7 @@
-package com.korea.babchingu.tag;
+package com.korea.babchingu.board.tag;
 
 import com.korea.babchingu.board.Board;
-import com.korea.babchingu.tag.tag.Tag;
+import com.korea.babchingu.board.tag.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
