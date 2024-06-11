@@ -88,16 +88,17 @@ body {
 
 .more-button {
     display: block;
-    width: 200px;
-    margin: 20px auto;
-    padding: 10px 0;
-    text-align: center;
+    margin: 20px 0;
+    padding: 10px 20px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    position: absolute;
+    bottom: -60px; /* 버튼이 게시물 컨테이너 아래에 위치하도록 설정 */
+    right: 0;
 }
 
 .more-button:hover {
@@ -284,17 +285,17 @@ li {
 
 /*메시지*/
 .message-box {
+    display: none;
     position: fixed;
-    bottom: 20px;
+    bottom: 0px;
     right: 20px;
     width: 300px;
     padding: 15px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: white;
     border-radius: 10px;
-    z-index: 1000;
+    border: 1px solid #ccc;
 }
-
+/*
 .message-box-header {
     display: flex;
     justify-content: space-between;
@@ -332,4 +333,22 @@ li {
 
 .message-box button:hover {
     background-color: #0056b3;
+}*/
+
+.message-box button:hover {
+    background-color: #0056b3;
+}
+
+.message-box.visible {
+    display: block;
+}
+.toggle-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #ccc;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
 }

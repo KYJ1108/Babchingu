@@ -17,29 +17,43 @@
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 
 <!-- 메시지 박스 -->
-<div class="message-box">
+<div class="message-box" id="messageBox">
     <div class="message-box-header">
         <strong>메시지</strong>
-        <button onclick="document.querySelector('.message-box').style.display='none'">X</button>
     </div>
     <div class="message-box-content">
-        <p>여기에 메시지를 입력하세요...</p>
+        <!-- 메시지가 추가될 영역 -->
     </div>
     <div class="message-box-footer">
         <input type="text" placeholder="메시지 입력...">
-        <button>보내기</button>
+        <button id="sendMessage">보내기</button>
     </div>
 </div>
 
+<!-- 메시지 창을 표시하는 버튼 -->
+<button class="toggle-button" id="toggleButton">∧</button>
+
 <script>
     // 메시지 박스 관련 스크립트
-    document.querySelector('.message-box button').addEventListener('click', function() {
+    document.querySelector('#sendMessage').addEventListener('click', function() {
         const input = document.querySelector('.message-box input');
         const content = document.querySelector('.message-box-content');
         const message = document.createElement('p');
         message.textContent = input.value;
         content.appendChild(message);
         input.value = '';
+    });
+
+    // 메시지 박스를 표시하는 버튼 이벤트 리스너
+    document.querySelector('#toggleButton').addEventListener('click', function() {
+        const messageBox = document.getElementById('messageBox');
+        if (messageBox.classList.contains('visible')) {
+            messageBox.classList.remove('visible');
+            this.textContent = '∧';
+        } else {
+            messageBox.classList.add('visible');
+            this.textContent = '∨';
+        }
     });
 </script>
 </body>
