@@ -32,6 +32,9 @@ public class ProfileController {
         model.addAttribute("sex", profile.getSex());
         model.addAttribute("memberId", profile.getMember_id());
         model.addAttribute("profileId", profile.getProfile_id());
+        model.addAttribute("phone", profile.getPhone());
+        model.addAttribute("email", profile.getEmail());
+
 
         return "profile";  // profile.html
     }
