@@ -12,21 +12,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Profile {
 
-    @NotEmpty
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profile_id;
 
-    @NotEmpty
     private Long member_id;
 
-    @NotEmpty
     private String nickname;
 
     @NotEmpty
     private byte[] image;
 
-    @NotEmpty
     private String sex;
+
+    private String phone;
+
+    private String email;
+
 }
 

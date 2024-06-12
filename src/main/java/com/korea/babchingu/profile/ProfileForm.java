@@ -8,19 +8,19 @@ import lombok.Setter;
 @Setter
 public class ProfileForm {
 
-    @NotEmpty
     private Long profile_id;
 
-    @NotEmpty
     private Long member_id;
 
-    @NotEmpty
     private String nickname;
 
     @NotEmpty
     private byte[] image;
 
-    @NotEmpty
     private String sex;
+
+    private String phone;
+
+    private String email;
 }
 

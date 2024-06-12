@@ -2,6 +2,7 @@ package com.korea.babchingu.profile;
 
 import com.korea.babchingu.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
-
+    @Autowired
     private final ProfileRepository profileRepository;
 
     public Profile getProfileById(Long id) {
@@ -37,6 +38,8 @@ public class ProfileService {
         profile.setSex(profileForm.getSex());
         profile.setImage(profileForm.getImage());
         profile.setNickname(profileForm.getNickname());
+        profile.setPhone(profileForm.getPhone());
+        profile.setEmail(profileForm.getEmail());
 
         profileRepository.save(profile);
 
