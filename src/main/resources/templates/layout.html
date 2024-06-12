@@ -57,95 +57,58 @@
     });
 </script>
 
-<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>-->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429"></script>-->
 <script>
-    var container = document.getElementById('container'), // 지도와 로드뷰를 감싸고 있는 div 입니다
-        mapWrapper = document.getElementById('mapWrapper'), // 지도를 감싸고 있는 div 입니다
-        btnRoadview = document.getElementById('btnRoadview'), // 지도 위의 로드뷰 버튼, 클릭하면 지도는 감춰지고 로드뷰가 보입니다
-        btnMap = document.getElementById('btnMap'), // 로드뷰 위의 지도 버튼, 클릭하면 로드뷰는 감춰지고 지도가 보입니다
-        rvContainer = document.getElementById('roadview'), // 로드뷰를 표시할 div 입니다
-        mapContainer = document.getElementById('map'); // 지도를 표시할 div 입니다
+    // HTML에서 해당 요소를 가져옵니다.
+    var mapContainer = document.getElementById('map');
 
-    function initializeMap() {
+    // HTML에서 주소 값을 동적으로 가져오는 함수를 정의합니다.
+    function getAddressFromHTML() {
+        // HTML 요소에서 주소 값을 가져옵니다.
+        var addressElement = document.getElementById('boardAddress');
+        var address = addressElement.textContent;
+
+        // 가져온 주소 값을 지도를 표시하는 함수에 전달합니다.
+        searchAddressAndShowMap(address);
+    }
+
+    // 주소로 좌표를 검색하여 지도를 표시하는 함수를 정의합니다.
+    function searchAddressAndShowMap(address) {
+        // 주소-좌표 변환 객체를 생성합니다.
         var geocoder = new kakao.maps.services.Geocoder();
-        var address = document.getElementById('boardAddress').textContent;
 
+        // 주소로 좌표를 검색합니다.
         geocoder.addressSearch(address, function(result, status) {
+            // 정상적으로 검색이 완료된 경우
             if (status === kakao.maps.services.Status.OK) {
+                // 검색 결과의 첫 번째 항목을 가져와서 좌표를 생성합니다.
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도 옵션을 설정합니다.
                 var mapOption = {
-                    center: coords,
-                    level: 3
+                    center: coords, // 지도의 중심 좌표를 검색한 좌표로 설정합니다.
+                    level: 3 // 지도의 확대 레벨을 설정합니다. (0~14)
                 };
 
+                // 검색된 좌표를 중심으로 하는 지도 객체를 생성합니다.
                 var map = new kakao.maps.Map(mapContainer, mapOption);
 
-                // 지도 중심에 마커 생성
+                // 검색된 좌표를 표시하는 마커를 생성합니다.
                 var marker = new kakao.maps.Marker({
-                    position: coords,
-                    map: map
+                    position: coords, // 마커의 위치를 검색된 좌표로 설정합니다.
+                    map: map // 마커를 표시할 지도 객체를 설정합니다.
                 });
             } else {
-                console.error("Geocoding failed: " + status);
+                // 검색 결과가 없는 경우 또는 그 외의 오류가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+                console.error('Geocoder failed: ' + status);
             }
         });
     }
-    // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
-    var placePosition = new kakao.maps.LatLng(33.450701, 126.570667);
 
-    // 지도 옵션입니다
-    var mapOption = {
-        center: placePosition, // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
-
-    // 지도를 표시할 div와 지도 옵션으로 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-
-    // 로드뷰 객체를 생성합니다
-    var roadview = new kakao.maps.Roadview(rvContainer);
-
-    // 로드뷰의 위치를 특정 장소를 포함하는 파노라마 ID로 설정합니다
-    // 로드뷰의 파노라마 ID는 Wizard를 사용하면 쉽게 얻을수 있습니다
-    roadview.setPanoId(1023434522, placePosition);
-
-    // 특정 장소가 잘보이도록 로드뷰의 적절한 시점(ViewPoint)을 설정합니다
-    // Wizard를 사용하면 적절한 로드뷰 시점(ViewPoint)값을 쉽게 확인할 수 있습니다
-    roadview.setViewpoint({
-        pan: 321,
-        tilt: 0,
-        zoom: 0
-    });
-
-    // 지도 중심을 표시할 마커를 생성하고 특정 장소 위에 표시합니다
-    var mapMarker = new kakao.maps.Marker({
-        position: placePosition,
-        map: map
-    });
-
-    // 로드뷰 초기화가 완료되면
-    kakao.maps.event.addListener(roadview, 'init', function() {
-
-        // 로드뷰에 특정 장소를 표시할 마커를 생성하고 로드뷰 위에 표시합니다
-        var rvMarker = new kakao.maps.Marker({
-            position: placePosition,
-            map: roadview
-        });
-    });
-
-    // 지도와 로드뷰를 감싸고 있는 div의 class를 변경하여 지도를 숨기거나 보이게 하는 함수입니다
-    function toggleMap(active) {
-        if (active) {
-
-            // 지도가 보이도록 지도와 로드뷰를 감싸고 있는 div의 class를 변경합니다
-            container.className = "view_map"
-        } else {
-
-            // 지도가 숨겨지도록 지도와 로드뷰를 감싸고 있는 div의 class를 변경합니다
-            container.className = "view_roadview"
-        }
-    }
+    // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
+    getAddressFromHTML();
 </script>
+
 </body>
 </html>
