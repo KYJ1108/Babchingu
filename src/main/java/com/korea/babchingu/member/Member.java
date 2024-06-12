@@ -1,8 +1,8 @@
 package com.korea.babchingu.member;
 
 import com.korea.babchingu.board.Board;
+import com.korea.babchingu.chat.ChatRoom;
 import com.korea.babchingu.comment.Comment;
-import com.korea.babchingu.image.Image;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,4 +38,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
+//    @ManyToMany
+//    private List<ChatRoom> chatRoomList = new ArrayList<>();
 }

@@ -41,4 +41,12 @@ public class MemberService {
             throw new DataNotFoundException("member not found");
         }
     }
+    public Member getUserNickname(String nickname) {
+        Optional<Member> user = memberRepository.findByNickname(nickname);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
 }
