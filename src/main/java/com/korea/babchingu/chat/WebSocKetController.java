@@ -33,12 +33,12 @@ public class WebSocKetController {
 
     @MessageMapping("/talk")
     @SendTo("/sub/talk")
-    public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
-        LocalDateTime createDate = message.getCreateDate();
-        ChatRoom chatRoom = chatRoomRepository.findById(id);
-        Member member = memberService.getUserNickname(message.getSender());
-        ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
-        chatMessageRepository.save(chatMessage);
+    public ChatMessageDto message(ChatMessageDto message) throws Exception {
+//        LocalDateTime createDate = message.getCreateDate();
+//        ChatRoom chatRoom = chatRoomRepository.findById(id);
+//        Member member = memberService.getUserNickname(message.getSender());
+//        ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
+//        chatMessageRepository.save(chatMessage);
         return message;
     }
 

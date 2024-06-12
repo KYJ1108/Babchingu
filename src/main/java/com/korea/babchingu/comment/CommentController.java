@@ -6,15 +6,14 @@ import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +22,12 @@ public class CommentController {
     private final CommentService commentService;
     private final BoardService boardService;
     private final MemberService memberService;
+
+    @ModelAttribute("memberList")
+    public List<Member> member(){
+        List<Member> memberList = memberService.findAll();
+        return memberList;
+    }
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult, Principal principal) {
         Member member = memberService.getMember(principal.getName());

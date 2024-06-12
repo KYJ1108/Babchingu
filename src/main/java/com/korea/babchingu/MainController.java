@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +21,11 @@ public class MainController {
 
     private final MainService mainService;
     private final MemberService memberService;
-
+    @ModelAttribute("memberList")
+    public List<Member> member(){
+        List<Member> memberList = memberService.findAll();
+        return memberList;
+    }
     @GetMapping("/")
     public String main(Model model, Principal principal) {
         if (principal != null) {

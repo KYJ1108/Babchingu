@@ -21,7 +21,9 @@
         <strong>메시지</strong>
     </div>
     <div class="message-box-content">
-        <div th:text="${member.loginId}"></div>
+        <div th:each="member : ${memberList}" >
+            <div th:text="${member.loginId}"></div>
+        </div>
     </div>
     <div class="message-box-footer">
         <input type="text" placeholder="메시지 입력...">

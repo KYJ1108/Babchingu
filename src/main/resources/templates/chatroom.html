@@ -21,11 +21,15 @@
 <div class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
         <h1 class="text-2xl font-bold mb-4">Chat Room</h1>
-        <div id="messages" class="w-full h-[85%] overflow-y-auto mb-4"></div>
+        <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
+                <div id="greetings">
+                    <div id="images"></div>
+                </div>
+        </div>
         <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4"
                placeholder="Type your message..."/>
         <div class="flex gap-5">
-            <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">Send</button>
+            <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg" onclick="sendChat()">Send</button>
             <i class="fa-regular fa-image fa-xl" id="img">
                 <input type="file" id="file" style="display: none;">
             </i>
@@ -53,13 +57,11 @@
             <a th:href="@{/user/main}">나가기</a>
         </button>
     </div>
-</div>
-
     <!--    <div>-->
     <!--        <div id="images">이미지들</div>-->
     <!--    </div>-->
     <script th:inline="javascript">
-        function connect() {
+     function connect() {
             var socket = new SockJS("http://localhost:8080/ws-stomp");
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
@@ -68,9 +70,9 @@
                 stompClient.subscribe('/sub/talk', function (chatMessageDto) {
                     showChat(JSON.parse(chatMessageDto.body));
                 });
-            }); // 이 부분에 중괄호가 추가되어야 합니다.
-
+            });
         }
+        
 
         //html 에서 입력값, roomId 를 받아서 Controller 로 전달
         function sendChat() {
@@ -80,13 +82,14 @@
                         'message': $("#message").val()
                     }));
             }
+              $("#message").val('');
         }
 
         function showChat(chatMessageDto) {
 
 
             $("#greetings").append(
-                "<span>"+chatMessageDto.message+"</span>"
+                "<div>"+chatMessageDto.message+"</div>"
             );
             var messageContainer = document.getElementById("messages");
             messageContainer.scrollTop = messageContainer.scrollHeight;
@@ -112,7 +115,6 @@
         });
 
     </script>
-</div>
 </body>
 
 </html>

@@ -9,6 +9,4 @@ import java.time.LocalDateTime;
 @Getter
 public class ChatMessageDto {
     private String message;
-    private String sender;
-    private LocalDateTime createDate;
 }
