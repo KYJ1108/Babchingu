@@ -17,23 +17,25 @@
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 
 <!-- 메시지 박스 -->
-<div class="message-box">
+<div class="message-box" id="messageBox">
     <div class="message-box-header">
         <strong>메시지</strong>
-        <button onclick="document.querySelector('.message-box').style.display='none'">X</button>
     </div>
     <div class="message-box-content">
-        <p>여기에 메시지를 입력하세요...</p>
+        <!-- 메시지가 추가될 영역 -->
     </div>
     <div class="message-box-footer">
         <input type="text" placeholder="메시지 입력...">
-        <button>보내기</button>
+        <button id="sendMessage">보내기</button>
     </div>
 </div>
 
+<!-- 메시지 창을 표시하는 버튼 -->
+<button class="toggle-button" id="toggleButton">∧</button>
+
 <script>
     // 메시지 박스 관련 스크립트
-    document.querySelector('.message-box button').addEventListener('click', function() {
+    document.querySelector('#sendMessage').addEventListener('click', function() {
         const input = document.querySelector('.message-box input');
         const content = document.querySelector('.message-box-content');
         const message = document.createElement('p');
@@ -41,6 +43,109 @@
         content.appendChild(message);
         input.value = '';
     });
+
+    // 메시지 박스를 표시하는 버튼 이벤트 리스너
+    document.querySelector('#toggleButton').addEventListener('click', function() {
+        const messageBox = document.getElementById('messageBox');
+        if (messageBox.classList.contains('visible')) {
+            messageBox.classList.remove('visible');
+            this.textContent = '∧';
+        } else {
+            messageBox.classList.add('visible');
+            this.textContent = '∨';
+        }
+    });
+</script>
+
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429"></script>
+<script>
+    var container = document.getElementById('container'), // 지도와 로드뷰를 감싸고 있는 div 입니다
+        mapWrapper = document.getElementById('mapWrapper'), // 지도를 감싸고 있는 div 입니다
+        btnRoadview = document.getElementById('btnRoadview'), // 지도 위의 로드뷰 버튼, 클릭하면 지도는 감춰지고 로드뷰가 보입니다
+        btnMap = document.getElementById('btnMap'), // 로드뷰 위의 지도 버튼, 클릭하면 로드뷰는 감춰지고 지도가 보입니다
+        rvContainer = document.getElementById('roadview'), // 로드뷰를 표시할 div 입니다
+        mapContainer = document.getElementById('map'); // 지도를 표시할 div 입니다
+
+    function initializeMap() {
+        var geocoder = new kakao.maps.services.Geocoder();
+        var address = document.getElementById('boardAddress').textContent;
+
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                var mapOption = {
+                    center: coords,
+                    level: 3
+                };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                // 지도 중심에 마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: coords,
+                    map: map
+                });
+            } else {
+                console.error("Geocoding failed: " + status);
+            }
+        });
+    }
+    // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
+    var placePosition = new kakao.maps.LatLng(33.450701, 126.570667);
+
+    // 지도 옵션입니다
+    var mapOption = {
+        center: placePosition, // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
+    };
+
+    // 지도를 표시할 div와 지도 옵션으로 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 로드뷰 객체를 생성합니다
+    var roadview = new kakao.maps.Roadview(rvContainer);
+
+    // 로드뷰의 위치를 특정 장소를 포함하는 파노라마 ID로 설정합니다
+    // 로드뷰의 파노라마 ID는 Wizard를 사용하면 쉽게 얻을수 있습니다
+    roadview.setPanoId(1023434522, placePosition);
+
+    // 특정 장소가 잘보이도록 로드뷰의 적절한 시점(ViewPoint)을 설정합니다
+    // Wizard를 사용하면 적절한 로드뷰 시점(ViewPoint)값을 쉽게 확인할 수 있습니다
+    roadview.setViewpoint({
+        pan: 321,
+        tilt: 0,
+        zoom: 0
+    });
+
+    // 지도 중심을 표시할 마커를 생성하고 특정 장소 위에 표시합니다
+    var mapMarker = new kakao.maps.Marker({
+        position: placePosition,
+        map: map
+    });
+
+    // 로드뷰 초기화가 완료되면
+    kakao.maps.event.addListener(roadview, 'init', function() {
+
+        // 로드뷰에 특정 장소를 표시할 마커를 생성하고 로드뷰 위에 표시합니다
+        var rvMarker = new kakao.maps.Marker({
+            position: placePosition,
+            map: roadview
+        });
+    });
+
+    // 지도와 로드뷰를 감싸고 있는 div의 class를 변경하여 지도를 숨기거나 보이게 하는 함수입니다
+    function toggleMap(active) {
+        if (active) {
+
+            // 지도가 보이도록 지도와 로드뷰를 감싸고 있는 div의 class를 변경합니다
+            container.className = "view_map"
+        } else {
+
+            // 지도가 숨겨지도록 지도와 로드뷰를 감싸고 있는 div의 class를 변경합니다
+            container.className = "view_roadview"
+        }
+    }
 </script>
 </body>
 </html>
