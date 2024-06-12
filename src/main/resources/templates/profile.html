@@ -107,7 +107,7 @@
         }
 
         .menu-button {
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             position: relative;
         }
@@ -234,8 +234,8 @@
         <div class="profile-info">
             <h1 id="profileId" hidden="">PID</h1>
             <h1 id="nickname">${nickname}</h1>
-            <p id="memberId">회원 ID: ${memberId}</p>
-            <p id="sex">성별: ${sex}</p>
+            <p id="memberId">회원 ID: <span id="memberIdValue"></span></p>
+            <p id="sex">성별: <span id="sexValue"></span></p>
             <div class="profile-stats">
                 <div>
                     <strong id="postCount">게시물 수</strong>
@@ -268,10 +268,16 @@
 <div class="popup" id="popup">
     <div class="popup-content">
         <h2>프로필 수정</h2>
-        <label for="newNickname">새 닉네임:</label>
+        <label for="newNickname">닉네임:</label>
         <input type="text" id="newNickname" name="newNickname" required>
-        <label for="newImage">새 프로필 사진 URL:</label>
+        <label for="newImage">프로필 사진 URL:</label>
         <input type="text" id="newImage" name="newImage" required>
+        <label for="newSex">성별:</label>
+        <input type="text" id="newSex" name="newSex" required>
+        <label for="newEmail">이메일:</label>
+        <input type="text" id="newEmail" name="newEmail" required>
+        <label for="newPhone">휴대폰 번호:</label>
+        <input type="text" id="newPhone" name="newPhone" required>
         <button onclick="saveProfile()">저장</button>
         <button onclick="closePopup()">취소</button>
     </div>
@@ -353,6 +359,11 @@
     var postCountElem = document.getElementById("postCount");
     var followerCountElem = document.getElementById("followerCount");
     var followingCountElem = document.getElementById("followingCount");
+    var memberIdElem = document.getElementById("memberIdValue");
+    var sexElem = document.getElementById("sexValue");
+
+    memberIdElem.textContent = data.memberId;
+    sexElem.textContent = data.sex;
 
     postCountElem.textContent = "게시물 수: " + data.postCount;
     followerCountElem.textContent = "팔로워: " + data.followerCount;
@@ -361,6 +372,11 @@
 
     // displayProfileInfo 함수 호출하여 데이터 표시
     displayProfileInfo(profileData);
+
+
+
+
+
 
 </script>
 </body>
