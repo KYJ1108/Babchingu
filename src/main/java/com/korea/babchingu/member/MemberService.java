@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,18 @@ public class MemberService {
         } else {
             throw new DataNotFoundException("member not found");
         }
+    }
+    public Member getUserNickname(String nickname) {
+        Optional<Member> user = memberRepository.findByNickname(nickname);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 
     public String findId(String name, String email) {

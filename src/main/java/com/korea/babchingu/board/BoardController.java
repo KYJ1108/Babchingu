@@ -49,24 +49,33 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable("id") Long id, Model model) {
+    public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
         if (board == null) {
             // 회사 정보를 찾지 못한 경우 처리 (예: 404 페이지로 리다이렉트)
             return "redirect:/error";
         }
         model.addAttribute("board", board);
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
         return "board_detail";
     }
 
     // 더보기
     @GetMapping("/list")
-    public String boardList(Model model) {
+    public String boardList(Model model, Principal principal) {
         // 게시물 목록 가져오기
         List<Board> boards = boardService.getAllBoards();
 
         // 모델에 게시물 목록 추가
         model.addAttribute("boards", boards);
+
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
 
         return "boardList_form";
     }
