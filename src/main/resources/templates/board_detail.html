@@ -13,9 +13,11 @@
             <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
             <div th:text="${board.title}"></div>
             <div th:text="${board.restName}"></div>
-            <div th:text="${board.address}"></div>
+            <div id="boardAddress" th:text="${board.address}"></div>
             <div th:text="${board.jibun}"></div>
             <div th:text="${board.content}"></div>
+            <!--            <div th:text="${board.createDate}"></div>-->
+            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
     </div>
 
@@ -59,5 +61,13 @@
         <input type="text" name="content" placeholder="댓글작성">
         <input type="submit" value="댓글 등록">
     </form>
+
+    <!-- 지도 표시 -->
+    <div id="container" class="view_map">
+        <div id="mapWrapper" style="width:100%;height:300px;position:relative;">
+            <div id="map" style="width:100%;height:100%"></div> <!-- 지도를 표시할 div 입니다 -->
+        </div>
+    </div>
+
 </div>
 </html>

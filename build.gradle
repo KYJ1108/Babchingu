@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.2.5'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.5'
 
+<<<<<<< HEAD
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.webjars:webjars-locator-core'
 	implementation 'org.webjars:sockjs-client:1.0.2'
@@ -48,6 +49,9 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+=======
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+>>>>>>> 6d2c0ae0e6d9fed6ad32dd177d1cdd101c12c8b7
 }
 
 tasks.named('test') {

@@ -30,6 +30,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath content = createString("content");
 
+    public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ListPath<com.korea.babchingu.image.Image, com.korea.babchingu.image.QImage> images = this.<com.korea.babchingu.image.Image, com.korea.babchingu.image.QImage>createList("images", com.korea.babchingu.image.Image.class, com.korea.babchingu.image.QImage.class, PathInits.DIRECT2);
@@ -41,6 +43,8 @@ public class QBoard extends EntityPathBase<Board> {
     public final StringPath restName = createString("restName");
 
     public final StringPath title = createString("title");
+
+    public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 
     public QBoard(String variable) {
         this(Board.class, forVariable(variable), INITS);

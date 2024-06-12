@@ -31,7 +31,27 @@
         <div class="post-boxes">
             <!-- 첫 번째 게시물 -->
             <div class="post-box">
-                <h2>첫 번째 게시물</h2>
+                <th:block th:each="board : ${boards}">
+                    <a class="post" th:href="@{|/board/${board.id}|}">
+                        <div th:if="${!#lists.isEmpty(board.images)}">
+                            <img th:src="${board.images[0].url}" alt="음식사진" style="width:200px; height:100%;">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-title" th:text="${board.title}"></div>
+                            <div class="post-details">
+                                <div th:text="${board.restName}"></div>
+                                <div th:text="${board.address}"></div>
+                            </div>
+                            <div class="post-tags">
+                                <!--                        <span th:each="tag : ${board.tags}" th:text="${tag}"></span>-->
+                            </div>
+                            <div class="post-footer">
+                                <!--                        <span th:text="'❤️ ' + ${board.likes}"></span>-->
+                                <!--                        <span th:text="'💬 ' + ${board.comments}"></span>-->
+                            </div>
+                        </div>
+                    </a>
+                </th:block>
             </div>
             <!-- 두 번째 게시물 -->
             <div class="post-box">
