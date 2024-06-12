@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -41,6 +42,8 @@ public class Board {
     @ManyToOne
     private Member member;
 
+    @ManyToMany
+    Set<Member> voter;
     @CreatedDate
     private LocalDateTime createDate;
     @LastModifiedDate

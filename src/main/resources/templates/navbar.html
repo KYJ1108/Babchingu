@@ -10,6 +10,17 @@
                 <input type="text" name="searchInput" placeholder="검색" class="input input-bordered w-24 md:w-auto" />
             </form>
             <div class="dropdown dropdown-end">
+                <div>
+                    <a href="/chat/create"> 채팅방 만들기</a>
+                </div>
+
+                <div>
+                    <ul>
+                        <li th:if="${chatroomList != null}" th:each="chatroom : ${chatroomList}">
+                            <a class="talk" th:href="@{/chat/talk}" th:text="${chatroom.roomId}"></a>
+                        </li>
+                    </ul>
+                </div>
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                     <div class="w-10 rounded-full">
                         <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />

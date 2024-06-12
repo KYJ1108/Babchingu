@@ -4,7 +4,9 @@ import com.korea.babchingu.image.Image;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,24 +51,33 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable("id") Long id, Model model) {
+    public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
         if (board == null) {
             // 회사 정보를 찾지 못한 경우 처리 (예: 404 페이지로 리다이렉트)
             return "redirect:/error";
         }
         model.addAttribute("board", board);
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
         return "board_detail";
     }
 
     // 더보기
     @GetMapping("/list")
-    public String boardList(Model model) {
+    public String boardList(Model model, Principal principal) {
         // 게시물 목록 가져오기
         List<Board> boards = boardService.getAllBoards();
 
         // 모델에 게시물 목록 추가
         model.addAttribute("boards", boards);
+
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
 
         return "boardList_form";
     }
@@ -119,5 +130,14 @@ public class BoardController {
     public String delete(@PathVariable("id") Long id) {
         boardService.delete(id);
         return "redirect:/";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/vote/{id}")
+    public String boardVote(Principal principal, @PathVariable("id") Long id) {
+        Board board = this.boardService.getBoard(id);
+        Member member = this.memberService.getMember(principal.getName());
+        this.boardService.vote(board, member);
+        return String.format("redirect:/board/%s", id);
     }
 }
