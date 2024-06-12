@@ -311,11 +311,7 @@ li {
     cursor: pointer;
 }
 
-/* 지도 디테일 지도 + 로드뷰*/
-#container {overflow:hidden; width: 500px; height:300px; position:relative; margin: 20px;}
-#btnRoadview,  #btnMap {position:absolute;top:5px;left:5px;padding:7px 12px;font-size:14px;border: 1px solid #dbdbdb;background-color: #fff;border-radius: 2px;box-shadow: 0 1px 1px rgba(0,0,0,.04);z-index:1;cursor:pointer;}
-#btnRoadview:hover,  #btnMap:hover{background-color: #fcfcfc;border: 1px solid #c1c1c1;}
-#container.view_map #mapWrapper {z-index: 10;}
-#container.view_map #btnMap {display: none;}
-#container.view_roadview #mapWrapper {z-index: 0;}
-#container.view_roadview #btnRoadview {display: none;}
+/* 지도 디테일 지도*/
+#containerMap {overflow:hidden; width: 500px; height:300px; position:relative; margin: 20px;}
+#mapWrapper {width:100%; height:300px; position:relative;}
+#map {width:100%; height:100%;}

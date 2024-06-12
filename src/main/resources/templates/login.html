@@ -10,9 +10,6 @@
         <li>
             <a th:href="@{/login}">RESET</a>
         </li>
-        <li>
-            <a th:href="@{/findId}">FIND ID</a>
-        </li>
     </ul>
 
     <!-- Form -->
@@ -24,6 +21,9 @@
         <!-- password input -->
         <div class="input__block">
             <input type="password" placeholder="Password" class="input" name="password" id="password" />
+            <!-- 로그인이 올바르지 않을 경우 메시지 -->
+            <p th:if="${param.error}" class="error-message">로그인에 실패하였습니다.</p>
+
         </div>
         <!-- sign in button -->
         <button class="signin__btn">Sign in</button>
@@ -45,8 +45,10 @@
     <button class="naver__btn">
         <a class="fa fa-naver" href="/oauth2/authorization/naver"> Sign in with naver</a>
     </button>
-
     <ul class="links2">
+        <li>
+            <a th:href="@{/findId}">아이디 찾기</a>
+        </li>
         <li>
             <a th:href="@{/findPw}">비밀번호 찾기</a>
         </li>
@@ -95,6 +97,21 @@
                     opacity : 1;
                 }
             }
+            a{
+                text-decoration:none;
+                color:#0f132a;
+                font-weight:bolder;
+                text-align:center;
+                cursor : pointer;
+            }
+        }
+    }
+    .links2{
+        list-style-type:none;
+        li{
+            display:inline-block;
+            margin:0 20px 0 0;
+            transition:.2s linear;
             a{
                 text-decoration:none;
                 color:#0f132a;

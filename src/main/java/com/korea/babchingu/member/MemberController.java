@@ -23,6 +23,8 @@ public class MemberController {
     private final MemberService memberService;
     private final MyUserDetailService myUserDetailService;
     private final PasswordEncoder passwordEncoder;
+    private final SendEmailService sendEmailService;
+
 
     @Getter
     @Setter
@@ -88,21 +90,25 @@ public class MemberController {
         return "redirect:/"; // 또는 다른 페이지로 리다이렉트
     }
 
-    @GetMapping("/findId")
-    public String findId(){
-        return "findId";
+    @GetMapping("/findPw")
+    public String findPwForm(MemberPwRequestDto memberPwRequestDto) {
+        return "findPw";
     }
 
-    @PostMapping("/findId")
-    public String findId(@RequestParam String name, @RequestParam String email, Model model) {
-        // 여기에 사용자의 이름과 이메일로 아이디를 찾는 로직을 구현하세요.
-        // 예를 들어, MemberService 클래스의 findId 메소드를 호출하여 사용자의 아이디를 가져올 수 있어요.
-        String userId = memberService.findId(name, email);
+    @PostMapping("/findPw")
+    public String findPw(@Valid MemberPwRequestDto memberPwRequestDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "아이디와 이메일을 확인해주세요.");
+            return "findPw";
+        }
 
-        // 사용자 아이디를 모델에 추가하여 HTML 페이지로 전달합니다.
-        model.addAttribute("userId", userId);
+        try {
+            sendEmailService.createMailAndChargePassword(memberPwRequestDto);
+        } catch (Exception | CustomException e) {
+            model.addAttribute("error", "비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
+            return "findPw";
+        }
 
-        // 결과를 보여줄 페이지로 이동합니다. 예를 들어, find/id-result.html 페이지를 만들어서 결과를 보여줄 수 있어요.
-        return "findId_result";
+        return "redirect:/member/login";
     }
 }
