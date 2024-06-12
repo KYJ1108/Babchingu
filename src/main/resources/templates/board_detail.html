@@ -16,9 +16,15 @@
             <div id="boardAddress" th:text="${board.address}"></div>
             <div th:text="${board.jibun}"></div>
             <div th:text="${board.content}"></div>
-            <!--            <div th:text="${board.createDate}"></div>-->
             <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
+
+        <form th:action="@{|/board/vote/${board.id}|}" class="flex items-center" method="post">
+            <label class="flex items-center">
+                <input type="checkbox" checked="checked" name="voter" class="mask mask-heart bg-red-400">
+                <span th:text="${#lists.size(board.voter)}"></span>
+            </label>
+        </form>
     </div>
 
     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">

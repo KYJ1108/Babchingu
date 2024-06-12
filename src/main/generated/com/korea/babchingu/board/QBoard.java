@@ -46,6 +46,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 
+    public final SetPath<com.korea.babchingu.member.Member, com.korea.babchingu.member.QMember> voter = this.<com.korea.babchingu.member.Member, com.korea.babchingu.member.QMember>createSet("voter", com.korea.babchingu.member.Member.class, com.korea.babchingu.member.QMember.class, PathInits.DIRECT2);
+
     public QBoard(String variable) {
         this(Board.class, forVariable(variable), INITS);
     }
