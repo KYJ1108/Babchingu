@@ -1,4 +1,4 @@
-package com.korea.babchingu.tag.tag;
+package com.korea.babchingu.board.tag.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

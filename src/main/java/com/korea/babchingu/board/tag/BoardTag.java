@@ -1,7 +1,7 @@
-package com.korea.babchingu.tag;
+package com.korea.babchingu.board.tag;
 
 import com.korea.babchingu.board.Board;
-import com.korea.babchingu.tag.tag.Tag;
+import com.korea.babchingu.board.tag.tag.Tag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +15,8 @@ public class BoardTag {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id")
     private Tag tag;
 }

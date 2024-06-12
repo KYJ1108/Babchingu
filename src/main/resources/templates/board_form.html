@@ -33,19 +33,22 @@
             <label for="images">이미지</label>
         </div>
         <input type="file" id="images" name="images" multiple>
+        <div th:each="image : ${images}">
+            <img th:src="${image.url}" alt="Image">
+        </div>
 
         <!--  해시태그  -->
-        <div class="mb-3">
-            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">
-            <div class="mb-3">
-                <label for="hashtags" class="form-label">해시태그</label>
-                <div>
-                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">
-                    <div id="hashtags-container"></div>
-                    <input type="hidden" id="hashtags-hidden" name="tags" />
-                </div>
-            </div>
-        </div>
+        <!--        <div class="mb-3">-->
+        <!--            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">-->
+        <!--            <div class="mb-3">-->
+        <!--                <label for="hashtags" class="form-label">해시태그</label>-->
+        <!--                <div>-->
+        <!--                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">-->
+        <!--                    <div id="hashtags-container"></div>-->
+        <!--                    <input type="hidden" id="hashtags-hidden" name="tags" />-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <input type="submit" class="btn" value="게시물 등록">
 
         <!-- 회원 정보 -->
@@ -79,7 +82,6 @@
 
     <!--  해시태그  -->
     <script>
-        <script>
         const hashtagsInput = document.getElementById("hashtags");
         const hashtagsContainer = document.getElementById("hashtags-container");
         const hiddenHashtagsInput = document.getElementById("hashtags-hidden");
@@ -109,16 +111,16 @@
             }
         }
 
-        hashtagsInput.addEventListener("keydown", (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const tag = hashtagsInput.value.trim();
-                if (tag) {
-                    addHashtag(tag);
-                    hashtagsInput.value = "";
-                }
-            }
-        });
+<!--        hashtagsInput.addEventListener("keydown", (event) => {-->
+<!--            if (event.key === 'Enter') {-->
+<!--                event.preventDefault();-->
+<!--                const tag = hashtagsInput.value.trim();-->
+<!--                if (tag) {-->
+<!--                    addHashtag(tag);-->
+<!--                    hashtagsInput.value = "";-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
     </script>
 
 </div>

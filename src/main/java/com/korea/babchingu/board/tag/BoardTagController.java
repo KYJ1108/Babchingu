@@ -1,9 +1,9 @@
-package com.korea.babchingu.tag;
+package com.korea.babchingu.board.tag;
 
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.board.BoardService;
-import com.korea.babchingu.tag.tag.Tag;
-import com.korea.babchingu.tag.tag.TagService;
+import com.korea.babchingu.board.tag.tag.Tag;
+import com.korea.babchingu.board.tag.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

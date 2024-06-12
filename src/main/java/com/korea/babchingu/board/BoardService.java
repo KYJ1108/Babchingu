@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
-    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member, LocalDateTime createDate) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
@@ -32,6 +33,7 @@ public class BoardService {
         board.setJibun(jibun);
         board.setRestName(restName);
         board.setMember(member);
+        board.setCreateDate(LocalDateTime.now());
 
         boardRepository.save(board);
 
@@ -72,5 +74,39 @@ public class BoardService {
 
     public List<Board> getSearchList(String keyword) {
         return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
+    }
+
+    public List<Board> getAllBoards() {
+        return boardRepository.findAll();
+    }
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, LocalDateTime createDate) {
+        Board board = getBoard(id);
+        board.setTitle(title);
+        board.setContent(content);
+        board.setAddress(address);
+        board.setJibun(jibun);
+        board.setRestName(restName);
+        board.setCreateDate(LocalDateTime.now());
+
+        boardRepository.save(board);
+
+        for (MultipartFile image : images) {
+            Image img = new Image();
+            img.setBoard(board);
+            img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+
+            imageRepository.save(img);
+        }
+        return board;
+    }
+
+    public void delete(Long id) {
+        Board board = getBoard(id);
+        boardRepository.delete(board);
+    }
+
+    public void vote(Board board, Member member) {
+        board.getVoter().add(member);
+        this.boardRepository.save(board);
     }
 }

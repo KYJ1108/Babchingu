@@ -23,6 +23,8 @@ public class MemberController {
     private final MemberService memberService;
     private final MyUserDetailService myUserDetailService;
     private final PasswordEncoder passwordEncoder;
+    private final SendEmailService sendEmailService;
+
 
     @Getter
     @Setter
@@ -86,5 +88,27 @@ public class MemberController {
 
         // 인증 성공한 경우에 대한 처리
         return "redirect:/"; // 또는 다른 페이지로 리다이렉트
+    }
+
+    @GetMapping("/findPw")
+    public String findPwForm(MemberPwRequestDto memberPwRequestDto) {
+        return "findPw";
+    }
+
+    @PostMapping("/findPw")
+    public String findPw(@Valid MemberPwRequestDto memberPwRequestDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "아이디와 이메일을 확인해주세요.");
+            return "findPw";
+        }
+
+        try {
+            sendEmailService.createMailAndChargePassword(memberPwRequestDto);
+        } catch (Exception | CustomException e) {
+            model.addAttribute("error", "비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
+            return "findPw";
+        }
+
+        return "redirect:/member/login";
     }
 }
