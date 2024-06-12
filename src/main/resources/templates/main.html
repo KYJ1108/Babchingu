@@ -31,6 +31,7 @@
         <div class="post-boxes">
             <!-- 첫 번째 게시물 -->
             <div class="post-box">
+                <h2>첫 번째 게시물</h2>
                 <th:block th:each="board : ${boards}">
                     <a class="post" th:href="@{|/board/${board.id}|}">
                         <div th:if="${!#lists.isEmpty(board.images)}">
@@ -60,11 +61,13 @@
             <!-- 세 번째 게시물 -->
             <div class="post-box">
                 <h2>세 번째 게시물</h2>
-                </div>
+            </div>
+        </div>
+        <div class="plus-container">
+            <!--  더보기 버튼  -->
+            <a class="more-button" href="/board/list">더보기</a>
         </div>
     </div>
-    <!--  더보기 버튼  -->
-    <a class="more-button" href="/board/list">더보기</a>
 
     <footer class="footer p-10 bg-base-200 text-base-content">
         <aside>
@@ -93,6 +96,7 @@
         </nav>
     </footer>
 </div>
+
 
 <script>
     let currentSlide = 0;

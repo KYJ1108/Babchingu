@@ -38,7 +38,4 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
-
-//    @ManyToMany
-//    private List<ChatRoom> chatRoomList = new ArrayList<>();
 }

@@ -35,38 +35,36 @@
 <!-- 메시지 창을 표시하는 버튼 -->
 <button class="toggle-button" id="toggleButton">DM</button>
 
-    <script>
-        // sendChat 함수 정의
-        function sendChat() {
-            // Your chat sending logic
-            console.log("Chat sent");
+<script>
+    // sendChat 함수 정의
+    function sendChat() {
+        // Your chat sending logic
+        console.log("Chat sent");
+    }
+
+    // 메시지 박스 관련 스크립트
+    document.querySelector('#sendMessage').addEventListener('click', function() {
+        const input = document.querySelector('.message-box input');
+        const content = document.querySelector('.message-box-content');
+        const message = document.createElement('p');
+        message.textContent = input.value;
+        content.appendChild(message);
+        input.value = '';
+
+        // sendChat 함수 호출
+        sendChat();
+    });
+
+    // 메시지 박스를 표시하는 버튼 이벤트 리스너
+    document.querySelector('#toggleButton').addEventListener('click', function() {
+        const messageBox = document.getElementById('messageBox');
+        if (messageBox.classList.contains('visible')) {
+            messageBox.classList.remove('visible');
+            this.textContent = 'DM';
+        } else {
+            messageBox.classList.add('visible');
+            this.textContent = '∨';
         }
-
-        // 메시지 박스 관련 스크립트
-        document.querySelector('#sendMessage').addEventListener('click', function() {
-            const input = document.querySelector('.message-box input');
-            const content = document.querySelector('.message-box-content');
-            const message = document.createElement('p');
-            message.textContent = input.value;
-            content.appendChild(message);
-            input.value = '';
-
-            // sendChat 함수 호출
-            sendChat();
-        });
-
-        // 메시지 박스를 표시하는 버튼 이벤트 리스너
-        document.querySelector('#toggleButton').addEventListener('click', function() {
-            const messageBox = document.getElementById('messageBox');
-            if (messageBox.classList.contains('visible')) {
-                messageBox.classList.remove('visible');
-                this.textContent = 'DM';
-            } else {
-                messageBox.classList.add('visible');
-                this.textContent = '∨';
-            }
-        });
-    </script>
     });
 </script>
 
