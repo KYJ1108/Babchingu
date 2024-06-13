@@ -45,11 +45,6 @@ public class WebSocKetController {
     @MessageMapping("/alarm/{username}")
     @SendTo("/sub/alarm/{username}")
     public AlarmDto alarm(AlarmDto alarm) throws Exception {
-        Member sendMember = memberRepository.findByNickname(alarm.getSendUsername()).orElseThrow();
-        Member acceptMember = memberRepository.findByNickname(alarm.getAcceptUsername()).orElseThrow();
-        ChatRoom chatRoom = chatRoomRepository.findById(alarm.getChatRoomId());
-        Alarm alarm1 = Alarm.builder().message(alarm.getMessage()).sendMember(sendMember).acceptMember(acceptMember).chatRoom(chatRoom).build();
-        alarmRepository.save(alarm1);
         return alarm;
     }
 

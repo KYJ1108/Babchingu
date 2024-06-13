@@ -4,6 +4,7 @@ import com.korea.babchingu.Follow.Follow;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.chat.ChatRoom;
 import com.korea.babchingu.comment.Comment;
+import com.korea.babchingu.profile.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +27,10 @@ public class Member {
     @Column(unique = true)
     private String loginId;
     private String password;
-    private String nickname;
     private String email;
+
+    @OneToOne
+    private Profile profile;
 
     @CreatedDate
     private LocalDateTime createDate;

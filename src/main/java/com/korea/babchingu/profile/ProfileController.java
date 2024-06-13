@@ -36,7 +36,6 @@ public class ProfileController {
         model.addAttribute("memberId", profile.getMember().getId());
         model.addAttribute("profileId", profile.getProfile_id());
         model.addAttribute("phone", profile.getPhone());
-        model.addAttribute("email", profile.getEmail());
 
 
         return "profile";  // profile.html

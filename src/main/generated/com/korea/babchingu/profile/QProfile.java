@@ -22,8 +22,6 @@ public class QProfile extends EntityPathBase<Profile> {
 
     public static final QProfile profile = new QProfile("profile");
 
-    public final StringPath email = createString("email");
-
     public final ArrayPath<byte[], Byte> image = createArray("image", byte[].class);
 
     public final com.korea.babchingu.member.QMember member;

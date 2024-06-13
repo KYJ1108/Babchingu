@@ -29,7 +29,5 @@ public class Profile {
 
     private String phone;
 
-    private String email;
-
 }
 

@@ -65,7 +65,7 @@ public class MemberController {
         }
 
         try {
-            memberService.save(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getEmail(), memberForm.getNickname(), memberForm.getImage(), memberForm.getSex(), memberForm.getPhone());
+            memberService.save(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getEmail());
 
         } catch (RuntimeException e) {
             bindingResult.reject("signupFailed", e.getMessage());

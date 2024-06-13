@@ -18,6 +18,8 @@ public class QMember extends EntityPathBase<Member> {
 
     private static final long serialVersionUID = 1556269930L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QMember member = new QMember("member1");
 
     public final ListPath<com.korea.babchingu.board.Board, com.korea.babchingu.board.QBoard> boardList = this.<com.korea.babchingu.board.Board, com.korea.babchingu.board.QBoard>createList("boardList", com.korea.babchingu.board.Board.class, com.korea.babchingu.board.QBoard.class, PathInits.DIRECT2);
@@ -36,22 +38,31 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath loginId = createString("loginId");
 
-    public final StringPath nickname = createString("nickname");
-
     public final StringPath password = createString("password");
+
+    public final com.korea.babchingu.profile.QProfile profile;
 
     public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 
     public QMember(String variable) {
-        super(Member.class, forVariable(variable));
+        this(Member.class, forVariable(variable), INITS);
     }
 
     public QMember(Path<? extends Member> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QMember(PathMetadata metadata) {
-        super(Member.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QMember(PathMetadata metadata, PathInits inits) {
+        this(Member.class, metadata, inits);
+    }
+
+    public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.profile = inits.isInitialized("profile") ? new com.korea.babchingu.profile.QProfile(forProperty("profile"), inits.get("profile")) : null;
     }
 
 }
