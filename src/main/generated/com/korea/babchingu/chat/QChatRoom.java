@@ -28,7 +28,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.korea.babchingu.member.QMember member;
+    public final com.korea.babchingu.member.QMember member1;
 
     public final com.korea.babchingu.member.QMember member2;
 
@@ -50,7 +50,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public QChatRoom(Class<? extends ChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.korea.babchingu.member.QMember(forProperty("member")) : null;
+        this.member1 = inits.isInitialized("member1") ? new com.korea.babchingu.member.QMember(forProperty("member1")) : null;
         this.member2 = inits.isInitialized("member2") ? new com.korea.babchingu.member.QMember(forProperty("member2")) : null;
     }
 

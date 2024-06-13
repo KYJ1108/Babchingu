@@ -16,14 +16,15 @@ public class ChatRoomCustomImp1 implements ChatRoomCustom {
     QChatRoom qChatRoom = QChatRoom.chatRoom;
 
 
-    @Override
-    public Optional<ChatRoom> findByMembers(Member member, Member member2) {
-        return Optional.ofNullable(jpaQueryFactory
-                .select(qChatRoom)
-                .from(qChatRoom)
-                .where((qChatRoom.member.eq(member).and(qChatRoom.member2.eq(member2)))
-                        .or((qChatRoom.member.eq(member2).and(qChatRoom.member2.eq(member)))))
-                .fetchOne());
-    }
+//    @Override
+//    public Optional<ChatRoom> getMembers(Member member, Member member2) {
+//        return Optional.ofNullable(jpaQueryFactory
+//                .select(qChatRoom)
+//                .from(qChatRoom)
+//                .where((qChatRoom.member.eq(member).and(qChatRoom.member2.eq(member2)))
+//                        .or((qChatRoom.member.eq(member2).and(qChatRoom.member2.eq(member))))
+//                )
+//                .fetchOne());
+//    }
 }
 

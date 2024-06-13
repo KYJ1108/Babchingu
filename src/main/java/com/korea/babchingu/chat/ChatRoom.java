@@ -31,7 +31,7 @@ public class ChatRoom {
 
     @ManyToOne
     @JoinColumn(name = "member1_id")
-    private Member member;
+    private Member member1;
 
     @ManyToOne
     @JoinColumn(name = "member2_id")
@@ -41,9 +41,9 @@ public class ChatRoom {
     @JsonManagedReference
     List<Alarm> alarmList = new ArrayList<>();
 
-
+    @Builder
     private ChatRoom(Member member1, Member member2) {
-        this.member = member1;
+        this.member1 = member1;
         this.member2 = member2;
     }
 }
