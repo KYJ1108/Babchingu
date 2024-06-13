@@ -51,20 +51,6 @@ public class WebSocKetController {
         return null;
     }
 
-    @MessageMapping("/alarm/{username}")
-    @SendTo("/sub/alarm/{username}")
-    public AlarmDto alarm(AlarmDto alarm) throws Exception {
-        Member sendMember = memberRepository.findByNickname(alarm.getSendUsername()).orElseThrow();
-        Member acceptMember = memberRepository.findByNickname(alarm.getAcceptUsername()).orElseThrow();
-        Optional<ChatRoom> _chatRoom = chatRoomRepository.findById(alarm.getChatRoomId());
-        if(!_chatRoom.isEmpty()) {
-            ChatRoom chatRoom = _chatRoom.get();
-            Alarm alarm1 = Alarm.builder().message(alarm.getMessage()).sendMember(sendMember).acceptMember(acceptMember).chatRoom(chatRoom).build();
-            alarmRepository.save(alarm1);
-            return alarm;
-        }
-        return null;
-    }
 
     @GetMapping("/chat/create/{id}")
     public String chatTest(Principal principal, @PathVariable("id")Long id, Model model) {

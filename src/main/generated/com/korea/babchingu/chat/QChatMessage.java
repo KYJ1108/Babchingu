@@ -54,7 +54,7 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
         super(type, metadata, inits);
         this.chatRoom = inits.isInitialized("chatRoom") ? new QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
         this.image = inits.isInitialized("image") ? new com.korea.babchingu.image.QImage(forProperty("image"), inits.get("image")) : null;
-        this.sender = inits.isInitialized("sender") ? new com.korea.babchingu.member.QMember(forProperty("sender")) : null;
+        this.sender = inits.isInitialized("sender") ? new com.korea.babchingu.member.QMember(forProperty("sender"), inits.get("sender")) : null;
     }
 
 }
