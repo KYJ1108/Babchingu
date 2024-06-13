@@ -11,7 +11,7 @@ import java.util.Optional;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
 //    public Optional<ChatRoom> getChatRoom(Member member1 , Member member2){
-//        return this.chatRoomRepository.findByMembers(member1,member2);
+//        return this.chatRoomRepository.getMembers(member1,member2);
 //
 //    }
 
@@ -20,6 +20,6 @@ public class ChatRoomService {
     }
 
     public ChatRoom findById(Long id){
-        return chatRoomRepository.findById(id);
+        return chatRoomRepository.findById(id).orElseThrow();
     }
 }

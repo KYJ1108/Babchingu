@@ -24,6 +24,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.korea.babchingu.board.Board, com.korea.babchingu.board.QBoard> boardList = this.<com.korea.babchingu.board.Board, com.korea.babchingu.board.QBoard>createList("boardList", com.korea.babchingu.board.Board.class, com.korea.babchingu.board.QBoard.class, PathInits.DIRECT2);
 
+    public final ListPath<com.korea.babchingu.chat.ChatRoom, com.korea.babchingu.chat.QChatRoom> chatRoomList = this.<com.korea.babchingu.chat.ChatRoom, com.korea.babchingu.chat.QChatRoom>createList("chatRoomList", com.korea.babchingu.chat.ChatRoom.class, com.korea.babchingu.chat.QChatRoom.class, PathInits.DIRECT2);
+
     public final ListPath<com.korea.babchingu.comment.Comment, com.korea.babchingu.comment.QComment> commentList = this.<com.korea.babchingu.comment.Comment, com.korea.babchingu.comment.QComment>createList("commentList", com.korea.babchingu.comment.Comment.class, com.korea.babchingu.comment.QComment.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.time.LocalDateTime> createDate = createDateTime("createDate", java.time.LocalDateTime.class);

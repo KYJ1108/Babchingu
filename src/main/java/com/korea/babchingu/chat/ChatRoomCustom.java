@@ -5,5 +5,5 @@ import com.korea.babchingu.member.Member;
 import java.util.Optional;
 
 public interface ChatRoomCustom {
-//    Optional<ChatRoom> findByMembers(Member member, Member member2);
+//    Optional<ChatRoom> getMembers(Member member, Member member2);
 }
