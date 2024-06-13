@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,13 +18,15 @@ public class QProfile extends EntityPathBase<Profile> {
 
     private static final long serialVersionUID = 1267086880L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QProfile profile = new QProfile("profile");
 
     public final StringPath email = createString("email");
 
     public final ArrayPath<byte[], Byte> image = createArray("image", byte[].class);
 
-    public final NumberPath<Long> member_id = createNumber("member_id", Long.class);
+    public final com.korea.babchingu.member.QMember member;
 
     public final StringPath nickname = createString("nickname");
 
@@ -34,15 +37,24 @@ public class QProfile extends EntityPathBase<Profile> {
     public final StringPath sex = createString("sex");
 
     public QProfile(String variable) {
-        super(Profile.class, forVariable(variable));
+        this(Profile.class, forVariable(variable), INITS);
     }
 
     public QProfile(Path<? extends Profile> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QProfile(PathMetadata metadata) {
-        super(Profile.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QProfile(PathMetadata metadata, PathInits inits) {
+        this(Profile.class, metadata, inits);
+    }
+
+    public QProfile(Class<? extends Profile> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.member = inits.isInitialized("member") ? new com.korea.babchingu.member.QMember(forProperty("member"), inits.get("member")) : null;
     }
 
 }

@@ -26,19 +26,28 @@ public class MemberController {
     private final SendEmailService sendEmailService;
 
 
-    @Getter
-    @Setter
-    class MemberForm {
-        @NotEmpty(message = "아이디를 입력해주세요.")
-        private String loginId;
-        @NotEmpty(message = "비밀번호를 입력해주세요.")
-        private String password;
-        @NotEmpty(message = "비밀번호를 동일하게 입력해주세요.")
-        private String password2;
-        @NotEmpty(message = "이메일을 입력해주세요.")
-        @Email(message = "이메일 형식이 아닙니다.")
-        private String email;
-    }
+//    @Getter
+//    @Setter
+//    class MemberForm {
+//        @NotEmpty(message = "아이디를 입력해주세요.")
+//        private String loginId;
+//        @NotEmpty(message = "비밀번호를 입력해주세요.")
+//        private String password;
+//        @NotEmpty(message = "비밀번호를 동일하게 입력해주세요.")
+//        private String password2;
+//        @NotEmpty(message = "이메일을 입력해주세요.")
+//        @Email(message = "이메일 형식이 아닙니다.")
+//        private String email;
+//        @NotEmpty(message = "닉네임을 입력해주세요.")
+//        private String nickname;
+//        private String image;
+//        private String sex;
+//        private String phone;
+//
+//        public MemberForm() {
+//            // Default constructor for form binding
+//        }
+//    }
 
     @GetMapping("/signup")
     public String signup(MemberForm memberForm) {
@@ -56,7 +65,8 @@ public class MemberController {
         }
 
         try {
-            memberService.save(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getEmail());
+            memberService.save(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getEmail(), memberForm.getNickname(), memberForm.getImage(), memberForm.getSex(), memberForm.getPhone());
+
         } catch (RuntimeException e) {
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup";

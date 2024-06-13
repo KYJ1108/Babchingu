@@ -1,5 +1,6 @@
 package com.korea.babchingu.member;
 
+import com.korea.babchingu.Follow.Follow;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.chat.ChatRoom;
 import com.korea.babchingu.comment.Comment;
@@ -27,7 +28,7 @@ public class Member {
     private String password;
     private String nickname;
     private String email;
-    private String sex;
+
     @CreatedDate
     private LocalDateTime createDate;
     @LastModifiedDate
@@ -38,4 +39,13 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
+    //팔로우
+
+    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
+    private List<Follow> followingList;
+
+    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
+    private List<Follow> followerList;
+
 }

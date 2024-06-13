@@ -66,7 +66,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.korea.babchingu.member.QMember(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new com.korea.babchingu.member.QMember(forProperty("member"), inits.get("member")) : null;
     }
 
 }

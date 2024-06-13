@@ -48,8 +48,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
             member = new Member();
             member.setLoginId(mySocialUser.getSub());
             member.setPassword(mySocialUser.getPass());
-            member.setNickname(mySocialUser.getName());
-            member.setEmail(mySocialUser.getEmail());
             member.setCreateDate(LocalDateTime.now());
 
             memberRepository.save(member);

@@ -28,6 +28,10 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
+    public final ListPath<com.korea.babchingu.Follow.Follow, com.korea.babchingu.Follow.QFollow> followerList = this.<com.korea.babchingu.Follow.Follow, com.korea.babchingu.Follow.QFollow>createList("followerList", com.korea.babchingu.Follow.Follow.class, com.korea.babchingu.Follow.QFollow.class, PathInits.DIRECT2);
+
+    public final ListPath<com.korea.babchingu.Follow.Follow, com.korea.babchingu.Follow.QFollow> followingList = this.<com.korea.babchingu.Follow.Follow, com.korea.babchingu.Follow.QFollow>createList("followingList", com.korea.babchingu.Follow.Follow.class, com.korea.babchingu.Follow.QFollow.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath loginId = createString("loginId");
@@ -35,8 +39,6 @@ public class QMember extends EntityPathBase<Member> {
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
-
-    public final StringPath sex = createString("sex");
 
     public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 

@@ -1,5 +1,6 @@
 package com.korea.babchingu.profile;
 
+import com.korea.babchingu.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -16,11 +17,12 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profile_id;
 
-    private Long member_id;
+    // 연관 관계 설정
+    @OneToOne(mappedBy = "profile")
+    private Member member;
 
     private String nickname;
 
-    @NotEmpty
     private byte[] image;
 
     private String sex;
