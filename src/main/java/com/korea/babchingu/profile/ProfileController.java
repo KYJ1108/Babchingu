@@ -16,6 +16,7 @@ public class ProfileController {
 
     @GetMapping("/profile1")
     public String getProfile() {
+
         return "profile";
     }
 
@@ -27,13 +28,14 @@ public class ProfileController {
             return "redirect:/error";
         }
 
+//        model.addAttribute("profile", profile);
+
         model.addAttribute("nickname", profile.getNickname());
         model.addAttribute("image", profile.getImage());
         model.addAttribute("sex", profile.getSex());
-        model.addAttribute("memberId", profile.getMember_id());
+        model.addAttribute("memberId", profile.getMember().getId());
         model.addAttribute("profileId", profile.getProfile_id());
         model.addAttribute("phone", profile.getPhone());
-        model.addAttribute("email", profile.getEmail());
 
 
         return "profile";  // profile.html
@@ -46,7 +48,7 @@ public class ProfileController {
     @PostMapping("/profile")
     public String updateProfile(ProfileForm profileForm) {
 
-        profileService.saveProfileById(profileForm);
+//        profileService.saveProfileById(profileForm);
         return "profile";
     }
 
