@@ -40,7 +40,7 @@ public class MainController {
         return "map";
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public String search(Model model,@RequestParam String searchInput) {
 
         List<Board> searchBoard = mainService.getSearchList(searchInput);

@@ -4,7 +4,9 @@ import com.korea.babchingu.image.Image;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -128,5 +130,14 @@ public class BoardController {
     public String delete(@PathVariable("id") Long id) {
         boardService.delete(id);
         return "redirect:/";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/vote/{id}")
+    public String boardVote(Principal principal, @PathVariable("id") Long id) {
+        Board board = this.boardService.getBoard(id);
+        Member member = this.memberService.getMember(principal.getName());
+        this.boardService.vote(board, member);
+        return String.format("redirect:/board/%s", id);
     }
 }

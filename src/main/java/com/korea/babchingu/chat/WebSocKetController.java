@@ -10,6 +10,7 @@ import com.korea.babchingu.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,9 @@ public class WebSocKetController {
     private final MemberRepository memberRepository;
     private final AlarmRepository alarmRepository;
 
-    @MessageMapping("/talk")
-    @SendTo("/sub/talk")
-    public ChatMessageDto message(ChatMessageDto message) throws Exception {
+    @MessageMapping("/talk/{id}")
+    @SendTo("/sub/talk/{id}")
+    public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
 //        LocalDateTime createDate = message.getCreateDate();
 //        ChatRoom chatRoom = chatRoomRepository.findById(id);
 //        Member member = memberService.getUserNickname(message.getSender());

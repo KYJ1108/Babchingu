@@ -29,19 +29,21 @@ public class ChatRoom {
     @JsonManagedReference
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
-//    @ManyToOne
-//    private Member member;
-//
-//    @ManyToOne
-//    private Member member2;
+    @ManyToOne
+    @JoinColumn(name = "member1_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "member2_id")
+    private Member member2;
 
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     List<Alarm> alarmList = new ArrayList<>();
 
 
-//    private ChatRoom(Member member1, Member member2) {
-//        this.member = member1;
-//        this.member2 = member2;
-//    }
+    private ChatRoom(Member member1, Member member2) {
+        this.member = member1;
+        this.member2 = member2;
+    }
 }
