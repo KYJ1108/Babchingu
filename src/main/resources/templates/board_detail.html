@@ -19,12 +19,10 @@
             <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
 
-        <form th:action="@{|/board/vote/${board.id}|}" class="flex items-center" method="post">
-            <label class="flex items-center">
-                <input type="checkbox" checked="checked" name="voter" class="mask mask-heart bg-red-400">
-                <span th:text="${#lists.size(board.voter)}"></span>
-            </label>
-        </form>
+        <a th:href="@{|board/${board.id}/vote|}" class="recommend">
+            <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
+            <span th:text="${#lists.size(board.voter)}"></span>
+        </a>
     </div>
 
     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">

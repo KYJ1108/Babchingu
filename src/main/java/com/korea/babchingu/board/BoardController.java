@@ -136,12 +136,16 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("/vote/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/board/{id}/vote")
     public String boardVote(Principal principal, @PathVariable("id") Long id) {
         Board board = this.boardService.getBoard(id);
         Member member = this.memberService.getMember(principal.getName());
-        this.boardService.vote(board, member);
+        if (board.getVoter().contains(member)) {
+            this.boardService.cancelVote(board, member);
+        } else {
+            this.boardService.vote(board, member);
+        }
         return String.format("redirect:/board/%s", id);
     }
 }
