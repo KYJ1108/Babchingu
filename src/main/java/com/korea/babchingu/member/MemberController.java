@@ -1,5 +1,6 @@
 package com.korea.babchingu.member;
 
+import com.korea.babchingu.board.Board;
 import com.korea.babchingu.security.MyUserDetailService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -16,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,7 +59,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String signup(@Valid MemberForm memberForm, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "signup";
         }
         if (!memberForm.getPassword().equals(memberForm.getPassword2())) {
@@ -121,4 +124,13 @@ public class MemberController {
 
         return "redirect:/member/login";
     }
+
+    @PostMapping("/member/search")
+    public String search(Model model, @RequestParam String memberId) {
+        List<Member> searchLoginId = memberService.getSearchList(memberId);
+        model.addAttribute("searchLoginId", searchLoginId);
+
+        return "layout";
+    }
+
 }

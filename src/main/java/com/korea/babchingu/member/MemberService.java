@@ -63,4 +63,8 @@ public class MemberService {
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
+
+    public List<Member> getSearchList(String keyword) {
+        return memberRepository.findByLoginIdContainingIgnoreCase(keyword);
+    }
 }
