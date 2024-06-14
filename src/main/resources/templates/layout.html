@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/styles.css">
+    <script src="https://kit.fontawesome.com/fcf8de99ce.js" crossorigin="anonymous"></script>
     <title>밥친구</title>
 </head>
 <body>
@@ -125,7 +126,7 @@
 
 <!--boardList_필터-->
 <script>
-    function toggleCategory() {
+    function toggleAllCategories() {
         var options = document.querySelectorAll('.category-options');
         options.forEach(function(option) {
             option.classList.toggle('active');
@@ -133,11 +134,6 @@
     }
 
     function toggleCategory(category) {
-        var options = document.querySelectorAll('.category-options');
-        options.forEach(function(option) {
-            option.classList.remove('active');
-        });
-
         var categoryOptions = document.getElementById(category + '-options');
         categoryOptions.classList.toggle('active');
     }
