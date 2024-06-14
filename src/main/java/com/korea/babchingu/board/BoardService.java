@@ -13,10 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -107,6 +104,13 @@ public class BoardService {
 
     public void vote(Board board, Member member) {
         board.getVoter().add(member);
+        this.boardRepository.save(board);
+    }
+
+    public void cancelVote(Board board, Member member) {
+        Set<Member> updatedVoters = new HashSet<>(board.getVoter());
+        updatedVoters.remove(member);
+        board.setVoter(updatedVoters);
         this.boardRepository.save(board);
     }
 }

@@ -29,7 +29,7 @@
                         </a>
                     </li>
                     <li><a>프로필 수정</a></li>
-                    <li><a class="justify-between" href="/logout">로그아웃</a></li>
+                    <li><a class="justify-between" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a></li>
                     <li>
                         <a class="justify-between" href="/board/create">
                             게시물 작성
