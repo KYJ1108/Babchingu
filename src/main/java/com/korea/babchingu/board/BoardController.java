@@ -21,9 +21,15 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
-    //    private final TagService tagService;
+//    private final TagService tagService;
 //    private final BoardTagService boardTagService;
     private final MemberService memberService;
+
+    @ModelAttribute("memberList")
+    public List<Member> member(){
+        List<Member> memberList = memberService.findAll();
+        return memberList;
+    }
 
     @GetMapping("/create")
     public String create(BoardForm boardForm) {
@@ -78,7 +84,6 @@ public class BoardController {
             Member member = memberService.getMember(principal.getName());
             model.addAttribute("member", member);
         }
-
         return "boardList_form";
     }
 
@@ -111,7 +116,6 @@ public class BoardController {
             // 게시글이 존재하지 않는 경우에 대한 예외 처리
             return "redirect:/error";
         }
-
         return "board_modify";
     }
 
