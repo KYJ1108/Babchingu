@@ -2,60 +2,63 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
     <div class="filter-container">
-        <img class="category" src="/img/filter.png" style="width:25px;height:25px;" onclick="toggleCategory()">
-        <div class="category">
-            <span onclick="toggleCategory('location')">지역</span>
-            <div class="category-options" id="location-options">
-                <label><input type="checkbox" value="서울"> 서울</label>
-                <label><input type="checkbox" value="경기"> 경기</label>
-                <label><input type="checkbox" value="충북"> 충북</label>
-                <label><input type="checkbox" value="충남"> 충남</label>
-                <label><input type="checkbox" value="전북"> 전북</label>
-                <label><input type="checkbox" value="전남"> 전남</label>
-                <label><input type="checkbox" value="경남"> 경남</label>
-                <label><input type="checkbox" value="경북"> 경북</label>
-                <label><input type="checkbox" value="강원"> 강원</label>
-                <label><input type="checkbox" value="인천"> 인천</label>
-                <label><input type="checkbox" value="대구"> 대구</label>
-                <label><input type="checkbox" value="부산"> 부산</label>
-                <label><input type="checkbox" value="울산"> 울산</label>
-                <label><input type="checkbox" value="대전"> 대전</label>
-                <label><input type="checkbox" value="광주"> 광주</label>
-                <label><input type="checkbox" value="제주"> 제주</label>
+
+        <div class="collapse bg-base-200">
+            <input type="checkbox" />
+            <div class="collapse-title text-xl font-medium">
+                <img class="category" src="/img/filter.png" style="width:25px;height:25px;" onclick="toggleCategory()">
+            </div>
+            <div class="collapse-content">
+                <div class="category">
+                    <span onclick="toggleCategory('location')">지역</span>
+                    <label><input type="checkbox" value="서울"> 서울</label>
+                    <label><input type="checkbox" value="경기"> 경기</label>
+                    <label><input type="checkbox" value="충북"> 충북</label>
+                    <label><input type="checkbox" value="충남"> 충남</label>
+                    <label><input type="checkbox" value="전북"> 전북</label>
+                    <label><input type="checkbox" value="전남"> 전남</label>
+                    <label><input type="checkbox" value="경남"> 경남</label>
+                    <label><input type="checkbox" value="경북"> 경북</label>
+                    <label><input type="checkbox" value="강원"> 강원</label>
+                    <label><input type="checkbox" value="인천"> 인천</label>
+                    <label><input type="checkbox" value="대구"> 대구</label>
+                    <label><input type="checkbox" value="부산"> 부산</label>
+                    <label><input type="checkbox" value="울산"> 울산</label>
+                    <label><input type="checkbox" value="대전"> 대전</label>
+                    <label><input type="checkbox" value="광주"> 광주</label>
+                    <label><input type="checkbox" value="제주"> 제주</label>
+                </div>
+
+                <hr>
+
+                <div class="category">
+                    <span onclick="toggleCategory('food')">음식</span>
+                    <label><input type="checkbox" value="한식"> 한식</label>
+                    <label><input type="checkbox" value="중식"> 중식</label>
+                    <label><input type="checkbox" value="일식"> 일식</label>
+                    <label><input type="checkbox" value="양식"> 양식</label>
+                    <label><input type="checkbox" value="디저트"> 디저트</label>
+                    <label><input type="checkbox" value="아시아"> 아시아</label>
+                    <label><input type="checkbox" value="유럽"> 유럽</label>
+                    <label><input type="checkbox" value="아프리카"> 아프리카</label>
+                    <label><input type="checkbox" value="오세아니아"> 오세아니아</label>
+                    <label><input type="checkbox" value="북아메리카"> 북아메리카</label>
+                    <label><input type="checkbox" value="남아메리카"> 남아메리카</label>
+                    <label><input type="checkbox" value="남극"> 남극</label>
+                    <label><input type="checkbox" value="북극"> 북극</label>
+                </div>
+
+                <hr>
+
+                <div class="category">
+                    <span onclick="toggleCategory('gender')">성별</span>
+                    <label><input type="checkbox" value="여"> 여</label>
+                    <label><input type="checkbox" value="남"> 남</label>
+                    <label><input type="checkbox" value="무관"> 무관</label>
+                </div>
             </div>
         </div>
 
-        <hr>
-
-        <div class="category">
-            <span onclick="toggleCategory('food')">음식</span>
-            <div class="category-options" id="food-options">
-                <label><input type="checkbox" value="한식"> 한식</label>
-                <label><input type="checkbox" value="중식"> 중식</label>
-                <label><input type="checkbox" value="일식"> 일식</label>
-                <label><input type="checkbox" value="양식"> 양식</label>
-                <label><input type="checkbox" value="디저트"> 디저트</label>
-                <label><input type="checkbox" value="아시아"> 아시아</label>
-                <label><input type="checkbox" value="유럽"> 유럽</label>
-                <label><input type="checkbox" value="아프리카"> 아프리카</label>
-                <label><input type="checkbox" value="오세아니아"> 오세아니아</label>
-                <label><input type="checkbox" value="북아메리카"> 북아메리카</label>
-                <label><input type="checkbox" value="남아메리카"> 남아메리카</label>
-                <label><input type="checkbox" value="남극"> 남극</label>
-                <label><input type="checkbox" value="북극"> 북극</label>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="category">
-            <span onclick="toggleCategory('gender')">성별</span>
-            <div class="category-options" id="gender-options">
-                <label><input type="checkbox" value="여"> 여</label>
-                <label><input type="checkbox" value="남"> 남</label>
-                <label><input type="checkbox" value="무관"> 무관</label>
-            </div>
-        </div>
 
 
         <select id="filter">
