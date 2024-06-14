@@ -19,22 +19,45 @@
 
 <!-- 메시지 박스 -->
 <div class="message-box" id="messageBox">
-    <div class="message-box-header">
+    <div class="message-box-header flex justify-between items-center">
         <strong>메시지</strong>
+        <!-- You can open the modal using ID.showModal() method -->
+        <div onclick="document.getElementById('my_modal_3').showModal()">
+            <img class="option-icon" src="/img/search.png" style="width: 20px; height: 20px;">
+        </div>
+
+        <dialog id="my_modal_3" class="modal">
+            <div class="modal-box">
+                <!-- 모달 닫기 버튼 -->
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('my_modal_3').close()">✕</button>
+
+                <!-- 검색 폼 -->
+                <form th:action="@{/member/search}" class="flex items-center gap-2" method="post">
+                    <input type="text" name="memberId" placeholder="회원 검색">
+                    <input type="submit" value="검색">
+                </form>
+
+                <!-- 검색 결과 목록 -->
+                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-blue-300 hover:text-white p-[10px] flex'">
+                    <li th:each="member : ${searchLoginId}" th:class="${itemHover}">
+                        <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.loginId}" th:class="${itemAnchorClass}"></a>
+                    </li>
+                </ul>
+            </div>
+        </dialog>
+
     </div>
     <div class="message-box-content">
         <div th:each="member : ${memberList}">
             <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.loginId}"></a>
         </div>
     </div>
-    <div class="message-box-footer">
-        <input type="text" placeholder="메시지 입력...">
-        <button id="sendMessage">보내기</button>
-    </div>
 </div>
 
 <!-- 메시지 창을 표시하는 버튼 -->
-<button class="toggle-button" id="toggleButton">DM</button>
+<button class="toggle-button" id="toggleButton">
+    <img src="/img/message.png" alt="" style="width: 20px; height: 20px;">
+</button>
 
 <script>
     // sendChat 함수 정의
@@ -43,28 +66,15 @@
         console.log("Chat sent");
     }
 
-    // 메시지 박스 관련 스크립트
-    document.querySelector('#sendMessage').addEventListener('click', function() {
-        const input = document.querySelector('.message-box input');
-        const content = document.querySelector('.message-box-content');
-        const message = document.createElement('p');
-        message.textContent = input.value;
-        content.appendChild(message);
-        input.value = '';
-
-        // sendChat 함수 호출
-        sendChat();
-    });
-
     // 메시지 박스를 표시하는 버튼 이벤트 리스너
     document.querySelector('#toggleButton').addEventListener('click', function() {
         const messageBox = document.getElementById('messageBox');
         if (messageBox.classList.contains('visible')) {
             messageBox.classList.remove('visible');
-            this.textContent = 'DM';
+            this.innerHTML = '<img src="/img/message.png" alt="" style="width: 20px; height: 20px;">';
         } else {
             messageBox.classList.add('visible');
-            this.textContent = '∨';
+            this.innerHTML = '<img src="/img/v.png" alt="" style="width: 20px; height: 20px;">';
         }
     });
 </script>
@@ -122,6 +132,36 @@
 
     // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
     getAddressFromHTML();
+</script>
+<script>
+    function searchMemberAndShowModal() {
+        const memberId = document.getElementById('searchInput').value;
+
+        fetch('/member/searchId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `memberId=${encodeURIComponent(memberId)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 여기서 모달에 검색 결과를 표시하는 JavaScript 코드 작성
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = ''; // 기존 내용 초기화
+
+            data.forEach(member => {
+                const memberElement = document.createElement('p');
+                memberElement.textContent = member.name; // 예시: 멤버 객체의 필드에 맞게 수정
+
+                modalContent.appendChild(memberElement);
+            });
+
+            // 모달을 보여주는 JavaScript 코드 작성 (예: Bootstrap Modal 사용 시)
+            $('#myModal').modal('show');
+        })
+        .catch(error => console.error('Error fetching search results:', error));
+    }
 </script>
 
 <!--boardList_필터-->
