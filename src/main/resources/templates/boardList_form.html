@@ -2,7 +2,6 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
     <div class="filter-container">
-
         <div class="collapse bg-base-200">
             <input type="checkbox" />
             <div class="collapse-title text-xl font-medium">
@@ -10,7 +9,7 @@
             </div>
             <div class="collapse-content">
                 <div class="category">
-                    <span onclick="toggleCategory('location')">지역</span>
+                    <span onclick="toggleCategory('location')"><b>지역</b></span><br>
                     <label><input type="checkbox" value="서울"> 서울</label>
                     <label><input type="checkbox" value="경기"> 경기</label>
                     <label><input type="checkbox" value="충북"> 충북</label>
@@ -32,35 +31,25 @@
                 <hr>
 
                 <div class="category">
-                    <span onclick="toggleCategory('food')">음식</span>
+                    <span onclick="toggleCategory('food')"><b>음식</b></span><br>
                     <label><input type="checkbox" value="한식"> 한식</label>
                     <label><input type="checkbox" value="중식"> 중식</label>
                     <label><input type="checkbox" value="일식"> 일식</label>
+                    <label><input type="checkbox" value="아시아"> 아시아</label>
                     <label><input type="checkbox" value="양식"> 양식</label>
                     <label><input type="checkbox" value="디저트"> 디저트</label>
-                    <label><input type="checkbox" value="아시아"> 아시아</label>
-                    <label><input type="checkbox" value="유럽"> 유럽</label>
-                    <label><input type="checkbox" value="아프리카"> 아프리카</label>
-                    <label><input type="checkbox" value="오세아니아"> 오세아니아</label>
-                    <label><input type="checkbox" value="북아메리카"> 북아메리카</label>
-                    <label><input type="checkbox" value="남아메리카"> 남아메리카</label>
-                    <label><input type="checkbox" value="남극"> 남극</label>
-                    <label><input type="checkbox" value="북극"> 북극</label>
                 </div>
 
                 <hr>
 
                 <div class="category">
-                    <span onclick="toggleCategory('gender')">성별</span>
+                    <span onclick="toggleCategory('gender')"><b>성별</b></span><br>
                     <label><input type="checkbox" value="여"> 여</label>
                     <label><input type="checkbox" value="남"> 남</label>
                     <label><input type="checkbox" value="무관"> 무관</label>
                 </div>
             </div>
         </div>
-
-
-
         <select id="filter">
             <option value="all">전체</option>
             <option value="popular">인기</option>

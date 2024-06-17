@@ -21,6 +21,8 @@ public class MainController {
 
     private final MainService mainService;
     private final MemberService memberService;
+    private final BoardService boardService;
+
     @ModelAttribute("memberList")
     public List<Member> member(){
         List<Member> memberList = memberService.findAll();
@@ -32,6 +34,10 @@ public class MainController {
             Member member = memberService.getMember(principal.getName());
             model.addAttribute("member", member);
         }
+        // 인기 있는 게시물 가져오기 (좋아요 순으로 상위 3개)
+        List<Board> popularBoards = mainService.getPopularBoards();
+        model.addAttribute("popularBoards", popularBoards);
+
         return "main";
     }
 
