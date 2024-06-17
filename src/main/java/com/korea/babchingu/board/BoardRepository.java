@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(String keyword1, String keyword2);
 
