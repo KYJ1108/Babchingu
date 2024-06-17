@@ -167,7 +167,7 @@
 
 <!--boardList_필터-->
 <script>
-    function toggleCategory() {
+    function toggleAllCategories() {
         var options = document.querySelectorAll('.category-options');
         options.forEach(function(option) {
             option.classList.toggle('active');
@@ -175,11 +175,6 @@
     }
 
     function toggleCategory(category) {
-        var options = document.querySelectorAll('.category-options');
-        options.forEach(function(option) {
-            option.classList.remove('active');
-        });
-
         var categoryOptions = document.getElementById(category + '-options');
         categoryOptions.classList.toggle('active');
     }
