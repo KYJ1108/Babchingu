@@ -28,22 +28,41 @@ body {
 
 .post-boxes {
     height: 500px;
+    width: 100%;
     display: flex;
     /* post-box를 가로로 정렬하기 위해 flex 컨테이너로 설정 */
     justify-content: space-between;
     /* 각 post-box를 컨테이너 양쪽 끝에 배치 */
+    gap: 10px;
 }
 
 .post-box {
-    width: 30%;
+    width: 100%;
     /* 각 박스의 너비를 30%로 설정하여 가로로 세 개가 보이도록 함 */
-    height: 500px;
-    border: 1px solid #ddd;
-    /* 테두리 스타일 설정 */
-    border-radius: 10px;
+    height: 100%;
     padding: 20px;
     /* 내부 여백 설정 */
     align-items: center;
+}
+
+.post-content{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.post-title{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.post-details{
+    margin-bottom: 10px;
+}
+
+.post-footer {
+text-align: right;
 }
 
 .slider {

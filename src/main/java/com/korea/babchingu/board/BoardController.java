@@ -45,8 +45,7 @@ public class BoardController {
             return "board_form";
         }
 
-        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member, boardForm.getCreateDate());
-
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), member, boardForm.getCreateDate());
         // 해시태그 저장
 //        String[] tagNames = tags.split(",");
 //        for (String tagName : tagNames){
@@ -125,8 +124,7 @@ public class BoardController {
                          @Valid BoardForm boardForm,
                          @RequestParam("images") List<MultipartFile> images,
                          Model model) {
-        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCreateDate());
-        model.addAttribute("board", board);
+        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());        model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }
 

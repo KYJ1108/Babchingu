@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class BoardForm {
     private String address;
     private String jibun;
     private String restName;
+    private Set<String> categories;
 
     private Member member;
 
