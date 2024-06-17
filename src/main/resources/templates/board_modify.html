@@ -1,0 +1,129 @@
+<html lang="ko" layout:decorate="~{layout}">
+<div layout:fragment="content" class="w-[800px] mx-auto flex flex-col gap-7">
+    <form th:action="@{|/board/modify/${id}|}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
+        <!--  제목 & 내용  -->
+        <div>
+            <img class="option-icon" src="/img/w.png" style="width:20px;height:20px;">
+            <span class="option-title">글쓰기</span>
+        </div>
+        <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
+        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+        <textarea name="content" class="input" th:field="*{content}" th:vlaue="*{content}" placeholder="내용을 입력해주세요"></textarea>
+        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+
+        <!-- 장소 입력 -->
+        <ul>
+            <li>
+                <img class="option-icon" src="/img/pin.png" style="width:20px;height:20px;">
+                <span class="option-title">장소</span>
+            </li>
+            <li>
+                <input type="text" id="keyword" class="input" th:field="*{restName}" th:value="*{restName}" placeholder="장소를 검색해주세요." readonly onclick="openPlaceSearchPopup()" style="width:100%">
+            </li>
+            <input type="text" id="sample4_roadAddress" class="input" th:field="*{address}" th:value="*{address}" placeholder="도로명주소" style="width:100%">
+            <input type="text" id="sample4_jibunAddress" class="input" th:field="*{jibun}" th:value="*{jibun}" placeholder="지번주소" style="width:100%">
+        </ul>
+
+        <!-- 지도 -->
+        <!--        <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>-->
+
+        <!--  사진  -->
+        <div>
+            <img class="option-icon" src="/img/p.png" style="width:20px;height:20px;">
+            <label for="images">이미지</label>
+        </div>
+        <input type="file" id="images" name="images" multiple>
+        <div th:each="image : ${images}">
+            <img th:src="${image.url}" alt="Image">
+        </div>
+
+        <!--  해시태그  -->
+        <!--        <div class="mb-3">-->
+        <!--            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">-->
+        <!--            <div class="mb-3">-->
+        <!--                <label for="hashtags" class="form-label">해시태그</label>-->
+        <!--                <div>-->
+        <!--                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">-->
+        <!--                    <div id="hashtags-container"></div>-->
+        <!--                    <input type="hidden" id="hashtags-hidden" name="tags" />-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <input type="submit" class="btn" value="게시물 수정">
+
+        <!-- 회원 정보 -->
+        <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
+        <input type="hidden" id="loginId" name="loginId" th:value="${loginId}">
+    </form>
+
+    <!-- 주소 검색 script -->
+    <script>
+        // 장소 검색 팝업 열기
+        function openPlaceSearchPopup() {
+            window.open('/board/placeSearchPopup', 'placeSearchPopup', 'width=600,height=400,scrollbars=yes,resizable=yes');
+        }
+
+        // 선택한 장소 데이터를 받아옴
+        function setPlaceData(placeName, roadAddress, jibunAddress) {
+            document.getElementById('keyword').value = placeName;
+            document.getElementById("sample4_roadAddress").value = roadAddress; // 도로명 주소 필드에 도로명 주소 설정
+            document.getElementById("sample4_jibunAddress").value = jibunAddress; // 지번 주소 필드에 지번 주소 설정
+        }
+
+        window.addEventListener('message', function(event) {
+            // 메시지를 수신하면 해당 데이터를 처리합니다.
+            var placeData = event.data;
+            var placeName = placeData.placeName;
+            var address = placeData.roadAddress;
+            var jibunAddress = placeData.jibunAddress;
+            setPlaceData(placeName, address, jibunAddress);
+        });
+    </script>
+    <!--  지도 script 끝  -->
+
+    <!--  해시태그  -->
+    <script>
+        <script>
+        const hashtagsInput = document.getElementById("hashtags");
+        const hashtagsContainer = document.getElementById("hashtags-container");
+        const hiddenHashtagsInput = document.getElementById("hashtags-hidden");
+
+        let hashtags = [];
+
+        function addHashtag(tag) {
+            tag = tag.replace(/[\[\]]/g, '').trim();
+            if(tag && !hashtags.includes(tag)) {
+                const span = document.createElement("span");
+                span.innerText = "#" + tag + " ";
+                span.classList.add("hashtag");
+
+                const removeButton = document.createElement("button");
+                removeButton.innerText = "x";
+                removeButton.classList.add("remove-button");
+                removeButton.addEventListener("click", () => {
+                    hashtagsContainer.removeChild(span);
+                    hashtags = hashtags.filter((hashtag) => hashtag !== tag);
+                    hiddenHashtagsInput.value = hashtags.join(",");
+                });
+
+                span.appendChild(removeButton);
+                hashtagsContainer.appendChild(span);
+                hashtags.push(tag);
+                hiddenHashtagsInput.value = hashtags.join(",");
+            }
+        }
+
+        hashtagsInput.addEventListener("keydown", (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const tag = hashtagsInput.value.trim();
+                if (tag) {
+                    addHashtag(tag);
+                    hashtagsInput.value = "";
+                }
+            }
+        });
+    </script>
+
+</div>
+</html>

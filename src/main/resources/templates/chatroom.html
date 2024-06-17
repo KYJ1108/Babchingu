@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{|/styles.css|}">
+    <link th:href="@{|https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css|}" rel="stylesheet"
+          type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/bccde956fc.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+<div class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
+        <h1 class="text-2xl font-bold mb-4">Chat Room</h1>
+        <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
+            <div th:each="message : ${chatroom.chatMessageList}">
+                <div class="chat chat-start" id="me">
+                    <div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                            <img alt="Tailwind CSS chat bubble component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        </div>
+                    </div>
+                    <div class="chat-header">
+                        <div th:text="${message.sender.loginId}"></div>
+                    </div>
+                    <div class="chat-bubble">
+                        <div th:text="${message.message}"></div>
+                    </div>
+                    <div class="chat-footer opacity-50">
+                        <time class="text-xs opacity-50" th:text="${message.createDate}"></time>
+                    </div>
+                </div>
+                <div class="chat chat-end" id="receiver">
+                    <div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                            <img alt="Tailwind CSS chat bubble component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        </div>
+                    </div>
+                    <div class="chat-header">
+                        <div th:text="${message.sender.loginId}"></div>
+                    </div>
+                    <div class="chat-bubble">
+                        <div th:text="${message.message}"></div>
+                    </div>
+                    <div class="chat-footer opacity-50">
+                        <time class="text-xs opacity-50" th:text="${message.createDate}"></time>
+                        Seen at 12:46
+                    </div>
+                </div>
+            </div>
+                <div id="greetings">
+                    <div id="images"></div>
+                </div>
+        </div>
+        <input id="message" type="text" class="border border-gray-300 rounded-lg p-2 w-full mb-4"
+               placeholder="Type your message..."/>
+        <div class="flex gap-5">
+            <button id="sendButton" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg" onclick="sendChat()">Send</button>
+        </div>
+    </div>
+    <div>
+        <button class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg">
+            <a href="/">나가기</a>
+        </button>
+    </div>
+    <script th:inline="javascript">
+     function connect() {
+            var socket = new SockJS("http://localhost:8080/ws-stomp");
+            stompClient = Stomp.over(socket);
+            const roomId = [[${chatroom.id}]]
+            console.log(roomId);
+            stompClient.connect({}, function (frame) {
+                console.log('웹소켓 연결 성공:', frame);
+                //구독
+                stompClient.subscribe('/sub/talk/'+roomId, function (chatMessageDto) {
+                    showChat(JSON.parse(chatMessageDto.body));
+                });
+            });
+        }
+        
+
+        //html 에서 입력값, roomId 를 받아서 Controller 로 전달
+        function sendChat() {
+            const roomId = [[${chatroom.id}]]
+            const sender = [[${user.loginId}]]
+            if ($("#message").val() != "") {
+                stompClient.send("/pub/talk/"+roomId, {},
+                    JSON.stringify({
+                        'message': $("#message").val(),
+                        'sender' : sender
+                    }));
+            }
+              $("#message").val('');
+        }
+
+        function showChat(chatMessageDto) {
+
+
+            $("#greetings").append(
+                "<div>"+chatMessageDto.sender+ ': '+ chatMessageDto.message+"</div>"
+            );
+            var messageContainer = document.getElementById("messages");
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        $(function () {
+            $("#message").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    sendChat();
+                }
+            });
+        });
+
+        // 페이지 로드 후 실행되는 부분
+        document.addEventListener('DOMContentLoaded', function () {
+            connect();
+
+            // 채팅창의 div 요소를 가져옵니다.
+            var messageContainer = document.getElementById("messages");
+
+            // 스크롤을 아래로 이동시킵니다.
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+
+    </script>
+</body>
+
+</html>

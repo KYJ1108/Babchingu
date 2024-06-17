@@ -3,11 +3,75 @@
 <div layout:fragment="content">
     <!-- 질문 -->
     <div>
-        <div style="width:800px; height:250px;">
+        <div class="flex flex-row">
+            <a th:href="@{|/board/modify/${id}|}" style="color: blue;">수정</a>
+            <form th:action="@{|/board/delete/${id}|}" method="post">
+                <input type="submit" style="color: red;" value="삭제">
+            </form>
+        </div>
+        <div>
             <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
             <div th:text="${board.title}"></div>
+            <div th:text="${board.restName}"></div>
+            <div id="boardAddress" th:text="${board.address}"></div>
+            <div th:text="${board.jibun}"></div>
             <div th:text="${board.content}"></div>
+            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+        </div>
+
+        <a th:href="@{|board/${board.id}/vote|}" class="recommend">
+            <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
+            <span th:text="${#lists.size(board.voter)}"></span>
+        </a>
+    </div>
+
+    <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
+
+    <!--댓글 반복-->
+    <div th:each="comment : ${board.commentList}">
+        <div>
+            <span th:text="${comment.content}" class="font-bold"></span>
+            <div class="flex flex-row">
+                <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
+                    <input type="text" name="content" placeholder="댓글 수정">
+                    <input type="submit" style="color: blue;" value="댓글 수정">
+                </form>
+                <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
+                    <input type="submit" style="color: red;" value="삭제">
+                </form>
+            </div>
+            <!-- 대댓글 반복 -->
+            <div th:each="answer : ${comment.answerList}">
+                <span th:text="${answer.content}"></span>
+                <div class="flex flex-row">
+                    <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">
+                        <input type="text" name="content" placeholder="대댓글 수정">
+                        <input type="submit" style="color: blue;" value="대댓글 수정">
+                    </form>
+                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post">
+                        <input type="submit" style="color: red;" value="삭제">
+                    </form>
+                </div>
+            </div>
+            <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" method="post">
+                <input type="text" name="content" placeholder="대댓글작성">
+                <input type="submit" value="대댓글 등록">
+            </form>
         </div>
     </div>
+
+    <!--     댓글 작성 폼 -->
+    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" method="post">
+        <input type="text" name="content" placeholder="댓글작성">
+        <input type="submit" value="댓글 등록">
+    </form>
+
+    <!-- 지도 표시 -->
+    <div id="containerMap" class="view_map">
+        <div id="mapWrapper">
+            <div id="map"></div>
+        </div>
+    </div>
+
 </div>
 </html>

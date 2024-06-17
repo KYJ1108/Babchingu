@@ -4,9 +4,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://kit.fontawesome.com/fcf8de99ce.js" crossorigin="anonymous"></script>
     <title>밥친구</title>
 </head>
 <body>
@@ -15,5 +16,216 @@
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
+
+<!-- 메시지 박스 -->
+<div class="message-box" id="messageBox">
+    <div class="message-box-header flex justify-between items-center">
+        <strong>메시지</strong>
+        <!-- You can open the modal using ID.showModal() method -->
+        <div onclick="searchModal.showModal()">
+            <img class="option-icon" src="/img/search.png" style="width: 20px; height: 20px;">
+        </div>
+
+        <dialog id="searchModal" class="modal">
+            <div class="modal-box">
+                <!-- 모달 닫기 버튼 -->
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="searchModal.close()">✕</button>
+
+                <!-- 검색 폼 -->
+                <form th:action="@{/member/search}" class="flex items-center gap-2" method="post">
+                    <input type="hidden" id="isSearchModal" name="isSearchModal" th:value="${isSearchModal}">
+                    <input type="text" name="memberId" placeholder="회원 검색">
+                    <input type="submit" value="검색">
+                </form>
+
+                <!-- 검색 결과 목록 -->
+                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-gray-100 p-[10px] flex w-full', itemAnchorClass='inline-block w-full h-full'">
+                    <li th:each="member : ${searchLoginId}" th:class="${itemHover}">
+                        <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.loginId}" th:class="${itemAnchorClass}"></a>
+                    </li>
+                </ul>
+            </div>
+        </dialog>
+
+    </div>
+    <div class="message-box-content">
+        <div th:each="member : ${memberList}">
+            <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.loginId}"></a>
+        </div>
+    </div>
+</div>
+
+<!-- 메시지 창을 표시하는 버튼 -->
+<button class="toggle-button" id="toggleButton">
+    <img src="/img/message.png" alt="" style="width: 20px; height: 20px;">
+</button>
+
+<script>
+    // sendChat 함수 정의
+    function sendChat() {
+        // Your chat sending logic
+        console.log("Chat sent");
+    }
+
+    // 메시지 박스를 표시하는 버튼 이벤트 리스너
+    document.querySelector('#toggleButton').addEventListener('click', function() {
+        const messageBox = document.getElementById('messageBox');
+        if (messageBox.classList.contains('visible')) {
+            messageBox.classList.remove('visible');
+            this.innerHTML = '<img src="/img/message.png" alt="" style="width: 20px; height: 20px;">';
+        } else {
+            messageBox.classList.add('visible');
+            this.innerHTML = '<img src="/img/v.png" alt="" style="width: 20px; height: 20px;">';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
+<script>
+    // HTML에서 해당 요소를 가져옵니다.
+    var mapContainer = document.getElementById('map');
+
+    // HTML에서 주소 값을 동적으로 가져오는 함수를 정의합니다.
+    function getAddressFromHTML() {
+        // HTML 요소에서 주소 값을 가져옵니다.
+        var addressElement = document.getElementById('boardAddress');
+        var address = addressElement.textContent;
+
+        // 가져온 주소 값을 지도를 표시하는 함수에 전달합니다.
+        searchAddressAndShowMap(address);
+    }
+
+    // 주소로 좌표를 검색하여 지도를 표시하는 함수를 정의합니다.
+    function searchAddressAndShowMap(address) {
+        // 주소-좌표 변환 객체를 생성합니다.
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다.
+        geocoder.addressSearch(address, function(result, status) {
+            // 정상적으로 검색이 완료된 경우
+            if (status === kakao.maps.services.Status.OK) {
+                // 검색 결과의 첫 번째 항목을 가져와서 좌표를 생성합니다.
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도 옵션을 설정합니다.
+                var mapOption = {
+                    center: coords, // 지도의 중심 좌표를 검색한 좌표로 설정합니다.
+                    level: 3 // 지도의 확대 레벨을 설정합니다. (0~14)
+                };
+
+                // 검색된 좌표를 중심으로 하는 지도 객체를 생성합니다.
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                // 검색된 좌표를 표시하는 마커를 생성합니다.
+                var marker = new kakao.maps.Marker({
+                    position: coords, // 마커의 위치를 검색된 좌표로 설정합니다.
+                    map: map // 마커를 표시할 지도 객체를 설정합니다.
+                });
+            } else {
+                // 검색 결과가 없는 경우 또는 그 외의 오류가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+                console.error('Geocoder failed: ' + status);
+            }
+        });
+    }
+    // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
+    var placePosition = new kakao.maps.LatLng(33.450701, 126.570667);
+
+    // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
+    getAddressFromHTML();
+</script>
+<script>
+    function searchMemberAndShowModal() {
+        const memberId = document.getElementById('searchInput').value;
+
+        fetch('/member/searchId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `memberId=${encodeURIComponent(memberId)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 여기서 모달에 검색 결과를 표시하는 JavaScript 코드 작성
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = ''; // 기존 내용 초기화
+
+            data.forEach(member => {
+                const memberElement = document.createElement('p');
+                memberElement.textContent = member.name; // 예시: 멤버 객체의 필드에 맞게 수정
+
+                modalContent.appendChild(memberElement);
+            });
+
+            // 모달을 보여주는 JavaScript 코드 작성 (예: Bootstrap Modal 사용 시)
+            $('#myModal').modal('show');
+        })
+        .catch(error => console.error('Error fetching search results:', error));
+    }
+</script>
+
+<!--boardList_카테고리_필터-->
+<script>
+    function toggleAllCategories() {
+        var options = document.querySelectorAll('.category-options');
+        options.forEach(function(option) {
+            option.classList.toggle('active');
+        });
+    }
+
+    function toggleCategory(category) {
+        var categoryOptions = document.getElementById(category + '-options');
+        categoryOptions.classList.toggle('active');
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isSearchModal = /*[[${isSearchModal}]]*/ false;
+        const searchModal = document.getElementById("searchModal");
+
+        if (isSearchModal) {
+            searchModal.showModal();
+        }
+    });
+
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const memberId = document.getElementById('memberId').value;
+        window.location.href = `/member/search?memberId=${encodeURIComponent(memberId)}`;
+    });
+</script>
+
+<!--메인-->
+<script>
+    let currentSlide = 0;
+    const slidesContainer = document.querySelector('.slides');
+    const slides = document.querySelectorAll('.slide');
+    const slideCount = slides.length;
+    const nextButton = document.querySelector('.next');
+    const prevButton = document.querySelector('.prev');
+
+    function showSlide(n) {
+        slidesContainer.style.transform = `translateX(-${n * 100}%)`;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentSlide);
+        setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
+
+        nextButton.addEventListener('click', nextSlide);
+        prevButton.addEventListener('click', prevSlide);
+    });
+</script>
 </body>
 </html>

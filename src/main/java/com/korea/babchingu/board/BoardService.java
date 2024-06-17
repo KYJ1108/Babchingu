@@ -3,6 +3,7 @@ package com.korea.babchingu.board;
 import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.image.Image;
 import com.korea.babchingu.image.ImageRepository;
+import com.korea.babchingu.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +26,16 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
-    public Board create(String title, String content, List<MultipartFile> images) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName,  Set<String> categories, Member member, LocalDateTime createDate) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
-
+        board.setAddress(address);
+        board.setJibun(jibun);
+        board.setRestName(restName);
+        board.setCategories(categories);
+        board.setMember(member);
+        board.setCreateDate(LocalDateTime.now());
 
         boardRepository.save(board);
 
@@ -37,7 +46,6 @@ public class BoardService {
 
             imageRepository.save(img);
         }
-
         return board;
     }
 
@@ -62,8 +70,60 @@ public class BoardService {
         if (board.isPresent()) {
             return board.get();
         } else {
-            throw new DataNotFoundException("company not found");
+            throw new DataNotFoundException("board not found");
         }
     }
 
+    public List<Board> getSearchList(String keyword) {
+        return boardRepository.findByTitleContainingIgnoreCaseOrRestNameContainingIgnoreCase(keyword, keyword);
+    }
+
+
+    public List<Board> getAllBoards() {
+        return boardRepository.findAll();
+    }
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Set<String> categories,  LocalDateTime createDate) {
+        Board board = getBoard(id);
+        board.setTitle(title);
+        board.setContent(content);
+        board.setAddress(address);
+        board.setJibun(jibun);
+        board.setRestName(restName);
+        board.setCategories(categories);
+        board.setCreateDate(LocalDateTime.now());
+
+        boardRepository.save(board);
+
+        for (MultipartFile image : images) {
+            Image img = new Image();
+            img.setBoard(board);
+            img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+
+            imageRepository.save(img);
+        }
+        return board;
+    }
+
+    public void delete(Long id) {
+        Board board = getBoard(id);
+        boardRepository.delete(board);
+    }
+
+    public void vote(Board board, Member member) {
+        board.getVoter().add(member);
+        this.boardRepository.save(board);
+    }
+
+    public void cancelVote(Board board, Member member) {
+        Set<Member> updatedVoters = new HashSet<>(board.getVoter());
+        updatedVoters.remove(member);
+        board.setVoter(updatedVoters);
+        this.boardRepository.save(board);
+    }
+
+    // 인기 있는 게시물 가져오는 메소드 (예시)
+    public List<Board> getPopularBoards() {
+        // 좋아요를 기준으로 상위 3개의 게시물 가져오기
+        return boardRepository.findTop3ByOrderByVoterDesc(); // 리포지토리에 정의된 메소드 예시
+    }
 }
