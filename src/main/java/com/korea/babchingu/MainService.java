@@ -17,4 +17,7 @@ public class MainService {
         return boardService.getSearchList(keyword);
     }
 
+    public List<Board> getPopularBoards() {
+        return boardService.getPopularBoards();
+    }
 }

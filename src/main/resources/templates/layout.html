@@ -81,7 +81,6 @@
 </script>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
-<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429"></script>-->
 <script>
     // HTML에서 해당 요소를 가져옵니다.
     var mapContainer = document.getElementById('map');
@@ -165,7 +164,7 @@
     }
 </script>
 
-<!--boardList_필터-->
+<!--boardList_카테고리_필터-->
 <script>
     function toggleAllCategories() {
         var options = document.querySelectorAll('.category-options');
@@ -197,5 +196,36 @@
     });
 </script>
 
+<!--메인-->
+<script>
+    let currentSlide = 0;
+    const slidesContainer = document.querySelector('.slides');
+    const slides = document.querySelectorAll('.slide');
+    const slideCount = slides.length;
+    const nextButton = document.querySelector('.next');
+    const prevButton = document.querySelector('.prev');
+
+    function showSlide(n) {
+        slidesContainer.style.transform = `translateX(-${n * 100}%)`;
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+        showSlide(currentSlide);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentSlide);
+        setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
+
+        nextButton.addEventListener('click', nextSlide);
+        prevButton.addEventListener('click', prevSlide);
+    });
+</script>
 </body>
 </html>
