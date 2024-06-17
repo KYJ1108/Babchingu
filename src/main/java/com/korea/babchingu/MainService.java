@@ -11,8 +11,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MainService {
     private final BoardService boardService;
+//    private final TagService tagService;
 
     public List<Board> getSearchList(String keyword) {
         return boardService.getSearchList(keyword);
+    }
+
+    public List<Board> getPopularBoards() {
+        return boardService.getPopularBoards();
     }
 }

@@ -1,13 +1,19 @@
 package com.korea.babchingu.board;
 
+import com.korea.babchingu.image.Image;
+import com.korea.babchingu.member.Member;
+import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -15,6 +21,15 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+//    private final TagService tagService;
+//    private final BoardTagService boardTagService;
+    private final MemberService memberService;
+
+    @ModelAttribute("memberList")
+    public List<Member> member(){
+        List<Member> memberList = memberService.findAll();
+        return memberList;
+    }
 
     @GetMapping("/create")
     public String create(BoardForm boardForm) {
@@ -22,25 +37,113 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid BoardForm boardForm, BindingResult bindingResult, @RequestParam("images") List<MultipartFile> images) {
+    public String create(@Valid BoardForm boardForm, BindingResult bindingResult,
+                         @RequestParam("images") List<MultipartFile> images,
+                         Principal principal) {
+        Member member = this.memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "board_form";
         }
 
-        boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
-
-        return "redirect:/";
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), member, boardForm.getCreateDate());
+        // 해시태그 저장
+//        String[] tagNames = tags.split(",");
+//        for (String tagName : tagNames){
+//            Tag tag = tagService.saveTag(tagName.trim());
+//            boardTagService.saveBoardTag(board, tag);
+//        }
+        return "redirect:/board/%d".formatted(board.getId());
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable("id") Long id, Model model) {
+    public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
         if (board == null) {
             // 회사 정보를 찾지 못한 경우 처리 (예: 404 페이지로 리다이렉트)
             return "redirect:/error";
         }
         model.addAttribute("board", board);
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
         return "board_detail";
     }
 
+    // 더보기
+    @GetMapping("/list")
+    public String boardList(Model model, Principal principal) {
+        // 게시물 목록 가져오기
+        List<Board> boards = boardService.getAllBoards();
+
+        // 모델에 게시물 목록 추가
+        model.addAttribute("boards", boards);
+
+        if (principal != null) {
+            Member member = memberService.getMember(principal.getName());
+            model.addAttribute("member", member);
+        }
+        return "boardList_form";
+    }
+
+    // 장소 검색 - 지도 팝업창
+    @GetMapping("/placeSearchPopup")
+    public String placeSearchPopup() {
+        return "find_rest_form";
+    }
+
+
+    @GetMapping("/modify/{id}")
+    public String update(BoardForm boardForm, @PathVariable("id") Long id, Model model) {
+        // id를 사용하여 해당 게시글을 데이터베이스에서 가져오는 작업 수행
+        Board board = boardService.getBoard(id);
+
+        List<Image> images = board.getImages();
+
+        // 가져온 게시글이 null이 아닌 경우에만 모델에 값을 설정
+        if (board != null) {
+            // 해당 게시글의 내용을 boardForm에 설정
+            boardForm.setTitle(board.getTitle());
+            boardForm.setContent(board.getContent());
+            boardForm.setRestName(board.getRestName());
+            boardForm.setAddress(board.getAddress());
+            boardForm.setJibun(board.getJibun());
+
+            model.addAttribute("boardForm", boardForm); // 폼에 사용할 boardForm을 모델에 추가
+            model.addAttribute("images", images);
+        } else {
+            // 게시글이 존재하지 않는 경우에 대한 예외 처리
+            return "redirect:/error";
+        }
+        return "board_modify";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String update(@PathVariable("id") Long id,
+                         @RequestParam("content") String content,
+                         @Valid BoardForm boardForm,
+                         @RequestParam("images") List<MultipartFile> images,
+                         Model model) {
+        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());        model.addAttribute("board", board);
+        return "redirect:/board/%d".formatted(board.getId());
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        boardService.delete(id);
+        return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/board/{id}/vote")
+    public String boardVote(Principal principal, @PathVariable("id") Long id) {
+        Board board = this.boardService.getBoard(id);
+        Member member = this.memberService.getMember(principal.getName());
+        if (board.getVoter().contains(member)) {
+            this.boardService.cancelVote(board, member);
+        } else {
+            this.boardService.vote(board, member);
+        }
+        return String.format("redirect:/board/%s", id);
+    }
 }
