@@ -1,77 +1,124 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
-    <!-- 질문 -->
-    <div>
-        <div class="flex flex-row">
-            <a th:href="@{|/board/modify/${id}|}" style="color: blue;">수정</a>
-            <form th:action="@{|/board/delete/${id}|}" method="post">
-                <input type="submit" style="color: red;" value="삭제">
-            </form>
-        </div>
-        <div>
-            <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
-            <div th:text="${board.title}"></div>
-            <div th:text="${board.restName}"></div>
-            <div id="boardAddress" th:text="${board.address}"></div>
-            <div th:text="${board.jibun}"></div>
-            <div th:text="${board.content}"></div>
-            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
-        </div>
+<body>
+    <!---MAIN--->
+    <main class="container wrap">
 
-        <a th:href="@{|board/${board.id}/vote|}" class="recommend">
-            <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
-            <span th:text="${#lists.size(board.voter)}"></span>
-        </a>
-    </div>
+        <!--FEED BOARD-->
+        <div class="feed_board">
 
-    <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
+            <!--FEED COMPONENT-->
+            <article class="feed">
+                <!--top-->
+                <div class="new_poster">
+                    <div class="poster_img">
+                        <img alt="follower profile image" class="round_img" src="./img/다운로드.jfif" />
+                    </div>
+                    <a href="#n" class="poster_id txt_id">Following ID</a>
+                </div>
 
-    <!--댓글 반복-->
-    <div th:each="comment : ${board.commentList}">
-        <div>
-            <span th:text="${comment.content}" class="font-bold"></span>
-            <div class="flex flex-row">
-                <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
-                    <input type="text" name="content" placeholder="댓글 수정">
-                    <input type="submit" style="color: blue;" value="댓글 수정">
-                </form>
-                <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
-                    <input type="submit" style="color: red;" value="삭제">
-                </form>
-            </div>
-            <!-- 대댓글 반복 -->
-            <div th:each="answer : ${comment.answerList}">
-                <span th:text="${answer.content}"></span>
-                <div class="flex flex-row">
-                    <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">
-                        <input type="text" name="content" placeholder="대댓글 수정">
-                        <input type="submit" style="color: blue;" value="대댓글 수정">
-                    </form>
-                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post">
-                        <input type="submit" style="color: red;" value="삭제">
+                <!--content-->
+                <section class="feed_imgs">
+                    <div>
+                        <div th:text="${board.title}">
+                            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+                        </div>
+                        <div id="boardAddress" th:text="${board.address}"></div>
+                        <div th:text="${board.jibun}"></div>
+                        <div th:text="${board.restName}"></div>
+                        <div th:text="${board.content}"></div>
+                    </div>
+                    <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
+                    <div class="interactions">
+                        <div class="my_emotion">
+                            <!--위에서 cdn을 링크로 삽입해서 여기서 클래스명으로 가져오면 사용할 수 있다.-->
+                            <a th:href="@{|board/${board.id}/vote|}" class="recommend">
+                                <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                                <span th:text="${#lists.size(board.voter)}"></span>
+                            </a>
+                            <button type="button"><i class="far fa-comment"></i>write_comment</button></span>
+                            <button type="button"><i class="far fa-paper-plane"></i>send_DM</button></span>
+                        </div>
+                        <div class="pagnation"></div>
+                        <button type="button" class="bookmark"><i class="far fa-bookmark"></i>bookmark</button>
+                    </div>
+                    <p>
+                        <a href="#n" class="like_user">
+                            <img alt="like user image" class="round_img" src="./img/다운로드.jfif" />
+                            <span class="txt_id">강당당</span>
+                        </a>
+                        님
+                        <a href="#n" class="like_num txt_id">외 10명</a>
+                        이 좋아합니다
+                    </p>
+                </section>
+
+                <!--feed text-->
+
+                <!--comment-->
+                <div class="comments">
+                    <div id="listComment" class="list_comment">
+                        <section class="feed_txt">
+                            <div th:each="comment : ${board.commentList}">
+                                <div>
+                                    <span th:text="${comment.content}" class="font-bold"></span>
+                                    <div class="flex flex-row">
+                                        <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
+                                            <input type="text" name="content" placeholder="댓글 수정">
+                                            <input type="submit" style="color: blue;" value="댓글 수정">
+                                        </form>
+                                        <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
+                                            <input type="submit" style="color: red;" value="삭제">
+                                        </form>
+                                    </div>
+                                    <!-- 대댓글 반복 -->
+                                    <div th:each="answer : ${comment.answerList}">
+                                        <span th:text="${answer.content}"></span>
+                                        <div class="flex flex-row">
+                                            <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">
+                                                <input type="text" name="content" placeholder="대댓글 수정">
+                                                <input type="submit" style="color: blue;" value="대댓글 수정">
+                                            </form>
+                                            <form th:action="@{|/answer/delete/${answer.id}|}" method="post">
+                                                <input type="submit" style="color: red;" value="삭제">
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" method="post">
+                                        <input type="text" name="content" placeholder="대댓글작성">
+                                        <input type="submit" value="대댓글 등록">
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <form id="post" class="post_comment">
+                        <textarea id="newComment" type="in" placeholder="댓글 달기..."></textarea>
+                        <button id="btnPost" type="submit">게시</button>
                     </form>
                 </div>
-            </div>
-            <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" method="post">
-                <input type="text" name="content" placeholder="대댓글작성">
-                <input type="submit" value="대댓글 등록">
-            </form>
+            </article>
         </div>
-    </div>
+        <!--//FEED BOARD-->
+        <aside>
+            <!--WIDGET - story-->
+            <article class="widget stories">
+                <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
+            </article>
+            <!--//WIDGET - story-->
+            <article class="widget recommends">
+                <div id="containerMap" class="view_map">
+                    <div id="mapWrapper">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </article>
+            <!--//WIDGET - recommend-->
+        </aside>
+    </main>
+    <!---//MAIN--->
 
-    <!--     댓글 작성 폼 -->
-    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" method="post">
-        <input type="text" name="content" placeholder="댓글작성">
-        <input type="submit" value="댓글 등록">
-    </form>
-
-    <!-- 지도 표시 -->
-    <div id="containerMap" class="view_map">
-        <div id="mapWrapper">
-            <div id="map"></div>
-        </div>
-    </div>
-
-</div>
+    <script type="text/javascript" src="./js/main.js"></script>
+</body>
 </html>
