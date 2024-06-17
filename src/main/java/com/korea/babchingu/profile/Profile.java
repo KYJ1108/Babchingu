@@ -17,8 +17,8 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profile_id;
 
-    // 연관 관계 설정
-    @OneToOne(mappedBy = "profile")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String nickname;
