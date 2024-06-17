@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,6 +28,12 @@ public class MemberController {
     private final MyUserDetailService myUserDetailService;
     private final PasswordEncoder passwordEncoder;
     private final SendEmailService sendEmailService;
+
+    @ModelAttribute("memberList")
+    public List<Member> member(){
+        List<Member> memberList = memberService.findAll();
+        return memberList;
+    }
 
 
 //    @Getter
@@ -126,11 +133,12 @@ public class MemberController {
     }
 
     @PostMapping("/member/search")
-    public String search(Model model, @RequestParam String memberId) {
+    public String search(Model model, @RequestParam String memberId, @RequestParam(value = "isSearchModal", required = false) String isSearchModal) {
         List<Member> searchLoginId = memberService.getSearchList(memberId);
         model.addAttribute("searchLoginId", searchLoginId);
+        model.addAttribute("isSearchModal", isSearchModal);
 
-        return "layout";
+        return "redirect:/?memberId=%s".formatted(memberId);
     }
 
 }
