@@ -217,15 +217,14 @@
 <body>
 <div class="navbar">
     <div>
-        <a href="#">로고</a>
+        <a href="/">로고</a>
     </div>
     <div class="search-container">
         <div class="search-bar" id="searchBar" onclick="expandSearchBar()">Search</div>
         <input type="text" class="search-input" id="searchInput" placeholder="검색...">
     </div>
     <div>
-        <a href="#">로그아웃</a>
-        <a href="#">프로필</a>
+        <a th:href="@{/logout}">로그아웃</a>
     </div>
 </div>
 <div class="container">
@@ -233,7 +232,8 @@
         <div class="profile-picture" id="profile-picture" style="background-image: url('${image}')"></div>
         <div class="profile-info">
             <h1 id="profileId" hidden="">PID</h1>
-            <h1 id="nickname">${nickname}</h1>
+<!--            닉네임               -->
+            <h1 id="nickname" th:text="${nickname}"></h1>
             <p id="memberId">회원 ID: <span id="memberIdValue"></span></p>
             <p id="sex">성별: <span id="sexValue"></span></p>
             <div class="profile-stats">

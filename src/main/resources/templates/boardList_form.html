@@ -7,7 +7,7 @@
             <div class="collapse-title text-xl font-medium">
                 <img class="category" src="/img/filter.png" style="width:25px;height:25px;" onclick="toggleCategory()">
             </div>
-            <div class="collapse-content">
+            <form class="collapse-content">
                 <div class="category">
                     <span onclick="toggleCategory('location')"><b>지역</b></span><br>
                     <label><input type="checkbox" value="서울"> 서울</label>
@@ -48,15 +48,18 @@
                     <label><input type="checkbox" value="남"> 남</label>
                     <label><input type="checkbox" value="무관"> 무관</label>
                 </div>
-            </div>
+                <div class="submit-container">
+                    <input type="submit" class="btn" value="적용">
+                </div>
+            </form>
         </div>
-
-        <select id="filter">
-            <option value="all">전체</option>
-            <option value="popular">인기</option>
-            <option value="recent">최신</option>
-        </select>
     </div>
+
+    <select id="filter">
+        <option value="recent">최신순</option>
+        <option value="old">오래된순</option>
+        <option value="popular">인기순</option>
+    </select>
 
     <div class="post-container">
         <th:block th:each="board : ${boards}">
@@ -74,8 +77,8 @@
 <!--                        <span th:each="tag : ${board.tags}" th:text="${tag}"></span>-->
                     </div>
                     <div class="post-footer">
-<!--                        <span th:text="'❤️ ' + ${board.likes}"></span>-->
-<!--                        <span th:text="'💬 ' + ${board.comments}"></span>-->
+                        <span th:text="'❤️ ' + ${board.voter.size()}"></span>
+                        <span th:text="'💬 ' + ${board.commentList.size()}"></span>
                     </div>
                 </div>
             </a>

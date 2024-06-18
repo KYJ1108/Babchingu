@@ -1,5 +1,7 @@
 package com.korea.babchingu.profile;
 
+import com.korea.babchingu.member.Member;
+import com.korea.babchingu.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,42 +15,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final MemberService memberService;
 
-    @GetMapping("/profile1")
-    public String getProfile() {
+    @GetMapping("/member/{id}/profile")
+    public String profile(@PathVariable("id") Long id, Model model){
 
-        return "profile";
-    }
+        Member member = memberService.findById(id);
+        Profile profile = member.getProfile();
 
-    @GetMapping("/profile/{id}")
-    public String getProfileById(@PathVariable("id") Long id, Model model){
-
-        Profile profile = profileService.getProfileById(id);
         if (profile == null) {
             return "redirect:/error";
         }
 
-//        model.addAttribute("profile", profile);
-
+        model.addAttribute("profile", profile);
         model.addAttribute("nickname", profile.getNickname());
         model.addAttribute("image", profile.getImage());
         model.addAttribute("sex", profile.getSex());
-        model.addAttribute("memberId", profile.getMember().getId());
+        model.addAttribute("memberId", member.getLoginId());
         model.addAttribute("profileId", profile.getProfile_id());
         model.addAttribute("phone", profile.getPhone());
 
 
         return "profile";  // profile.html
     }
-    //@PostMapping("/profile")
-    //public String postProfile(ProfileForm profileForm) {
-    //return "profile";
-    //}
+//    @PostMapping("/profile")
+//    public String postProfile(ProfileForm profileForm) {
+//    return "profile";
+//    }
 
-    @PostMapping("/profile")
-    public String updateProfile(ProfileForm profileForm) {
+    @PostMapping("/member/{id}/profile/update")
+    public String updateProfile(@PathVariable("id") Long id, ProfileForm profileForm) {
 
-//        profileService.saveProfileById(profileForm);
+        profileService.save(profileForm.getProfile_id(), profileForm.getNickname(), profileForm.getImage(), profileForm.getSex(), profileForm.getPhone());
         return "profile";
     }
 

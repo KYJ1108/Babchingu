@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.http.ResponseEntity;
 import java.security.Principal;
 import java.util.List;
 
@@ -143,5 +143,14 @@ public class BoardController {
             this.boardService.vote(board, member);
         }
         return String.format("redirect:/board/%s", id);
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<List<Board>> filterBoardByCategories(@RequestParam("categories") List<String> categories) {
+        // 선택된 카테고리 정보(categories)를 이용하여 게시물 필터링 로직을 수행
+        List<Board> filteredBoards = boardService.filterByCategories(categories);
+
+        // 필터링된 결과를 JSON 형태로 응답
+        return ResponseEntity.ok(filteredBoards);
     }
 }

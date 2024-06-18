@@ -29,7 +29,7 @@ public class Member {
     private String password;
     private String email;
 
-    @OneToOne
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 
     @CreatedDate
