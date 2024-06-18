@@ -16,16 +16,24 @@
                         <img alt="follower profile image" class="round_img" src="./img/다운로드.jfif" />
                     </div>
                     <a href="#n" class="poster_id txt_id">Following ID</a>
+                    <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="ml-auto">
+                            <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
+                        </div>
+                        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                            <li><a>삭제</a></li>
+                            <li><a>수정</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!--content-->
                 <section class="feed_imgs">
                     <div>
-                        <div th:text="${board.title}">
-                            <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></p>
-                        </div>
-                        <div id="boardAddress" th:text="${board.address}"></div>
-                        <div th:text="${board.jibun}"></div>
+                        <div class="card-text font-bold" th:text="${board.title}"></div>
+                        <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
+                        <div th:text="${board.jibun}" class="small-font"></div>
                         <div th:text="${board.restName}"></div>
                         <div th:text="${board.content}"></div>
                     </div>
@@ -37,21 +45,12 @@
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
                                 <span th:text="${#lists.size(board.voter)}"></span>
                             </a>
-                            <button type="button"><i class="far fa-comment"></i>write_comment</button></span>
-                            <button type="button"><i class="far fa-paper-plane"></i>send_DM</button></span>
+                            <span th:text="'💬 ' + ${board.commentList.size()}"></span>
+<!--                            <button type="button"><i class="far fa-paper-plane"></i>send_DM</button></span>-->
                         </div>
                         <div class="pagnation"></div>
                         <button type="button" class="bookmark"><i class="far fa-bookmark"></i>bookmark</button>
                     </div>
-                    <p>
-                        <a href="#n" class="like_user">
-                            <img alt="like user image" class="round_img" src="./img/다운로드.jfif" />
-                            <span class="txt_id">강당당</span>
-                        </a>
-                        님
-                        <a href="#n" class="like_num txt_id">외 10명</a>
-                        이 좋아합니다
-                    </p>
                 </section>
 
                 <!--feed text-->
@@ -61,40 +60,42 @@
                     <div id="listComment" class="list_comment">
                         <section class="feed_txt">
                             <div th:each="comment : ${board.commentList}">
-                                <div>
-                                    <span th:text="${comment.content}" class="font-bold"></span>
-                                    <div class="flex flex-row">
-                                        <form th:action="@{|/comment/modify/${comment.id}|}" th:object="${commentForm}" method="post">
-                                            <input type="text" name="content" placeholder="댓글 수정">
-                                            <input type="submit" style="color: blue;" value="댓글 수정">
-                                        </form>
-                                        <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
-                                            <input type="submit" style="color: red;" value="삭제">
-                                        </form>
+                                <div class="dropdown dropdown-end">
+                                    <div class="flex flex-row items-center">
+                                        <span th:text="${comment.member.loginId} + ' ' + ${comment.content}" class="font-bold"></span>
+                                        <div class="flex-grow"></div> <!-- 이 부분을 추가하여 나머지 영역을 채우도록 설정 -->
+                                        <div tabindex="0" role="button">
+                                            <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
+                                        </div>
+                                        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                                            <li><a>삭제</a></li>
+                                            <li><a>수정</a></li>
+                                        </ul>
                                     </div>
+
                                     <!-- 대댓글 반복 -->
                                     <div th:each="answer : ${comment.answerList}">
-                                        <span th:text="${answer.content}"></span>
+                                        <span th:text="${answer.member.loginId} + ' ' + ${answer.content}"></span>
                                         <div class="flex flex-row">
-                                            <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">
-                                                <input type="text" name="content" placeholder="대댓글 수정">
-                                                <input type="submit" style="color: blue;" value="대댓글 수정">
-                                            </form>
-                                            <form th:action="@{|/answer/delete/${answer.id}|}" method="post">
-                                                <input type="submit" style="color: red;" value="삭제">
-                                            </form>
+<!--                                            <form th:action="@{|/answer/modify/${answer.id}|}" th:object="${answerForm}" method="post">-->
+<!--                                                <input type="text" name="content" placeholder="대댓글 수정">-->
+<!--                                                <input type="submit" style="color: blue;" value="대댓글 수정">-->
+<!--                                            </form>-->
+<!--                                            <form th:action="@{|/answer/delete/${answer.id}|}" method="post">-->
+<!--                                                <input type="submit" style="color: red;" value="삭제">-->
+<!--                                            </form>-->
                                         </div>
                                     </div>
-                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" method="post">
-                                        <input type="text" name="content" placeholder="대댓글작성">
-                                        <input type="submit" value="대댓글 등록">
+                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" class="post_comment" method="post">
+                                        <textarea name="content" type="in" placeholder="대댓글 달기..."></textarea>
+                                        <button type="submit">게시</button>
                                     </form>
                                 </div>
                             </div>
                         </section>
                     </div>
-                    <form id="post" class="post_comment">
-                        <textarea id="newComment" type="in" placeholder="댓글 달기..."></textarea>
+                    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" id="post" class="post_comment" method="post">
+                        <textarea name="content" type="in" placeholder="댓글 달기..."></textarea>
                         <button id="btnPost" type="submit">게시</button>
                     </form>
                 </div>
@@ -119,6 +120,7 @@
     </main>
     <!---//MAIN--->
 
-    <script type="text/javascript" src="./js/main.js"></script>
 </body>
+</div>
+<script type="text/javascript" src="./js/main.js"></script>
 </html>

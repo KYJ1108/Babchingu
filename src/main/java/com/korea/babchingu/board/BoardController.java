@@ -59,7 +59,6 @@ public class BoardController {
     public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
         if (board == null) {
-            // 회사 정보를 찾지 못한 경우 처리 (예: 404 페이지로 리다이렉트)
             return "redirect:/error";
         }
         model.addAttribute("board", board);

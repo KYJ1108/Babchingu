@@ -879,3 +879,9 @@ div.feed_board{
     flex: 1;
     color: #0095f6;
 }
+.gray-text {
+    color: #d3d3d3;
+}
+.small-font {
+    font-size: smaller;
+}
