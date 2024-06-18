@@ -74,9 +74,51 @@ text-align: right;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
 }
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+.text {
+    padding: 20px;
+    text-align: center;
+}
+.text h1 {
+    font-size: 24px;
+    color: #333;
+}
+.slide img {
+    width: auto;
+    max-height: 100%;
+    border-radius: 10px;
+}
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 .plus-container {
     margin-top: 15px;
     text-align: right;
@@ -194,24 +236,14 @@ li {
 
 /* boardList_form*/
 .filter-container {
+    margin-left: 10%;
+    margin-right: 10%;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    position: relative;
-    margin-bottom: 20px; /* post-container와의 간격 조정 */
 }
-/*
-#category {
-    display: none;
-    position: absolute;
-    top: 30px;
-    right: 0;
-    z-index: 10;
-}
-*/
 .category {
     cursor: pointer; /* 카테고리 이미지에 커서 포인터 설정 */
-    margin-right: 10px; /* 카테고리 이미지 오른쪽 여백 */
+    /*margin-right: 10px; /* 카테고리 이미지 오른쪽 여백 */
 }
 .category-options {
     display: none;
@@ -237,7 +269,7 @@ li {
 .category-options hr {
     border: none;
     border-top: 1px solid #ccc;
-    margin: 5px 0;
+    /*margin: 5px 0;*/
 }
 
 .post-container {
@@ -283,6 +315,17 @@ li {
     border: none;
     border-top: 1px solid #ccc;
     margin: 5px 0;
+}
+
+.submit-container {
+     display: flex;
+     justify-content: center;/* 가로 중앙 정렬 */
+     align-items: center; /* 세로 중앙 정렬 */
+     margin-top: 10px; /* 위에 여백 추가 */
+ }
+
+#filter{
+    margin-left: 10%;
 }
 
 .post-container {

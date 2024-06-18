@@ -126,4 +126,14 @@ public class BoardService {
         // 좋아요를 기준으로 상위 3개의 게시물 가져오기
         return boardRepository.findTop3ByOrderByVoterDesc(); // 리포지토리에 정의된 메소드 예시
     }
+
+    public List<Board> filterByCategories(List<String> categories) {
+        // categories가 비어있을 경우 모든 게시물 반환
+        if (categories == null || categories.isEmpty()) {
+            return boardRepository.findAll();
+        }
+
+        // 선택된 카테고리들로 필터링된 게시물 조회
+        return boardRepository.findByCategoriesIn(categories);
+    }
 }

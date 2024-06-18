@@ -165,20 +165,29 @@
 </script>
 
 <!--boardList_카테고리_필터-->
+<!-- AJAX 요청 처리 -->
 <script>
-    function toggleAllCategories() {
-        var options = document.querySelectorAll('.category-options');
-        options.forEach(function(option) {
-            option.classList.toggle('active');
-        });
-    }
+    document.getElementById('filterForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 제출 동작을 막습니다.
 
-    function toggleCategory(category) {
-        var categoryOptions = document.getElementById(category + '-options');
-        categoryOptions.classList.toggle('active');
-    }
+        var formData = new FormData(this); // 폼 데이터 객체 생성
+
+        // AJAX 요청
+        fetch('/board/filter', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) // 서버에서 받은 JSON 데이터를 처리
+        .then(data => {
+            // 데이터를 받아서 처리할 부분
+            console.log('필터링된 결과:', data);
+            // 여기에 필요한 DOM 조작이나 페이지 업데이트 로직을 추가하세요
+        })
+        .catch(error => console.error('에러 발생:', error));
+    });
 </script>
 
+<!--메인 배너-->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const isSearchModal = /*[[${isSearchModal}]]*/ false;
@@ -225,6 +234,43 @@
 
         nextButton.addEventListener('click', nextSlide);
         prevButton.addEventListener('click', prevSlide);
+    });
+</script>
+
+<!--boardList에서 필터-->
+<script>
+    function filterPosts() {
+        const filter = document.getElementById("filter").value;
+        const posts = document.querySelectorAll(".post");
+        const postContainer = document.querySelector(".post-container");
+
+        // Convert NodeList to array for sorting
+        const postArray = Array.from(posts);
+
+        // Sorting logic
+        postArray.sort((a, b) => {
+            const aDate = new Date(a.querySelector(".post-details div").innerText);
+            const bDate = new Date(b.querySelector(".post-details div").innerText);
+            const aLikes = parseInt(a.querySelector(".post-footer span")?.innerText.replace('❤️ ', '') || 0);
+            const bLikes = parseInt(b.querySelector(".post-footer span")?.innerText.replace('❤️ ', '') || 0);
+
+            if (filter === "recent") {
+                return bDate - aDate;
+            } else if (filter === "old") {
+                return aDate - bDate;
+            } else if (filter === "popular") {
+                return bLikes - aLikes;
+            }
+        });
+
+        // Append sorted posts to container
+        postContainer.innerHTML = "";
+        postArray.forEach(post => postContainer.appendChild(post));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        filterPosts(); // Initial sort by "recent"
+        document.getElementById("filter").addEventListener("change", filterPosts);
     });
 </script>
 </body>
