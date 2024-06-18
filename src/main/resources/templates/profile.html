@@ -217,15 +217,14 @@
 <body>
 <div class="navbar">
     <div>
-        <a href="#">로고</a>
+        <a href="/">로고</a>
     </div>
     <div class="search-container">
         <div class="search-bar" id="searchBar" onclick="expandSearchBar()">Search</div>
         <input type="text" class="search-input" id="searchInput" placeholder="검색...">
     </div>
     <div>
-        <a href="#">로그아웃</a>
-        <a href="#">프로필</a>
+        <a th:href="@{/logout}">로그아웃</a>
     </div>
 </div>
 <div class="container">
