@@ -52,9 +52,9 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public QAlarm(Class<? extends Alarm> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.acceptMember = inits.isInitialized("acceptMember") ? new com.korea.babchingu.member.QMember(forProperty("acceptMember"), inits.get("acceptMember")) : null;
+        this.acceptMember = inits.isInitialized("acceptMember") ? new com.korea.babchingu.member.QMember(forProperty("acceptMember")) : null;
         this.chatRoom = inits.isInitialized("chatRoom") ? new com.korea.babchingu.chat.QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
-        this.sendMember = inits.isInitialized("sendMember") ? new com.korea.babchingu.member.QMember(forProperty("sendMember"), inits.get("sendMember")) : null;
+        this.sendMember = inits.isInitialized("sendMember") ? new com.korea.babchingu.member.QMember(forProperty("sendMember")) : null;
     }
 
 }
