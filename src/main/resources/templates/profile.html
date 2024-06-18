@@ -233,7 +233,8 @@
         <div class="profile-picture" id="profile-picture" style="background-image: url('${image}')"></div>
         <div class="profile-info">
             <h1 id="profileId" hidden="">PID</h1>
-            <h1 id="nickname">${nickname}</h1>
+<!--            닉네임               -->
+            <h1 id="nickname" th:text="${nickname}"></h1>
             <p id="memberId">회원 ID: <span id="memberIdValue"></span></p>
             <p id="sex">성별: <span id="sexValue"></span></p>
             <div class="profile-stats">
