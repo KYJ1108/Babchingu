@@ -39,7 +39,7 @@
                 </form>
 
                 <!-- 검색 결과 목록 -->
-                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-gray-100 p-[10px] flex w-full', itemAnchorClass='inline-block w-full h-full'">
+                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-gray-100  p-[10px] flex w-full', itemAnchorClass='inline-block w-full h-full'">
                     <li th:each="member : ${searchLoginId}" th:class="${itemHover}">
                         <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.loginId}" th:class="${itemAnchorClass}"></a>
                     </li>
