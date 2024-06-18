@@ -92,7 +92,6 @@ public class BoardController {
         return "find_rest_form";
     }
 
-
     @GetMapping("/modify/{id}")
     public String update(BoardForm boardForm, @PathVariable("id") Long id, Model model) {
         // id를 사용하여 해당 게시글을 데이터베이스에서 가져오는 작업 수행

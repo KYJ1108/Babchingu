@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
-
-    <!-- 음식점 반복 시작 -->
-    <div class="card my-3" th:if="${searchBoard != null}" th:each="board : ${searchBoard}">
-        <a th:href="@{|/board/${board.id}|}">
-            <div>
-                <div style="white-space: pre-line;" th:text="${board.title}"></div>
-            </div>
-        </a>
+    <div class="post-container" th:if="${searchBoard != null}">
+        <th:block th:each="board : ${searchBoard}">
+            <a class="post" th:href="@{|/board/${board.id}|}">
+                <div th:if="${!#lists.isEmpty(board.images)}">
+                    <img th:src="${board.images[0].url}" alt="음식사진" style="width:200px; height:100%;">
+                </div>
+                <div class="post-content">
+                    <div class="post-title" th:text="${board.title}"></div>
+                    <div class="post-details">
+                        <div th:text="${board.restName}"></div>
+                        <div th:text="${board.address}"></div>
+                    </div>
+                    <div class="post-tags"></div>
+                    <div class="post-footer"></div>
+                </div>
+            </a>
+        </th:block>
     </div>
-    <!--음식점 반복 끝-->
 </div>
 </html>
