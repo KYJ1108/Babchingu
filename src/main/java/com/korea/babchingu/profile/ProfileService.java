@@ -26,23 +26,14 @@ public class ProfileService {
         }
     }
 
-//    public int saveProfileById(ProfileForm profileForm) {
-//
-//        Profile profile = new Profile();
-//
-//        long profileId = Long.parseLong(profileForm.getProfile_id().toString());
-//        long memberId = Long.parseLong(profileForm.getMember_id().toString());
-//
-//        profile.setProfile_id(profileId);
-//        profile.setMember();
-//        profile.setSex(profileForm.getSex());
-//        profile.setImage(profileForm.getImage());
-//        profile.setNickname(profileForm.getNickname());
-//        profile.setPhone(profileForm.getPhone());
-//        profile.setEmail(profileForm.getEmail());
-//
-//        profileRepository.save(profile);
-//
-//        return 0;
-//    }
+    public void save(Long profileId, String nickname, byte[] image, String sex, String phone) {
+        Profile profile = profileRepository.findById(profileId).orElseThrow();
+
+        profile.setNickname(nickname);
+        profile.setImage(image);
+        profile.setSex(sex);
+        profile.setPhone(phone);
+
+        profileRepository.save(profile);
+    }
 }
