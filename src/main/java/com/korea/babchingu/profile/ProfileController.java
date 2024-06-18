@@ -43,10 +43,10 @@ public class ProfileController {
 //    return "profile";
 //    }
 
-    @PostMapping("/profile")
-    public String updateProfile(ProfileForm profileForm) {
+    @PostMapping("/member/{id}/profile/update")
+    public String updateProfile(@PathVariable("id") Long id, ProfileForm profileForm) {
 
-//        profileService.saveProfileById(profileForm);
+        profileService.save(profileForm.getProfile_id(), profileForm.getNickname(), profileForm.getImage(), profileForm.getSex(), profileForm.getPhone());
         return "profile";
     }
 
