@@ -55,11 +55,13 @@
         </div>
     </div>
 
-    <select id="filter">
-        <option value="recent">최신순</option>
-        <option value="old">오래된순</option>
-        <option value="popular">인기순</option>
-    </select>
+    <form id="sortForm" onchange="submitForm()">
+        <label for="sort">정렬:</label>
+        <select id="sort" name="sort">
+            <option value="date" th:selected="${sort == 'date'}">최신순</option>
+            <option value="popular" th:selected="${sort == 'popular'}">인기순</option>
+        </select>
+    </form>
 
     <div class="post-container">
         <th:block th:each="board : ${boards}">
@@ -84,5 +86,13 @@
             </a>
         </th:block>
     </div>
+    <script>
+        function submitForm() {
+            var selectElement = document.getElementById("sort");
+            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+            var url = selectedOption === "date" ? "/board/date" : "/board/popular";
+            window.location.href = url;
+        }
+    </script>
 </div>
 </html>
