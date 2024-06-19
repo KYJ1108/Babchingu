@@ -14,11 +14,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final MyOAuth2UserService myOAuth2UserService;
+
+    public SecurityConfig(MyOAuth2UserService myOAuth2UserService) {
+        this.myOAuth2UserService = myOAuth2UserService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login","/signup", "/findPw").permitAll()
+                        .requestMatchers("/login", "/signup", "/findPw").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -27,18 +34,19 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint.userService(myOAuth2UserService)
+                        )
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .invalidateHttpSession(true)
                         .logoutSuccessUrl("/login")
                         .permitAll()
-                )
-                .oauth2Login(oauth2 ->
-                        oauth2.loginPage("/login")
                 );
         return http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
