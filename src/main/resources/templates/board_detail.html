@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
-<body>
+    <body>
     <!---MAIN--->
     <main class="container wrap">
 
@@ -13,17 +13,26 @@
                 <!--top-->
                 <div class="new_poster">
                     <div class="poster_img">
-                        <img alt="follower profile image" class="round_img" th:src="${board.member.url}" />
+                        <a th:href="@{|/profile/${board.member.loginId}|}">
+                            <img alt="follower profile image" class="round_img" th:src="${board.member.url}"/>
+                        </a>
                     </div>
                     <a th:text="${board.member.nickname}" th:href="@{|/profile/${board.member.loginId}|}" class="poster_id txt_id"></a>
                     <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
-                    <div class="dropdown dropdown-end w-full">
-                        <div tabindex="0" role="button" class="ml-auto">
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                             <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
                         </div>
-                        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                            <li><a>삭제</a></li>
-                            <li><a>수정</a></li>
+                        <ul tabindex="0"
+                            class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                            <li>
+                                <a th:href="@{|/board/modify/${id}|}">수정</a>
+                            </li>
+                            <li>
+                                <form th:action="@{|/board/delete/${id}|}" method="post">
+                                    <input type="submit" style="color: red;" value="삭제">
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -34,7 +43,7 @@
                         <div class="card-text font-bold" th:text="${board.title}"></div>
                         <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
                         <div th:text="${board.jibun}" class="small-font"></div>
-                        <div th:text="${board.restName}"></div>
+                        <div th:text="${board.restName}" class="small-font"></div>
                         <div th:text="${board.content}"></div>
                     </div>
                     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
@@ -45,7 +54,10 @@
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
                                 <span th:text="${#lists.size(board.voter)}"></span>
                             </a>
-                            <span th:text="'💬 ' + ${board.commentList.size()}"></span>
+                            <span style="margin-left: 10px; white-space: nowrap;">
+                                <span style="display: inline-block;">💬 </span>
+                                <span th:text="${board.commentList.size()}"></span>
+                            </span>
                         </div>
                         <div class="pagnation"></div>
                     </div>
@@ -58,39 +70,67 @@
                     <div id="listComment" class="list_comment">
                         <section class="feed_txt">
                             <div th:each="comment : ${board.commentList}">
-                                <div class="dropdown dropdown-end">
+                                <div class="dropdown dropdown-end w-full">
                                     <div class="flex flex-row items-center">
                                         <div>
-                                            <div th:text="${comment.member.nickname}" class="font-bold"></div>
+                                            <a th:href="@{|/profile/${comment.member.loginId}|}" th:text="${comment.member.nickname}" class="font-bold"></a>
                                             <div th:text="${comment.content}"></div>
                                         </div>
                                         <div class="flex-grow"></div> <!-- 이 부분을 추가하여 나머지 영역을 채우도록 설정 -->
-                                        <div tabindex="0" role="button">
-                                            <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
+                                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                            <img class="option-icon" src="/img/more.png"
+                                                 style="width: 20px; height: 20px;">
                                         </div>
-                                        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                                            <li><a>삭제</a></li>
+                                        <ul tabindex="0"
+                                            class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                                             <li><a>수정</a></li>
+                                            <li>
+                                                <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
+                                                    <input type="submit" style="color: red;" value="삭제">
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
-
-                                    <!-- 대댓글 반복 -->
+                                </div>
+                                <!-- 대댓글 반복 -->
+                                <div style="margin-left: 10px;">
                                     <div th:each="answer : ${comment.answerList}">
-                                        <div>
-                                            <div th:text="${answer.member.nickname}" class="font-bold"></div>
-                                            <div th:text="${answer.content}"></div>
+                                        <div class="dropdown dropdown-end w-full">
+                                            <div class="flex flex-row items-center">
+                                                <div>
+                                                    <a th:href="@{|/profile/${answer.member.loginId}|}" th:text="${answer.member.nickname}" class="font-bold"></a>
+                                                    <div th:text="${answer.content}"></div>
+                                                </div>
+                                                <div class="flex-grow"></div>
+                                                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                                    <img class="option-icon" src="/img/more.png"
+                                                         style="width: 20px; height: 20px;">
+                                                </div>
+                                                <ul tabindex="0"
+                                                    class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                                                    <li><a>수정</a></li>
+                                                    <li>
+                                                        <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
+                                                            <input type="submit" style="color: red;" value="삭제">
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" class="post_comment" method="post">
-                                        <textarea name="content" type="in" placeholder="대댓글 달기..."></textarea>
+                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}"
+                                          class="post_comment" method="post">
+                                            <textarea name="content" type="in" placeholder="대댓글 달기..."
+                                                      class="no-border"></textarea>
                                         <button type="submit">게시</button>
                                     </form>
                                 </div>
                             </div>
                         </section>
                     </div>
-                    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" id="post" class="post_comment" method="post">
-                        <textarea name="content" type="in" placeholder="댓글 달기..."></textarea>
+                    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" id="post"
+                          class="post_comment" method="post">
+                        <textarea name="content" type="in" placeholder="댓글 달기..." class="no-border"></textarea>
                         <button id="btnPost" type="submit">게시</button>
                     </form>
                 </div>
@@ -100,7 +140,8 @@
         <aside>
             <!--WIDGET - story-->
             <article class="widget stories">
-                <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진" style="width:200px; height:100%;">
+                <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진"
+                     style="width:100%; height:100%; margin: 5px;">
             </article>
             <!--//WIDGET - story-->
             <article class="widget recommends">
@@ -110,12 +151,8 @@
                     </div>
                 </div>
             </article>
-            <!--//WIDGET - recommend-->
         </aside>
     </main>
-    <!---//MAIN--->
-
-</body>
+    </body>
 </div>
-<script type="text/javascript" src="./js/main.js"></script>
 </html>

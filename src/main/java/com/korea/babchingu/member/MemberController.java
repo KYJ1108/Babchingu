@@ -1,17 +1,12 @@
 package com.korea.babchingu.member;
 
 import com.korea.babchingu.board.Board;
-import com.korea.babchingu.board.BoardService;
 import com.korea.babchingu.follow.Follow;
 import com.korea.babchingu.follow.FollowRepository;
 import com.korea.babchingu.follow.FollowService;
 import com.korea.babchingu.security.MyUserDetailService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -147,7 +142,6 @@ public class MemberController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInMemberId = authentication.getName();
         model.addAttribute("loggedInMemberId", loggedInMemberId);
-
 
         return "profile";
     }
