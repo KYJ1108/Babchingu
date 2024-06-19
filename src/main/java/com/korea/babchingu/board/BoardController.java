@@ -6,6 +6,9 @@ import com.korea.babchingu.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -152,5 +155,38 @@ public class BoardController {
 
         // 필터링된 결과를 JSON 형태로 응답
         return ResponseEntity.ok(filteredBoards);
+    }
+
+//    @GetMapping
+//    public String getFilteredBoards(@RequestParam(defaultValue = "0") int page,
+//                                    @RequestParam(defaultValue = "Latest") String sort,
+//                                    Model model) {
+//        Pageable pageable = PageRequest.of(page, 10);
+//        Page<Board> boards;
+////
+////        if ("Popular".equals(sort)) {
+////            boards = boardService.getBoardsByVoterSize(pageable);
+////        } else {
+////            boards = boardService.getBoardsByCreateDate(pageable);
+////        }
+//
+////        model.addAttribute("boards", boards);
+//        return "boardList";
+//    }
+
+    @GetMapping("/date")
+    public String getBoardsOrderByDate(Model model) {
+        List<Board> board = boardService.getBoardsByCreateDate();
+        model.addAttribute("boards", board);
+        model.addAttribute("sort", "date");
+        return "boardList_form";
+    }
+
+    @GetMapping("/popular")
+    public String getBoardsOrderByPopular(Model model) {
+        List<Board> board = boardService.getBoardsByVoterSize();
+        model.addAttribute("boards", board);
+        model.addAttribute("sort", "popular");
+        return "boardList_form";
     }
 }
