@@ -1,6 +1,7 @@
 package com.korea.babchingu.member;
 
 import com.korea.babchingu.board.Board;
+import com.korea.babchingu.board.BoardService;
 import com.korea.babchingu.security.MyUserDetailService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -34,30 +37,6 @@ public class MemberController {
         List<Member> memberList = memberService.findAll();
         return memberList;
     }
-
-
-//    @Getter
-//    @Setter
-//    class MemberForm {
-//        @NotEmpty(message = "아이디를 입력해주세요.")
-//        private String loginId;
-//        @NotEmpty(message = "비밀번호를 입력해주세요.")
-//        private String password;
-//        @NotEmpty(message = "비밀번호를 동일하게 입력해주세요.")
-//        private String password2;
-//        @NotEmpty(message = "이메일을 입력해주세요.")
-//        @Email(message = "이메일 형식이 아닙니다.")
-//        private String email;
-//        @NotEmpty(message = "닉네임을 입력해주세요.")
-//        private String nickname;
-//        private String image;
-//        private String sex;
-//        private String phone;
-//
-//        public MemberForm() {
-//            // Default constructor for form binding
-//        }
-//    }
 
     @GetMapping("/signup")
     public String signup(MemberForm memberForm) {
@@ -139,6 +118,87 @@ public class MemberController {
         model.addAttribute("isSearchModal", isSearchModal);
 
         return "redirect:/?memberId=%s".formatted(memberId);
+    }
+
+    @GetMapping("/profile")
+    public String userProfile(Principal principal, Model model){
+        // 사용자가 로그인되어 있는지 확인
+        if (principal == null){
+            // 사용자가 로그인되어 있지 않은 경우 처리
+            return "redirect:/user/login";
+        }
+
+        // 현재 로그인한 사용자의 아이디를 가져옴
+        String memberId = principal.getName();
+
+        // memberService를 사용하여 사용자의 정보를 가져옴
+        Member member = memberService.getMember(memberId);
+        model.addAttribute("member", member);
+
+        // 사용자가 작성간 게시물 등의 정보를 가져옴
+        List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
+        model.addAttribute("memberPosts", memberPosts);
+
+        return "profile";
+    }
+
+    @GetMapping("/modifyProfile")
+    public String modifyProfile(Model model, Principal principal) {
+        // 현재 로그인한 사용자의 아이디를 가져옴
+        String memberId = principal.getName();
+
+        // userService를 사용하여 사용자 정보를 가져옴
+        Member member = memberService.getMember(memberId);
+        String nickname = member.getNickname();
+        model.addAttribute("member", member);
+        model.addAttribute("nickname", nickname);
+
+        return "modifyProfile";
+    }
+
+    @PostMapping("/modifyProfile")
+    public String changeProfile(Model model, Principal principal,
+                                @RequestParam("nickname") String nickname,
+                                @RequestParam("email") String email,
+                                @RequestParam("file") MultipartFile file,
+                                @RequestParam(value = "url", defaultValue = "") String url) {
+
+        // Principal 객체가 null인지 확인
+        if (principal == null) {
+            // 처리할 방법을 결정하거나 예외를 처리합니다.
+            return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 오류 처리
+        }
+
+        // 현재 로그인한 사용자의 아이디를 가져옴
+        String memberId = principal.getName();
+        Member member = memberService.getMember(memberId);
+        String memberImage = member.getUrl();
+
+        // 파일이 업로드된 경우에만 처리
+        if (!file.isEmpty() && file.getContentType() != null && file.getContentType().startsWith("image")) {
+            // 이미지를 서버에 저장하고 url을 얻음
+            String tempUrl = memberService.temp_url(file);
+            if (tempUrl != null) {
+                url = tempUrl;
+                // 사용자 정보에 프로필 사진 URL 저장
+                memberService.saveimage(member, url);
+            } else {
+                model.addAttribute("error", "파일 업로드에 실패했습니다.");
+                return "modifyProfile_form";
+            }
+        } else {
+            // 파일이 업로드되지 않은 경우, 이미지 URL을 기존 값으로 설정
+            url = memberImage;
+        }
+
+        try {
+            memberService.updateProfile(member, nickname, email, url);
+            return "redirect:/profile";
+        } catch (CustomException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "프로필 업데이트에 실패했습니다: " + e.getMessage());
+            return "modifyProfile";
+        }
     }
 
 }

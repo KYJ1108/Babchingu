@@ -50,8 +50,8 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public QChatRoom(Class<? extends ChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member1 = inits.isInitialized("member1") ? new com.korea.babchingu.member.QMember(forProperty("member1"), inits.get("member1")) : null;
-        this.member2 = inits.isInitialized("member2") ? new com.korea.babchingu.member.QMember(forProperty("member2"), inits.get("member2")) : null;
+        this.member1 = inits.isInitialized("member1") ? new com.korea.babchingu.member.QMember(forProperty("member1")) : null;
+        this.member2 = inits.isInitialized("member2") ? new com.korea.babchingu.member.QMember(forProperty("member2")) : null;
     }
 
 }
