@@ -13,9 +13,11 @@
                 <!--top-->
                 <div class="new_poster">
                     <div class="poster_img">
-                        <img alt="follower profile image" class="round_img" th:src="${board.member.url}"/>
+                        <a th:href="@{|/profile/${board.member.loginId}|}">
+                            <img alt="follower profile image" class="round_img" th:src="${board.member.url}"/>
+                        </a>
                     </div>
-                    <a th:text="${board.member.nickname}" href="#n" class="poster_id txt_id"></a>
+                    <a th:text="${board.member.nickname}" th:href="@{|/profile/${board.member.loginId}|}" class="poster_id txt_id"></a>
                     <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -41,7 +43,7 @@
                         <div class="card-text font-bold" th:text="${board.title}"></div>
                         <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
                         <div th:text="${board.jibun}" class="small-font"></div>
-                        <div th:text="${board.restName}"></div>
+                        <div th:text="${board.restName}" class="small-font"></div>
                         <div th:text="${board.content}"></div>
                     </div>
                     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
@@ -52,7 +54,10 @@
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
                                 <span th:text="${#lists.size(board.voter)}"></span>
                             </a>
-                            <span th:text="'💬 ' + ${board.commentList.size()}"></span>
+                            <span style="margin-left: 10px; white-space: nowrap;">
+                                <span style="display: inline-block;">💬 </span>
+                                <span th:text="${board.commentList.size()}"></span>
+                            </span>
                         </div>
                         <div class="pagnation"></div>
                     </div>
@@ -68,7 +73,7 @@
                                 <div class="dropdown dropdown-end w-full">
                                     <div class="flex flex-row items-center">
                                         <div>
-                                            <div th:text="${comment.member.nickname}" class="font-bold"></div>
+                                            <a th:href="@{|/profile/${comment.member.loginId}|}" th:text="${comment.member.nickname}" class="font-bold"></a>
                                             <div th:text="${comment.content}"></div>
                                         </div>
                                         <div class="flex-grow"></div> <!-- 이 부분을 추가하여 나머지 영역을 채우도록 설정 -->
@@ -93,7 +98,7 @@
                                         <div class="dropdown dropdown-end w-full">
                                             <div class="flex flex-row items-center">
                                                 <div>
-                                                    <div th:text="${answer.member.nickname}" class="font-bold"></div>
+                                                    <a th:href="@{|/profile/${answer.member.loginId}|}" th:text="${answer.member.nickname}" class="font-bold"></a>
                                                     <div th:text="${answer.content}"></div>
                                                 </div>
                                                 <div class="flex-grow"></div>
