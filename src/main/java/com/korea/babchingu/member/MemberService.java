@@ -2,23 +2,31 @@ package com.korea.babchingu.member;
 
 import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.board.Board;
-import com.korea.babchingu.profile.Profile;
-import com.korea.babchingu.profile.ProfileRepository;
+import com.korea.babchingu.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.korea.babchingu.profile.QProfile.profile;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProfileRepository profileRepository;
+    private final BoardRepository boardRepository;
+    private final ResourceLoader resourceLoader;
 
     public Member save(String loginId, String password, String email) {
         // 아이디 중복 체크
@@ -40,13 +48,13 @@ public class MemberService {
         member = memberRepository.save(member);
 
         // Profile 저장
-        Profile profile = new Profile();
-        profile.setMember(member); // 연관 관계 설정
-        profile.setNickname("");
-        profile.setImage(null);
-        profile.setSex("");
-        profile.setPhone("");
-        profileRepository.save(profile);
+//        Profile profile = new Profile();
+//        profile.setMember(member); // 연관 관계 설정
+//        profile.setNickname("");
+//        profile.setImage(null);
+//        profile.setSex("");
+//        profile.setPhone("");
+//        profileRepository.save(profile);
 
         return member;
     }
@@ -70,5 +78,65 @@ public class MemberService {
 
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow();
+    }
+
+    public List<Board> getMemberPosts(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId).orElse(null);
+        if (member != null){
+            return boardRepository.findByMember(member);
+        }
+        return Collections.emptyList();
+    }
+
+    public void updateProfile(Member member, String nickname, String email, String userImage)throws CustomException {
+        // 사용자 정보를 업데이트
+        member.setNickname(nickname);
+        member.setEmail(email);
+        member.setUrl(userImage);
+        // 업데이트된 사용자를 데이터베이스에 다시 저장
+        memberRepository.save(member);
+    }
+
+    public String temp_url(MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                // 파일을 저장할 절대 경로 설정
+                String uploadDir = "src/main/resources/static/pimg";
+
+                // 디렉토리 생성 (이미 존재하면 생성하지 않음)
+                File directory = new File(uploadDir);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                // 파일명 생성
+                String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
+                String filePath = uploadDir + "/" + fileName;
+
+                // 파일 저장
+                Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+                return "/pimg/" + fileName;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public void saveimage(Member member, String url) {
+        try{
+            String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
+            if(member.getUrl() != null){
+                File oldFile = new File(path+member.getUrl());
+                if(oldFile.exists()){
+                    oldFile.delete();
+                }
+            }
+            member.setUrl(url);
+            memberRepository.save(member);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

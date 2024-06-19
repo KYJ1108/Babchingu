@@ -1,10 +1,8 @@
 package com.korea.babchingu.member;
 
-import com.korea.babchingu.Follow.Follow;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.chat.ChatRoom;
 import com.korea.babchingu.comment.Comment;
-import com.korea.babchingu.profile.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +26,7 @@ public class Member {
     private String loginId;
     private String password;
     private String email;
-
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Profile profile;
+    private String nickname;
 
     @CreatedDate
     private LocalDateTime createDate;
@@ -45,12 +41,14 @@ public class Member {
 
     @ManyToMany
     private List<ChatRoom> chatRoomList = new ArrayList<>();
+
+    private String url;
+
     //팔로우
-
-    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
-    private List<Follow> followingList;
-
-    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
-    private List<Follow> followerList;
+//    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
+//    private List<Follow> followingList;
+//
+//    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
+//    private List<Follow> followerList;
 
 }
