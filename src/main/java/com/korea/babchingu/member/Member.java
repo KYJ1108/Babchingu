@@ -42,7 +42,17 @@ public class Member {
     @ManyToMany
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
-    private String url;
+    private String url; // 프로필 이미지 URL
+
+    private boolean isCurrentUser; // 프로필
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
+    }
+
+    public void setCurrentUser(boolean currentUser) {
+        isCurrentUser = currentUser;
+    }
 
     //팔로우
 //    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)

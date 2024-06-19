@@ -46,10 +46,15 @@ public class Board {
     @ManyToMany
     Set<Member> voter;
     @CreatedDate
+    @Column(name = "create_date")
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime updateDate;
 
     @ElementCollection
     private Set<String> categories = new HashSet<>();
+
+    public int getVoterSize() {
+        return this.voter.size();
+    }
 }

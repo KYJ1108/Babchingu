@@ -139,4 +139,37 @@ public class MemberService {
             e.printStackTrace();
         }
     }
+
+    public Member getMemberByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId).orElse(null);
+    }
+
+    public void saveProfileImage(Member member, MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            // 파일을 저장할 절대 경로 설정
+            String uploadDir = "src/main/resources/static/profile-images";
+
+            // 디렉토리 생성 (이미 존재하면 생성하지 않음)
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 파일명 생성
+            String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
+            String filePath = uploadDir + "/" + fileName;
+
+            // 파일 저장
+            try {
+                Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                // 파일 저장 중 문제가 발생한 경우 예외 처리
+                throw new IOException("Failed to save profile image: " + e.getMessage());
+            }
+
+            // 파일 저장이 성공한 경우, Member 객체의 URL 업데이트
+            String imageUrl = "/profile-images/" + fileName;
+            member.setUrl(imageUrl);
+        }
+    }
 }

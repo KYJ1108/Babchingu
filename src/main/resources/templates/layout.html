@@ -237,41 +237,33 @@
     });
 </script>
 
-<!--boardList에서 필터-->
-<script>
-    function filterPosts() {
-        const filter = document.getElementById("filter").value;
-        const posts = document.querySelectorAll(".post");
-        const postContainer = document.querySelector(".post-container");
+<!--팔로잉&언팔로잉-->
+<script th:inline="javascript">
+    function followMember(memberId) {
+        // Ajax를 통해 팔로우 기능 호출
+        var csrfToken = /*[[${_csrf.token}]]*/ '';
+        var followerId = /*[[${member.id}]]*/ '';
+        var followingId = memberId;
 
-        // Convert NodeList to array for sorting
-        const postArray = Array.from(posts);
-
-        // Sorting logic
-        postArray.sort((a, b) => {
-            const aDate = new Date(a.querySelector(".post-details div").innerText);
-            const bDate = new Date(b.querySelector(".post-details div").innerText);
-            const aLikes = parseInt(a.querySelector(".post-footer span")?.innerText.replace('❤️ ', '') || 0);
-            const bLikes = parseInt(b.querySelector(".post-footer span")?.innerText.replace('❤️ ', '') || 0);
-
-            if (filter === "recent") {
-                return bDate - aDate;
-            } else if (filter === "old") {
-                return aDate - bDate;
-            } else if (filter === "popular") {
-                return bLikes - aLikes;
+        $.ajax({
+            url: '/api/follow',
+            type: 'POST',
+            data: {
+                'followerId': followerId,
+                'followingId': followingId,
+                '_csrf': csrfToken
+            },
+            success: function (response) {
+                console.log(response);
+                // 팔로우 버튼 갱신 또는 페이지 새로고침
+                // 예: location.reload();
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert(xhr.responseText);
             }
         });
-
-        // Append sorted posts to container
-        postContainer.innerHTML = "";
-        postArray.forEach(post => postContainer.appendChild(post));
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        filterPosts(); // Initial sort by "recent"
-        document.getElementById("filter").addEventListener("change", filterPosts);
-    });
 </script>
 </body>
 </html>

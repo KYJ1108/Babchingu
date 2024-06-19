@@ -6,6 +6,9 @@ import com.korea.babchingu.image.ImageRepository;
 import com.korea.babchingu.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -135,5 +138,21 @@ public class BoardService {
 
         // 선택된 카테고리들로 필터링된 게시물 조회
         return boardRepository.findByCategoriesIn(categories);
+    }
+
+//    public Page<Board> getBoardsByCreateDate(Pageable pageable) {
+//        return boardRepository.findAllByOrderByCreateDateDesc(pageable);
+//    }
+//
+//    public Page<Board> getBoardsByVoterSize(Pageable pageable) {
+//        return boardRepository.findAllByOrderByVoterSizeDesc(pageable);
+//    }
+
+    public List<Board> getBoardsByCreateDate() {
+        return boardRepository.findAllByOrderByCreateDateDesc();
+    }
+
+    public List<Board> getBoardsByVoterSize() {
+        return boardRepository.findAllByOrderByVoterSizeDesc();
     }
 }
