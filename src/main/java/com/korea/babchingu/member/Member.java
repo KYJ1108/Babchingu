@@ -44,6 +44,16 @@ public class Member {
 
     private String url;
 
+    private boolean isCurrentUser; // 프로필
+
+    public boolean isCurrentUser() {
+        return isCurrentUser;
+    }
+
+    public void setCurrentUser(boolean currentUser) {
+        isCurrentUser = currentUser;
+    }
+
     //팔로우
 //    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
 //    private List<Follow> followingList;
