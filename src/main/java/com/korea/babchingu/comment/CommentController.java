@@ -42,14 +42,22 @@ public class CommentController {
     }
 
     @PostMapping("/modify/{id}")
-    public String update(@PathVariable("id") Long id, @RequestParam("content") String content) {
-        Comment comment = commentService.update(id, content);
+    public String update(@PathVariable("id") Long id, @RequestParam("content") String content, Principal principal) {
+        Comment comment = commentService.getComment(id);
+        if (!comment.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(comment.getId());
+        }
+        commentService.update(id, content);
         return "redirect:/board/%d".formatted(comment.getBoard().getId());
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id, Principal principal) {
+        Comment comment = commentService.getComment(id);
+        if (!comment.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(comment.getId());
+        }
         commentService.delete(id);
-        return "redirect:/";
+        return "redirect:/board/%d".formatted(comment.getBoard().getId());
     }
 }

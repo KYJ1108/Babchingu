@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,6 +63,9 @@ public class BoardController {
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
+
+        String loggedInUsername = principal.getName();
+        model.addAttribute("loggedInUsername", loggedInUsername);
         if (board == null) {
             return "redirect:/error";
         }
@@ -95,12 +100,15 @@ public class BoardController {
     }
 
     @GetMapping("/modify/{id}")
-    public String update(BoardForm boardForm, @PathVariable("id") Long id, Model model) {
+    public String update(BoardForm boardForm, @PathVariable("id") Long id, Model model, Principal principal) {
         // id를 사용하여 해당 게시글을 데이터베이스에서 가져오는 작업 수행
         Board board = boardService.getBoard(id);
 
         List<Image> images = board.getImages();
 
+        if (!board.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(board.getId());
+        }
         // 가져온 게시글이 null이 아닌 경우에만 모델에 값을 설정
         if (board != null) {
             // 해당 게시글의 내용을 boardForm에 설정
@@ -124,15 +132,24 @@ public class BoardController {
                          @RequestParam("content") String content,
                          @Valid BoardForm boardForm,
                          @RequestParam("images") List<MultipartFile> images,
-                         Model model) {
-        Board board = boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());        model.addAttribute("board", board);
+                         Model model, Principal principal) {
+        Board board = boardService.getBoard(id);
+        if (!board.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(board.getId());
+        }
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());
+        model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id, Principal principal) {
+        Board board = boardService.getBoard(id);
+        if (!board.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(board.getId());
+        }
         boardService.delete(id);
-        return "redirect:/";
+        return "redirect:/board/%d".formatted(board.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
