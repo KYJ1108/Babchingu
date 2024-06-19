@@ -236,5 +236,34 @@
         prevButton.addEventListener('click', prevSlide);
     });
 </script>
+
+<!--팔로잉&언팔로잉-->
+<script th:inline="javascript">
+    function followMember(memberId) {
+        // Ajax를 통해 팔로우 기능 호출
+        var csrfToken = /*[[${_csrf.token}]]*/ '';
+        var followerId = /*[[${member.id}]]*/ '';
+        var followingId = memberId;
+
+        $.ajax({
+            url: '/api/follow',
+            type: 'POST',
+            data: {
+                'followerId': followerId,
+                'followingId': followingId,
+                '_csrf': csrfToken
+            },
+            success: function (response) {
+                console.log(response);
+                // 팔로우 버튼 갱신 또는 페이지 새로고침
+                // 예: location.reload();
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert(xhr.responseText);
+            }
+        });
+    }
+</script>
 </body>
 </html>

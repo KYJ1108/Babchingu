@@ -11,8 +11,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByLoginId(String loginId);
     Optional<Member> findByEmail(String email);
 
-//    @Query("SELECT m FROM Member m JOIN FETCH m.profile WHERE m.loginId = :loginId")
-//    Optional<Member> findByLoginIdWithProfile(@Param("loginId") String loginId);
-
     List<Member> findByLoginIdContainingIgnoreCase(String keyword);
 }

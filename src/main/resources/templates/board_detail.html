@@ -15,7 +15,7 @@
                     <div class="poster_img">
                         <img alt="follower profile image" class="round_img" th:src="${board.member.url}" />
                     </div>
-                    <a th:text="${board.member.nickname}" href="#n" class="poster_id txt_id"></a>
+                    <a th:text="${board.member.nickname}" th:href="@{|/profile/${board.member.loginId}|}" class="poster_id txt_id"></a>
                     <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
                     <div class="dropdown dropdown-end w-full">
                         <div tabindex="0" role="button" class="ml-auto">
