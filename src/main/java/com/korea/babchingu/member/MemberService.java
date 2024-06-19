@@ -3,6 +3,7 @@ package com.korea.babchingu.member;
 import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.board.BoardRepository;
+import com.korea.babchingu.follow.Follow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
@@ -43,6 +44,7 @@ public class MemberService {
         member.setLoginId(loginId);
         member.setPassword(passwordEncoder.encode(password));
         member.setEmail(email);
+
 
         // Member 저장
         member = memberRepository.save(member);

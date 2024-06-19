@@ -2,11 +2,16 @@ package com.korea.babchingu.member;
 
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.board.BoardService;
+import com.korea.babchingu.follow.Follow;
+import com.korea.babchingu.follow.FollowRepository;
+import com.korea.babchingu.follow.FollowService;
 import com.korea.babchingu.security.MyUserDetailService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +33,8 @@ public class MemberController {
     private final MyUserDetailService myUserDetailService;
     private final PasswordEncoder passwordEncoder;
     private final SendEmailService sendEmailService;
+    private final FollowService followService;
+    private final FollowRepository followRepository;
 
     @ModelAttribute("memberList")
     public List<Member> member(){
@@ -50,6 +57,7 @@ public class MemberController {
         }
 
         try {
+            Follow follow = new Follow();
             memberService.save(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getEmail());
 
         } catch (RuntimeException e) {
@@ -140,24 +148,40 @@ public class MemberController {
         String loggedInMemberId = authentication.getName();
         model.addAttribute("loggedInMemberId", loggedInMemberId);
 
+
         return "profile";
     }
 
     @GetMapping("/profile/{loginId}")
     public String userProfile(@PathVariable String loginId, Model model) {
-        // 사용자 정보를 로드하는 서비스 메서드를 호출하여 사용자 정보를 가져옴
-        Member member = memberService.getMemberByLoginId(loginId);
-        if (member == null) {
-            // 사용자가 존재하지 않는 경우, 예외 처리 또는 다른 방법으로 처리할 수 있음
-            throw new RuntimeException("사용자를 찾을 수 없습니다.");
+        try {
+            Member member = memberService.getMemberByLoginId(loginId);
+            if (member == null) {
+                throw new RuntimeException("사용자를 찾을 수 없습니다.");
+            }
+
+            // 사용자의 게시물 등을 가져오는 추가 작업
+            List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
+
+            // 현재 로그인한 사용자의 아이디를 가져와서 모델에 추가
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String loggedInMemberId = authentication.getName();
+
+            // 팔로워, 팔로잉 정보 추가
+            List<Follow> myFollowers = followRepository.findByFollowers(member);
+            List<Follow> myFollowing = followRepository.findByFollowing(member);
+
+            model.addAttribute("member", member);
+            model.addAttribute("memberPosts", memberPosts);
+            model.addAttribute("loggedInMemberId", loggedInMemberId);
+            model.addAttribute("myFollowers", myFollowers);
+            model.addAttribute("myFollowing", myFollowing);
+
+            return "profile"; // profile.html로 이동
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", "사용자를 찾을 수 없습니다.");
+            return "error"; // 에러 페이지로 이동
         }
-        model.addAttribute("member", member);
-
-        // 사용자의 게시물 등을 가져오는 등의 추가적인 작업을 수행할 수 있음
-        List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
-        model.addAttribute("memberPosts", memberPosts);
-
-        return "profile"; // profile.html로 이동
     }
 
     @GetMapping("/modifyProfile")
