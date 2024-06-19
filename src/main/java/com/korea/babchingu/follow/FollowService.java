@@ -13,10 +13,15 @@ public class FollowService {
 
     // 회원을 팔로우하는 메서드
     public void followMember(Long followerId, Long followingId) {
-        Member follower = memberRepository.findById(followerId).orElseThrow(()
-                -> new IllegalArgumentException("Follower not found"));
-        Member following = memberRepository.findById(followingId).orElseThrow(()
-                -> new IllegalArgumentException("Following not found"));
+        Member follower = memberRepository.findById(followerId)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+        Member following = memberRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("Following not found"));
+
+        // 이미 팔로우 중인지 체크
+        if (followRepository.existsByFollowerAndFollowing(follower, following)) {
+            throw new RuntimeException("이미 팔로우 중입니다.");
+        }
 
         Follow follow = new Follow();
         follow.setFollower(follower);
@@ -25,11 +30,12 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-    // 특정 회원의 팔로워 수 조회
-    public  Long countFollowers(Long memberId) {
+    // 팔로워 수 조회
+    public Long countFollowers(Long memberId) {
         return followRepository.countByFollowingId(memberId);
     }
-    // 특정 회원이 팔로우하는 회원 수 조회
+
+    // 팔로잉 수 조회
     public Long countFollowing(Long memberId) {
         return followRepository.countByFollowerId(memberId);
     }

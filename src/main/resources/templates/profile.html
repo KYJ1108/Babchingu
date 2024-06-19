@@ -8,26 +8,27 @@
         <div class="member-info">
             <p><strong>닉네임:</strong> <span th:text="${member.nickname}"></span></p>
             <!-- Display follower count -->
-            <p><strong>팔로워:</strong> <span th:text="${followerCount}"></span></p>
+            <p><strong>팔로워 </strong> <span th:text="${followerCount} == 0 ? '0' : ${followerCount}"></span></p>
             <!-- Display following count -->
-            <p><strong>팔로잉:</strong> <span th:text="${followingCount}"></span></p>
+            <p><strong>팔로잉 </strong> <span th:text="${followingCount} == 0 ? '0' : ${followingCount}"></span></p>
         </div>
         <!-- 팔로우 버튼 -->
-        <div class="follow-button-container">
-            <button class="follow-button" th:if="${not member.isCurrentUser}">
-                <span th:if="${following}">
-                    언팔로우
-                </span>
+        <div class="follow-button-container" th:if="${not member.isCurrentUser}">
+            <button class="follow-button" onclick="followMember('${member.id}')">
+        <span th:if="${following}">
+            언팔로우
+        </span>
                 <span th:unless="${following}">
-                    팔로우
-                </span>
+            팔로우
+        </span>
             </button>
         </div>
-        <div class="button-container">
+        <!-- 프로필 수정 버튼 -->
+        <div class="button-container" th:if="${loggedInMemberId == member.id}">
             <a th:href="@{/modifyProfile}">프로필 수정</a>
-            <a th:href="@{/community/add}">게시물 등록하기</a>
         </div>
-        <h2>내가 올린 게시물</h2>
+
+        <h2>올린 게시물</h2>
         <div class="posts">
             <!-- 각 게시물에 링크 추가 -->
             <div th:each="post : ${member.boardList}" class="post">

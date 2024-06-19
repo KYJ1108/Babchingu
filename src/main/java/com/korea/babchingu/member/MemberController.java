@@ -6,21 +6,18 @@ import com.korea.babchingu.security.MyUserDetailService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -34,12 +31,11 @@ public class MemberController {
 
     @ModelAttribute("memberList")
     public List<Member> member(){
-        List<Member> memberList = memberService.findAll();
-        return memberList;
+        return memberService.findAll();
     }
 
     @GetMapping("/signup")
-    public String signup(MemberForm memberForm) {
+    public String signupForm(MemberForm memberForm) {
         return "signup";
     }
 
@@ -69,7 +65,7 @@ public class MemberController {
         return "login";
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public String login(Model model, @RequestParam String username, @RequestParam String password) {
         UserDetails userDetails = myUserDetailService.loadUserByUsername(username);
 
@@ -86,7 +82,7 @@ public class MemberController {
         }
 
         // 인증 성공한 경우에 대한 처리
-        return "redirect:/"; // 또는 다른 페이지로 리다이렉트
+        return "redirect:/";
     }
 
     @GetMapping("/findPw")
@@ -139,7 +135,29 @@ public class MemberController {
         List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
         model.addAttribute("memberPosts", memberPosts);
 
+        // 현재 로그인한 사용자와 프로필 주인의 아이디를 비교하여 모델에 추가
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInMemberId = authentication.getName();
+        model.addAttribute("loggedInMemberId", loggedInMemberId);
+
         return "profile";
+    }
+
+    @GetMapping("/profile/{loginId}")
+    public String userProfile(@PathVariable String loginId, Model model) {
+        // 사용자 정보를 로드하는 서비스 메서드를 호출하여 사용자 정보를 가져옴
+        Member member = memberService.getMemberByLoginId(loginId);
+        if (member == null) {
+            // 사용자가 존재하지 않는 경우, 예외 처리 또는 다른 방법으로 처리할 수 있음
+            throw new RuntimeException("사용자를 찾을 수 없습니다.");
+        }
+        model.addAttribute("member", member);
+
+        // 사용자의 게시물 등을 가져오는 등의 추가적인 작업을 수행할 수 있음
+        List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
+        model.addAttribute("memberPosts", memberPosts);
+
+        return "profile"; // profile.html로 이동
     }
 
     @GetMapping("/modifyProfile")
@@ -160,45 +178,30 @@ public class MemberController {
     public String changeProfile(Model model, Principal principal,
                                 @RequestParam("nickname") String nickname,
                                 @RequestParam("email") String email,
-                                @RequestParam("file") MultipartFile file,
-                                @RequestParam(value = "url", defaultValue = "") String url) {
-
-        // Principal 객체가 null인지 확인
-        if (principal == null) {
-            // 처리할 방법을 결정하거나 예외를 처리합니다.
-            return "redirect:/login"; // 로그인 페이지로 리다이렉트 또는 오류 처리
-        }
-
-        // 현재 로그인한 사용자의 아이디를 가져옴
-        String memberId = principal.getName();
-        Member member = memberService.getMember(memberId);
-        String memberImage = member.getUrl();
-
-        // 파일이 업로드된 경우에만 처리
-        if (!file.isEmpty() && file.getContentType() != null && file.getContentType().startsWith("image")) {
-            // 이미지를 서버에 저장하고 url을 얻음
-            String tempUrl = memberService.temp_url(file);
-            if (tempUrl != null) {
-                url = tempUrl;
-                // 사용자 정보에 프로필 사진 URL 저장
-                memberService.saveimage(member, url);
-            } else {
-                model.addAttribute("error", "파일 업로드에 실패했습니다.");
-                return "modifyProfile_form";
-            }
-        } else {
-            // 파일이 업로드되지 않은 경우, 이미지 URL을 기존 값으로 설정
-            url = memberImage;
-        }
-
+                                @RequestParam("file") MultipartFile file) {
         try {
-            memberService.updateProfile(member, nickname, email, url);
+            // 현재 로그인한 사용자 정보 가져오기
+            String memberId = principal.getName();
+            Member member = memberService.getMember(memberId);
+
+            // 파일이 업로드된 경우에만 처리
+            if (!file.isEmpty()) {
+                // 프로필 이미지 저장 및 URL 업데이트
+                memberService.saveProfileImage(member, file);
+            }
+
+            // 프로필 정보 업데이트
+            memberService.updateProfile(member, nickname, email, member.getUrl());
+
             return "redirect:/profile";
+        } catch (IOException e) {
+            // 파일 업로드 실패 시 처리
+            model.addAttribute("error", "파일 업로드에 실패했습니다.");
+            return "modifyProfile";
         } catch (CustomException e) {
-            e.printStackTrace();
+            // 다른 예외 처리
             model.addAttribute("error", "프로필 업데이트에 실패했습니다: " + e.getMessage());
             return "modifyProfile";
         }
     }
-
 }
