@@ -165,7 +165,8 @@
 </script>
 
 <!--boardList_카테고리_필터-->
-<!-- AJAX 요청 처리 -->
+<!-- AJAX 요청 처리e.json()) // 서버에서 받은 JSON 데이터를 처리
+        .then(data => { -->
 <script>
     document.getElementById('filterForm').addEventListener('submit', function(event) {
         event.preventDefault(); // 기본 제출 동작을 막습니다.
@@ -177,8 +178,7 @@
             method: 'POST',
             body: formData
         })
-        .then(response => response.json()) // 서버에서 받은 JSON 데이터를 처리
-        .then(data => {
+        .then(response => respons
             // 데이터를 받아서 처리할 부분
             console.log('필터링된 결과:', data);
             // 여기에 필요한 DOM 조작이나 페이지 업데이트 로직을 추가하세요
