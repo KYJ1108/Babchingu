@@ -149,7 +149,7 @@ public class BoardController {
             return "redirect:/board/%d".formatted(board.getId());
         }
         boardService.delete(id);
-        return "redirect:/board/%d".formatted(board.getId());
+        return "redirect:/profile/%s".formatted(board.getMember().getLoginId());
     }
 
     @PreAuthorize("isAuthenticated()")
