@@ -23,7 +23,6 @@ public class FollowController {
     // 회원을 팔로우하는 엔드포인트
     @PostMapping("/follow/{longId}")
     public String followMember(@PathVariable("longId") String loginId, Principal principal) {
-
         Member you = memberService.findByLoginId(loginId);
         Member me = memberService.getMember(principal.getName());
 
