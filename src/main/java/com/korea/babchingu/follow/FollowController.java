@@ -41,16 +41,4 @@ public class FollowController {
         return "redirect:/profile/%s".formatted(you.getLoginId());
     }
 
-//    // 회원을 언팔로우하는 엔드포인트
-//    @PostMapping("/unfollow/{id}")
-//    public String unfollowMember(@PathVariable("id") Long id, Principal principal) {
-//        Member you = memberService.findById(id);
-//        Member me = memberService.getMember(principal.getName());
-//
-//        // 언팔로우 로직 수행
-//       Follow follow = followService.unfollow(me, you);
-//       followService.delete(follow);
-//
-//        return "redirect:/profile/%s".formatted(you.id);
-//    }
 }

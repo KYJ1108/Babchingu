@@ -39,7 +39,7 @@
 
                 <!--content-->
                 <section class="feed_imgs">
-                    <div style="margin-left: 20px;">
+                    <div style="margin-left: 25px; margin-right: 25px;">
                         <div class="card-text font-bold" th:text="${board.title}"></div>
                         <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
                         <div th:text="${board.jibun}" class="small-font"></div>
@@ -48,7 +48,7 @@
                     </div>
                     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
                     <div class="interactions">
-                        <div class="my_emotion" style="margin-left: 10px;">
+                        <div class="my_emotion" style="margin-left: 15px;">
                             <!--위에서 cdn을 링크로 삽입해서 여기서 클래스명으로 가져오면 사용할 수 있다.-->
                             <a th:href="@{|board/${board.id}/vote|}" class="recommend">
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
@@ -140,8 +140,8 @@
         <aside>
             <!--WIDGET - story-->
             <article class="widget stories">
-                <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진"
-                     style="width:100%; height:100%; margin: 5px;">
+                <img th:each="image, iterStat : ${board.images}" th:src="@{|${image.url}|}" th:alt="음식사진"
+                     style="width:100%; height:350px; margin: 5px;">
             </article>
             <!--//WIDGET - story-->
             <article class="widget recommends">
@@ -154,5 +154,58 @@
         </aside>
     </main>
     </body>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
+    <script>
+        // HTML에서 해당 요소를 가져옵니다.
+        var mapContainer = document.getElementById('map');
+
+        // HTML에서 주소 값을 동적으로 가져오는 함수를 정의합니다.
+        function getAddressFromHTML() {
+            // HTML 요소에서 주소 값을 가져옵니다.
+            var addressElement = document.getElementById('boardAddress');
+            var address = addressElement.textContent;
+
+            // 가져온 주소 값을 지도를 표시하는 함수에 전달합니다.
+            searchAddressAndShowMap(address);
+        }
+
+        // 주소로 좌표를 검색하여 지도를 표시하는 함수를 정의합니다.
+        function searchAddressAndShowMap(address) {
+            // 주소-좌표 변환 객체를 생성합니다.
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            // 주소로 좌표를 검색합니다.
+            geocoder.addressSearch(address, function(result, status) {
+                // 정상적으로 검색이 완료된 경우
+                if (status === kakao.maps.services.Status.OK) {
+                    // 검색 결과의 첫 번째 항목을 가져와서 좌표를 생성합니다.
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 지도 옵션을 설정합니다.
+                    var mapOption = {
+                        center: coords, // 지도의 중심 좌표를 검색한 좌표로 설정합니다.
+                        level: 3 // 지도의 확대 레벨을 설정합니다. (0~14)
+                    };
+
+                    // 검색된 좌표를 중심으로 하는 지도 객체를 생성합니다.
+                    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                    // 검색된 좌표를 표시하는 마커를 생성합니다.
+                    var marker = new kakao.maps.Marker({
+                        position: coords, // 마커의 위치를 검색된 좌표로 설정합니다.
+                        map: map // 마커를 표시할 지도 객체를 설정합니다.
+                    });
+                } else {
+                    // 검색 결과가 없는 경우 또는 그 외의 오류가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+                    console.error('Geocoder failed: ' + status);
+                }
+            });
+        }
+        // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
+        var placePosition = new kakao.maps.LatLng(33.450701, 126.570667);
+
+        // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
+        getAddressFromHTML();
+    </script>
 </div>
 </html>
