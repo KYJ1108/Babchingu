@@ -75,23 +75,27 @@ text-align: right;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 .slides {
+    flex: 1;
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    height: 100%;
 }
-.text {
-    padding: 20px;
-    text-align: center;
+
+.slide {
+    min-width: 100%;
+    transition: opacity 0.5s ease-in-out;
 }
-.text h1 {
-    font-size: 24px;
-    color: #333;
-}
+
 .slide img {
-    width: auto;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    /* 이미지 높이를 슬라이드 배너에 맞춤 */
+    object-fit: cover;
+    /* 이미지가 슬라이드 배너 크기에 맞게 조절 */
     border-radius: 10px;
 }
+
 .prev,
 .next {
     position: absolute;
@@ -146,68 +150,6 @@ text-align: right;
     height: 100%;
 }
 
-
-.text {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: left;
-}
-
-.text h1 {
-    font-size: 24px;
-    color: #333;
-}
-
-.slides {
-    flex: 1;
-    display: flex;
-    height: 100%;
-    overflow: hidden;
-}
-
-.slide {
-    min-width: 100%;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.slide img {
-    width: 100%;
-    height: 100%;
-    /* 이미지 높이를 슬라이드 배너에 맞춤 */
-    object-fit: cover;
-    /* 이미지가 슬라이드 배너 크기에 맞게 조절 */
-    border-radius: 10px;
-}
-
-.prev,
-.next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 10;
-}
-
-.prev {
-    left: 10px;
-}
-
-.next {
-    right: 10px;
-}
-
-.prev:hover,
-.next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
 
 .map-button {
     display: block;
@@ -446,9 +388,7 @@ li {
     font-weight:bold;
 }
 
-/**************************
-HEADER
-**************************/
+/*뭘까?*/
 header{
     position: fixed;
     width: 100%;
@@ -560,19 +500,14 @@ header .logo h1{
     display: block;
     height: 100%;
 }
-
-/**************************
-MAIN LAYOUT
-**************************/
+/*detail*/
 main.wrap{
     display: flex;
     flex-direction: row-reverse;
     padding: 80px 0 100px;
 }
 
-/**************************
-ASIDE
-**************************/
+
 aside{
     flex: 3.5;
 }
@@ -606,8 +541,6 @@ aside{
     font-size: 0.8em;
     font-weight: 500;
 }
-
-
 
 /* WIDGET - common */
 .widget{
@@ -770,9 +703,7 @@ aside{
     padding-top: 20px;
 }
 
-/**************************
-FEED BOARD
-**************************/
+/*FEED BOARD*/
 div.feed_board{
     flex: 6.5;
     margin-right: 15px;
