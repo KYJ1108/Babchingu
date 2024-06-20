@@ -1,37 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container-profile">
         <div class="profile-photo">
-            <img th:src="${member.url != null} ? ${member.url} : '/img/user.png'" alt="Profile Image">
+            <img th:src="${member.url != null ? member.url : '/img/user.png'}" alt="Profile Image">
         </div>
         <div class="member-info">
             <p><strong>닉네임:</strong> <span th:text="${member.nickname}"></span></p>
-            <!-- Display follower count -->
-            <p><strong>팔로워 </strong> <span th:text="${followerCount} == 0 ? '0' : ${followerCount}"></span></p>
-            <!-- Display following count -->
-            <p><strong>팔로잉 </strong> <span th:text="${followingCount} == 0 ? '0' : ${followingCount}"></span></p>
+            <p><strong>팔로워:</strong> <span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></p>
+            <p><strong>팔로잉:</strong> <span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></p>
         </div>
-        <!-- 팔로우 버튼 -->
-        <div class="follow-button-container" th:if="${not member.isCurrentUser}">
-            <button class="follow-button" onclick="followMember('${member.id}')">
-        <span th:if="${following}">
-            언팔로우
-        </span>
-                <span th:unless="${following}">
-            팔로우
-        </span>
-            </button>
+
+        <!-- 팔로우/언팔로우 버튼 -->
+        <div class="follow-button" th:if="${loggedInMemberId != member.loginId}">
+            <!-- 팔로우 버튼 -->
+            <form id="followForm" th:action="@{/api/follow/{id}(id=${member.loginId})}" method="post">
+                <button type="submit">팔로우</button>
+            </form>
         </div>
+
         <!-- 프로필 수정 버튼 -->
-        <div class="button-container" th:if="${loggedInMemberId == member.id}">
+        <div class="button-container" th:if="${loggedInMemberId == member.loginId}">
             <a th:href="@{/modifyProfile}">프로필 수정</a>
         </div>
 
         <h2>올린 게시물</h2>
         <div class="posts">
             <!-- 각 게시물에 링크 추가 -->
-            <div th:each="post : ${member.boardList}" class="post">
+            <div th:each="post : ${member.boardList}" class="postPro">
                 <a th:href="@{|/board/${post.id}|}"> <!-- 게시물로 이동하는 링크 -->
                     <div style="flex: 1; overflow: hidden;">
                         <div th:if="${not #lists.isEmpty(post.images)}" style="height: 300px;">
@@ -40,7 +36,7 @@
                     </div>
                 </a>
             </div>
-            <div th:if="${#lists.isEmpty(member.boardList)}" class="post">
+            <div th:if="${#lists.isEmpty(member.boardList)}" class="postPro">
                 <p>작성한 게시물이 없습니다.</p>
             </div>
         </div>

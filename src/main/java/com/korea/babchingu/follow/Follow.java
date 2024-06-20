@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -16,11 +19,12 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(name = "follower_id")
     private Member follower;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "following_id")
     private Member following;
 }
