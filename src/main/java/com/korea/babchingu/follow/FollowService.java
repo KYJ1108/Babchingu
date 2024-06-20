@@ -29,8 +29,11 @@ public class FollowService {
         return Optional.ofNullable(followRepository.findByFollowing(member)).orElse(Collections.emptyList());
     }
 
-    // 추가된 메서드 팔로우, 언팔로우 버튼
-    public boolean isFollowing(Member follower, Member following) {
-        return followRepository.existsByFollowerAndFollowing(follower, following);
+    public Follow unfollow(Member me, Member you) {
+        return followRepository.unFollow(me,you);
+    }
+
+    public void delete(Follow follow) {
+        followRepository.delete(follow);
     }
 }

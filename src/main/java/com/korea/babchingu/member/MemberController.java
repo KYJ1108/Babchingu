@@ -154,9 +154,9 @@ public class MemberController {
     }
 
     @GetMapping("/profile/{loginId}")
-    public String userProfile(@PathVariable String loginId, Model model) {
+    public String userProfile(@PathVariable String loginId, Model model, Principal principal) {
         try {
-            Member member = memberService.getMemberByLoginId(loginId);
+            Member member = memberService.getMemberByLoginId(loginId); // memberId로 회원 정보를 조회합니다.
             if (member == null) {
                 throw new RuntimeException("사용자를 찾을 수 없습니다.");
             }

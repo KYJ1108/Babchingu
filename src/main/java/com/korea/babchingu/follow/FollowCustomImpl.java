@@ -24,4 +24,8 @@ public class FollowCustomImpl implements FollowCustom{
     public List<Follow> findByFollowing(Member member){
         return jpaQueryFactory.select(qFollow).from(qFollow).where(qFollow.follower.eq(member)).fetch();
     }
+
+    public Follow unFollow(Member me, Member you){
+        return jpaQueryFactory.select(qFollow).from(qFollow).where(qFollow.follower.eq(me).and(qFollow.following.eq(you))).fetchOne();
+    }
 }

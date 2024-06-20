@@ -174,4 +174,8 @@ public class MemberService {
             member.setUrl(imageUrl);
         }
     }
+
+    public Member findByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId).orElseThrow();
+    }
 }

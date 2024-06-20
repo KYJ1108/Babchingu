@@ -21,30 +21,36 @@ public class FollowController {
 
 
     // 회원을 팔로우하는 엔드포인트
-    @PostMapping("/follow/{id}")
-    public String followMember(@PathVariable("id") Long id, Principal principal) {
+    @PostMapping("/follow/{longId}")
+    public String followMember(@PathVariable("longId") String loginId, Principal principal) {
 
-        Member you = memberService.findById(id);
+        Member you = memberService.findByLoginId(loginId);
         Member me = memberService.getMember(principal.getName());
 
-        Follow follow = new Follow();
-        follow.setFollower(me);
-        follow.setFollowing(you);
-        followService.save(follow);
+        Follow unFollow = followService.unfollow(me,you);
+        if(unFollow == null) {
 
-        return "redirect:/profile/%s".formatted(you.id);
+            Follow follow = new Follow();
+            follow.setFollower(me);
+            follow.setFollowing(you);
+            followService.save(follow);
+        }else{
+            followService.delete(unFollow);
+        }
+
+        return "redirect:/profile/%s".formatted(you.getLoginId());
     }
 
-//    @DeleteMapping("/follow/{id}")
-//    public ResponseEntity<?> unfollowMember(@PathVariable Long id, Principal principal) {
-//        // 언팔로우 처리
-//        try {
-//            followService.toggleFollow(id, principal.getName());
-//            return ResponseEntity.ok().build();
-//        } catch (EmptyResultDataAccessException e) {
-//            // 팔로우 관계가 없는 경우 처리
-//            return ResponseEntity.badRequest().body("팔로우 관계가 존재하지 않습니다.");
-//        }
+//    // 회원을 언팔로우하는 엔드포인트
+//    @PostMapping("/unfollow/{id}")
+//    public String unfollowMember(@PathVariable("id") Long id, Principal principal) {
+//        Member you = memberService.findById(id);
+//        Member me = memberService.getMember(principal.getName());
+//
+//        // 언팔로우 로직 수행
+//       Follow follow = followService.unfollow(me, you);
+//       followService.delete(follow);
+//
+//        return "redirect:/profile/%s".formatted(you.id);
 //    }
-
 }

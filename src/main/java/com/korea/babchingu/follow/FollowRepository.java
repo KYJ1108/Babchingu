@@ -12,7 +12,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> , FollowCu
     List<Follow> findByFollowers(Member member);
     List<Follow> findByFollowing(Member member);
 
-    Long countByFollowerId(Long followerId); // 팔로워 수 조회
-
-    boolean existsByFollowerAndFollowing(Member follower, Member following);
+    // 언팔로우
+//    @Query("SELECT f FROM Follow f WHERE f.follower = :follower AND f.following = :following")
+//    Follow findByFollowerAndFollowing(@Param("follower") Member me, @Param("following") Member you);
 }
