@@ -7,14 +7,14 @@
         </div>
         <div class="member-info">
             <p><strong>닉네임:</strong> <span th:text="${member.nickname}"></span></p>
-            <p><strong>팔로워:</strong> <span th:text="${#lists.size(myFollowers)}"></span></p>
-            <p><strong>팔로잉:</strong> <span th:text="${#lists.size(myFollowing)}"></span></p>
+            <p><strong>팔로워:</strong> <span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></p>
+            <p><strong>팔로잉:</strong> <span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></p>
         </div>
         <!-- 팔로우/언팔로우 버튼 -->
         <div class="follow-button-container">
             <form id="followForm" th:action="@{/api/follow/{id}(id=${member.id})}" method="post">
-                <button type="button" class="btn" id="followButton" th:text="${following != null && following ? '언팔로우' : '팔로잉'}"></button>
-                <input type="hidden" name="_method" value="${following != null && following ? 'delete' : 'post'}">
+                <button type="submit" class="btn" id="followButton" th:text="${following ? '언팔로우' : '팔로우'}"></button>
+                <input type="hidden" name="_method" th:value="${following ? 'delete' : 'post'}">
             </form>
         </div>
 
@@ -42,16 +42,16 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('followButton').addEventListener('click', function() {
-        var form = document.getElementById('followForm');
-        var button = document.getElementById('followButton');
+<!--<script>-->
+<!--    document.getElementById('followButton').addEventListener('click', function() {-->
+<!--        var form = document.getElementById('followForm');-->
+<!--        var button = document.getElementById('followButton');-->
 
-        // 버튼 비활성화
-        button.disabled = true;
+<!--        // 버튼 비활성화-->
+<!--        button.disabled = true;-->
 
-        // 폼 제출
-        form.submit();
-    });
-</script>
+<!--        // 폼 제출-->
+<!--        form.submit();-->
+<!--    });-->
+<!--</script>-->
 </html>

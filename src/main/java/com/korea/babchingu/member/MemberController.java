@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -138,6 +139,12 @@ public class MemberController {
         List<Board> memberPosts = memberService.getMemberPosts(member.getLoginId());
         model.addAttribute("memberPosts", memberPosts);
 
+        // 팔로우, 팔로잉
+        List<Follow> myFollowers = followService.getMyFollowers(member);
+        List<Follow> myFollowing = followService.getMyFollowing(member);
+        model.addAttribute("myFollowers", myFollowers);
+        model.addAttribute("myFollowing", myFollowing);
+
         // 현재 로그인한 사용자와 프로필 주인의 아이디를 비교하여 모델에 추가
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInMemberId = authentication.getName();
@@ -164,6 +171,7 @@ public class MemberController {
             // 팔로워, 팔로잉 정보 추가
             List<Follow> myFollowers = followRepository.findByFollowers(member);
             List<Follow> myFollowing = followRepository.findByFollowing(member);
+
 
             model.addAttribute("member", member);
             model.addAttribute("memberPosts", memberPosts);

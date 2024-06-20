@@ -1,12 +1,12 @@
 package com.korea.babchingu.follow;
 
 import com.korea.babchingu.member.Member;
-import com.korea.babchingu.member.MemberRepository;
 import com.korea.babchingu.member.MemberService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,22 +19,18 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-//    public void toggleFollow(Long memberIdToFollow, String followerUsername) {
-//        // 팔로우 상태 조회
-//        Optional<Follow> existingFollow = followRepository.findByFollowerIdAndFollowingId(followerId, memberIdToFollow);
-//
-//        if (existingFollow.isPresent()) {
-//            // 이미 팔로우한 상태면 언팔로우 처리
-//            followRepository.delete(existingFollow.get());
-//        } else {
-//            // 팔로우하지 않은 상태면 팔로우 처리
-//            Member follower = memberService.findByUsername(followerUsername);
-//            Member following = memberService.findById(memberIdToFollow);
-//
-//            Follow follow = new Follow();
-//            follow.setFollower(follower);
-//            follow.setFollowing(following);
-//            followRepository.save(follow);
-//        }
-//    }
+    // 자신 프로필 팔로우
+    public List<Follow> getMyFollowers(Member member) {
+        return Optional.ofNullable(followRepository.findByFollowers(member)).orElse(Collections.emptyList());
+    }
+
+    // 팔로잉 목록을 가져오는 메서드
+    public List<Follow> getMyFollowing(Member member) {
+        return Optional.ofNullable(followRepository.findByFollowing(member)).orElse(Collections.emptyList());
+    }
+
+    // 추가된 메서드 팔로우, 언팔로우 버튼
+    public boolean isFollowing(Member follower, Member following) {
+        return followRepository.existsByFollowerAndFollowing(follower, following);
+    }
 }
