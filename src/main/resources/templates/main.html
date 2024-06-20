@@ -1,27 +1,75 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
+<head>
+    <script>
 
+        let intervalId = null;
+
+        function slide() {
+            const slides = document.querySelectorAll('.slide');
+            const slider = document.querySelector('.slides');
+            let slideIndex = 0;
+            let slideWidth = slides[0].clientWidth; // 각 슬라이드의 너비
+
+            function updateSlidePosition() {
+                slider.style.transition = "transform 0.5s ease-in-out";
+                slider.style.transform = `translateX(${-slideIndex * slideWidth}px)`;
+            }
+
+            document.querySelector('.next').addEventListener('click', function() {
+                slideIndex++;
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                updateSlidePosition();
+            });
+
+            document.querySelector('.prev').addEventListener('click', function() {
+                slideIndex--;
+                if (slideIndex < 0) {
+                    slideIndex = slides.length - 1;
+                }
+                updateSlidePosition();
+            });
+
+            if(intervalId != null) {
+                clearInterval(intervalId);
+            }
+
+            // 자동 슬라이드 변경 추가 (2초마다)
+            intervalId = setInterval(function() {
+                slideIndex++;
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                updateSlidePosition();
+            }, 2000);
+        }
+        window.addEventListener('resize', function() {
+            console.log("resize");
+            const slider = document.querySelector('.slides');
+            slider.style.transform = `translateX(0px)`;
+            slide();
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            slide();
+        });
+
+    </script>
+</head>
+<div layout:fragment="content">
     <div class="slider">
         <div class="content">
             <div class="slides">
                 <div class="slide">
-                    <div class="text">
-                        <h1>첫 번째 슬라이드</h1>
-                        <img src="/foodImg/res1.jpg" alt="이미지 1">
-                    </div>
+                    <img src="/foodImg/bn1.png" alt="이미지 1">
                 </div>
                 <div class="slide">
-                    <div class="text">
-                        <h1>두 번째 슬라이드</h1>
-                        <img src="/foodImg/res2.jpg" alt="이미지 2">
-                    </div>
+                    <img src="/foodImg/bn2.png" alt="이미지 2">
                 </div>
                 <div class="slide">
-                    <div class="text">
-                        <h1>세 번째 슬라이드</h1>
-                        <img src="/foodImg/res3.jpg" alt="이미지 3">
-                    </div>
+                    <img src="/foodImg/bn3.png" alt="이미지 3">
                 </div>
             </div>
         </div>

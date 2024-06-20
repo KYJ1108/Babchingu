@@ -11,8 +11,4 @@ import java.util.List;
 public interface FollowRepository extends JpaRepository<Follow, Long> , FollowCustom {
     List<Follow> findByFollowers(Member member);
     List<Follow> findByFollowing(Member member);
-
-    // 언팔로우
-//    @Query("SELECT f FROM Follow f WHERE f.follower = :follower AND f.following = :following")
-//    Follow findByFollowerAndFollowing(@Param("follower") Member me, @Param("following") Member you);
 }

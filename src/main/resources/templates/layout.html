@@ -205,37 +205,5 @@
         window.location.href = `/member/search?memberId=${encodeURIComponent(memberId)}`;
     });
 </script>
-
-<!--메인-->
-<script>
-    let currentSlide = 0;
-    const slidesContainer = document.querySelector('.slides');
-    const slides = document.querySelectorAll('.slide');
-    const slideCount = slides.length;
-    const nextButton = document.querySelector('.next');
-    const prevButton = document.querySelector('.prev');
-
-    function showSlide(n) {
-        slidesContainer.style.transform = `translateX(-${n * 100}%)`;
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slideCount;
-        showSlide(currentSlide);
-    }
-
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-        showSlide(currentSlide);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        showSlide(currentSlide);
-        setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
-
-        nextButton.addEventListener('click', nextSlide);
-        prevButton.addEventListener('click', prevSlide);
-    });
-</script>
 </body>
 </html>

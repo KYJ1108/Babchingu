@@ -12,7 +12,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FollowService {
-    private final MemberService memberService;
     private final FollowRepository followRepository;
 
     public void save(Follow follow) {
