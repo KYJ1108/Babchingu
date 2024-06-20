@@ -66,8 +66,7 @@ text-align: right;
 }
 
 .slider {
-    width: 100%;
-    max-width: 80%;
+    width: 80%;
     height: 300px;
     margin: 10px auto;  /* 중앙 정렬 및 상단 여백 추가 */
     position: relative;
@@ -919,3 +918,4 @@ div.feed_board{
     outline: none; /* 추가: 포커스 시 테두리도 숨김 */
     resize: none; /* 추가: 크기 조절 막기 */
 }
+

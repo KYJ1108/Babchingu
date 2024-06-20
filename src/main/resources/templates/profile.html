@@ -1,14 +1,76 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-photo {
+            flex: 0 0 120px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .follow-button {
+            margin-top: 10px;
+        }
+
+        .posts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .post {
+            position: relative;
+            padding-bottom: 100%;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .post img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
 <div layout:fragment="content">
-    <div class="container-profile">
+    <div class="container" style="margin-left: 10%; margin-right: 10%;">
+        <p><strong><span th:text="${member.nickname}"></span></strong></p>
         <div class="profile-photo">
             <img th:src="${member.url != null ? member.url : '/img/user.png'}" alt="Profile Image">
         </div>
         <div class="member-info">
-            <p><strong>닉네임:</strong> <span th:text="${member.nickname}"></span></p>
-            <p><strong>팔로워:</strong> <span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></p>
-            <p><strong>팔로잉:</strong> <span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></p>
+            <p><strong>게시물 </strong> <span th:text="${#lists.size(member.boardList)}"></span></p>
+            <p><strong>팔로워 </strong> <span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></p>
+            <p><strong>팔로잉 </strong> <span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></p>
         </div>
 
         <!-- 팔로우/언팔로우 버튼 -->
