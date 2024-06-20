@@ -38,4 +38,5 @@ public class FollowController {
 
         return "redirect:/profile/%s".formatted(you.getLoginId());
     }
+
 }
