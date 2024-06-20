@@ -1,5 +1,40 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
+<head>
+    <!--boardList_카테고리_필터-->
+    <!-- AJAX 요청 처리e.json()) // 서버에서 받은 JSON 데이터를 처리
+            .then(data => { -->
+    <script>
+        document.getElementById('filterForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 기본 제출 동작을 막습니다.
+
+            var formData = new FormData(this); // 폼 데이터 객체 생성
+
+            // AJAX 요청
+            fetch('/board/filter', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => respons
+                // 데이터를 받아서 처리할 부분
+                console.log('필터링된 결과:', data);
+                // 여기에 필요한 DOM 조작이나 페이지 업데이트 로직을 추가하세요
+            })
+            .catch(error => console.error('에러 발생:', error));
+        });
+    </script>
+    <script>
+        function submitForm() {
+            var selectElement = document.getElementById("sort");
+            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+            var url = selectedOption === "date" ? "/board/date" : "/board/popular";
+            window.location.href = url;
+        }
+    </script>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
 <div layout:fragment="content">
     <div class="filter-container">
         <div class="collapse bg-base-200">
@@ -86,13 +121,31 @@
             </a>
         </th:block>
     </div>
-    <script>
-        function submitForm() {
-            var selectElement = document.getElementById("sort");
-            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
-            var url = selectedOption === "date" ? "/board/date" : "/board/popular";
-            window.location.href = url;
-        }
-    </script>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!boards.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!boards.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${boards.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, boards.totalPages-1)}"
+                th:if="${page >= boards.number-5 and page <= boards.number+5}"
+                th:classappend="${page == boards.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!boards.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${boards.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+
 </div>
+</body>
 </html>

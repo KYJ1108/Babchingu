@@ -39,7 +39,7 @@
 
                 <!--content-->
                 <section class="feed_imgs">
-                    <div style="margin-left: 20px;">
+                    <div style="margin-left: 25px; margin-right: 25px;">
                         <div class="card-text font-bold" th:text="${board.title}"></div>
                         <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
                         <div th:text="${board.jibun}" class="small-font"></div>
@@ -48,7 +48,7 @@
                     </div>
                     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
                     <div class="interactions">
-                        <div class="my_emotion" style="margin-left: 10px;">
+                        <div class="my_emotion" style="margin-left: 15px;">
                             <!--위에서 cdn을 링크로 삽입해서 여기서 클래스명으로 가져오면 사용할 수 있다.-->
                             <a th:href="@{|board/${board.id}/vote|}" class="recommend">
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>

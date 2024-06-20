@@ -1,7 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
+<head>
+    <!--메인-->
+    <script>
+        let currentSlide = 0;
+        const slidesContainer = document.querySelector('.slides');
+        const slides = document.querySelectorAll('.slide');
+        const slideCount = slides.length;
+        const nextButton = document.querySelector('.next');
+        const prevButton = document.querySelector('.prev');
 
+        function showSlide(n) {
+            slidesContainer.style.transform = `translateX(-${n * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            showSlide(currentSlide);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(currentSlide);
+            setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
+
+            nextButton.addEventListener('click', nextSlide);
+            prevButton.addEventListener('click', prevSlide);
+        });
+    </script>
+    <!--메인 배너-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const isSearchModal = /*[[${isSearchModal}]]*/ false;
+            const searchModal = document.getElementById("searchModal");
+
+            if (isSearchModal) {
+                searchModal.showModal();
+            }
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const memberId = document.getElementById('memberId').value;
+            window.location.href = `/member/search?memberId=${encodeURIComponent(memberId)}`;
+        });
+    </script>
+</head>
+<div layout:fragment="content">
     <div class="slider">
         <div class="content">
             <div class="slides">

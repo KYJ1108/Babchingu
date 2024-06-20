@@ -7,6 +7,7 @@ import com.korea.babchingu.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -148,11 +149,13 @@ public class BoardService {
 //        return boardRepository.findAllByOrderByVoterSizeDesc(pageable);
 //    }
 
-    public List<Board> getBoardsByCreateDate() {
-        return boardRepository.findAllByOrderByCreateDateDesc();
+    public Page<Board> getBoardsByCreateDate(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return boardRepository.findAllByOrderByCreateDateDesc(pageable);
     }
 
-    public List<Board> getBoardsByVoterSize() {
-        return boardRepository.findAllByOrderByVoterSizeDesc();
+    public Page<Board> getBoardsByVoterSize(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return boardRepository.findAllByOrderByVoterSizeDesc(pageable);
     }
 }
