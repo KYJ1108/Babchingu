@@ -974,6 +974,15 @@ div.feed_board{
 .small-font {
     font-size: smaller;
 }
+
+.post {
+    text-decoration: none;
+    color: inherit;
+}
+.post:hover {
+    text-decoration: none;
+    color: inherit;
+
 .no-border {
     border: none;
     outline: none; /* 추가: 포커스 시 테두리도 숨김 */

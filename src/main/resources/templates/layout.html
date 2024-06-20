@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/styles.css">
     <script src="https://kit.fontawesome.com/fcf8de99ce.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>밥친구</title>
 </head>
 <body>
@@ -78,10 +81,7 @@
             this.innerHTML = '<img src="/img/v.png" alt="" style="width: 20px; height: 20px;">';
         }
     });
-</script>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
-<script>
     // HTML에서 해당 요소를 가져옵니다.
     var mapContainer = document.getElementById('map');
 
@@ -132,8 +132,7 @@
 
     // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
     getAddressFromHTML();
-</script>
-<script>
+
     function searchMemberAndShowModal() {
         const memberId = document.getElementById('searchInput').value;
 
@@ -162,7 +161,7 @@
         })
         .catch(error => console.error('Error fetching search results:', error));
     }
-</script>
+
 
 <!--boardList_카테고리_필터-->
 <!-- AJAX 요청 처리e.json()) // 서버에서 받은 JSON 데이터를 처리
@@ -185,10 +184,10 @@
         })
         .catch(error => console.error('에러 발생:', error));
     });
-</script>
+
 
 <!--메인 배너-->
-<script>
+
     document.addEventListener("DOMContentLoaded", function() {
         const isSearchModal = /*[[${isSearchModal}]]*/ false;
         const searchModal = document.getElementById("searchModal");
@@ -203,10 +202,10 @@
         const memberId = document.getElementById('memberId').value;
         window.location.href = `/member/search?memberId=${encodeURIComponent(memberId)}`;
     });
-</script>
+
 
 <!--메인-->
-<script>
+
     let currentSlide = 0;
     const slidesContainer = document.querySelector('.slides');
     const slides = document.querySelectorAll('.slide');
@@ -235,35 +234,6 @@
         nextButton.addEventListener('click', nextSlide);
         prevButton.addEventListener('click', prevSlide);
     });
-</script>
-
-<!--팔로잉&언팔로잉-->
-<script th:inline="javascript">
-    function followMember(memberId) {
-        // Ajax를 통해 팔로우 기능 호출
-        var csrfToken = /*[[${_csrf.token}]]*/ '';
-        var followerId = /*[[${member.id}]]*/ '';
-        var followingId = memberId;
-
-        $.ajax({
-            url: '/api/follow',
-            type: 'POST',
-            data: {
-                'followerId': followerId,
-                'followingId': followingId,
-                '_csrf': csrfToken
-            },
-            success: function (response) {
-                console.log(response);
-                // 팔로우 버튼 갱신 또는 페이지 새로고침
-                // 예: location.reload();
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                alert(xhr.responseText);
-            }
-        });
-    }
 </script>
 </body>
 </html>
