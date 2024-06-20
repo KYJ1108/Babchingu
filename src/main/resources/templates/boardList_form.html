@@ -9,6 +9,64 @@
             window.location.href = url;
         }
     </script>
+    <style>
+        .pagination{display:-ms-flexbox;display:flex;padding-left:0;list-style:none;border-radius:.25rem}
+        .page-link{position:relative;display:block;padding:.5rem .75rem;margin-left:-1px;line-height:1.25;color:#007bff;background-color:#fff;border:1px solid #dee2e6}
+        .page-link:hover{z-index:2;color:#0056b3;text-decoration:none;background-color:#e9ecef;border-color:#dee2e6}
+        .page-link:focus{z-index:3;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.page-item:first-child
+            .page-link{margin-left:0;border-top-left-radius:.25rem;border-bottom-left-radius:.25rem}
+            .page-item:last-child .page-link{border-top-right-radius:.25rem;border-bottom-right-radius:.25rem}
+            .page-item.active .page-link{z-index:3;color:#fff;background-color:#007bff;border-color:#007bff}
+            .page-item.disabled .page-link{color:#6c757d;pointer-events:none;cursor:auto;background-color:#fff;border-color:#dee2e6}
+            .pagination-lg .page-link{padding:.75rem 1.5rem;font-size:1.25rem;line-height:1.5}
+            .pagination-lg .page-item:first-child .page-link{border-top-left-radius:.3rem;border-bottom-left-radius:.3rem}
+            .pagination-lg .page-item:last-child .page-link{border-top-right-radius:.3rem;border-bottom-right-radius:.3rem}
+            .pagination-sm .page-link{padding:.25rem .5rem;font-size:.875rem;line-height:1.5}
+            .pagination-sm .page-item:first-child .page-link{border-top-left-radius:.2rem;border-bottom-left-radius:.2rem}
+            .pagination-sm .page-item:last-child .page-link{border-top-right-radius:.2rem;border-bottom-right-radius:.2rem}
+            .badge{display:inline-block;padding:.25em .4em;font-size:75%;font-weight:700;line-height:1;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}
+            @media (prefers-reduced-motion:reduce){.badge{transition:none}}
+            a.badge:focus,a.badge:hover{text-decoration:none}
+            .badge:empty{display:none}
+            .btn .badge{position:relative;top:-1px}
+            .badge-pill{padding-right:.6em;padding-left:.6em;border-radius:10rem}
+            .badge-primary{color:#fff;background-color:#007bff}
+            a.badge-primary:focus,a.badge-primary:hover{color:#fff;background-color:#0062cc}
+            a.badge-primary.focus,a.badge-primary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}
+            .badge-secondary{color:#fff;background-color:#6c757d}
+            a.badge-secondary:focus,a.badge-secondary:hover{color:#fff;background-color:#545b62}
+            a.badge-secondary.focus,a.badge-secondary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}
+            .badge-success{color:#fff;background-color:#28a745}
+            a.badge-success:focus,a.badge-success:hover{color:#fff;background-color:#1e7e34}
+            a.badge-success.focus,a.badge-success:focus{outline:0;box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}
+            .badge-info{color:#fff;background-color:#17a2b8}
+            a.badge-info:focus,a.badge-info:hover{color:#fff;background-color:#117a8b}
+            a.badge-info.focus,a.badge-info:focus{outline:0;box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}
+            .badge-warning{color:#212529;background-color:#ffc107}
+            a.badge-warning:focus,a.badge-warning:hover{color:#212529;background-color:#d39e00}
+            a.badge-warning.focus,a.badge-warning:focus{outline:0;box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}
+            .badge-danger{color:#fff;background-color:#dc3545}
+            a.badge-danger:focus,a.badge-danger:hover{color:#fff;background-color:#bd2130}
+            a.badge-danger.focus,a.badge-danger:focus{outline:0;box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}
+            .badge-light{color:#212529;background-color:#f8f9fa}
+            a.badge-light:focus,a.badge-light:hover{color:#212529;background-color:#dae0e5}
+            a.badge-light.focus,a.badge-light:focus{outline:0;box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}
+            .badge-dark{color:#fff;background-color:#343a40}
+            a.badge-dark:focus,a.badge-dark:hover{color:#fff;background-color:#1d2124}
+            a.badge-dark.focus,a.badge-dark:focus{outline:0;box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}
+            .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}
+            @media (min-width:576px){.jumbotron{padding:4rem 2rem}}}
+        .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 100px;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 100px;
+    }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -99,8 +157,8 @@
     </div>
 
     <!-- 페이징처리 시작 -->
-    <div th:if="${!boards.isEmpty()}">
-        <ul class="pagination justify-content-center">
+    <div class="pagination-wrapper" th:if="${!boards.isEmpty()}">
+        <ul class="pagination">
             <li class="page-item" th:classappend="${!boards.hasPrevious} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{|?page=${boards.number-1}|}">
