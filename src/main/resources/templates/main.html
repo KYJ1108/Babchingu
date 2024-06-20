@@ -1,35 +1,58 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <head>
-    <!--메인-->
     <script>
-        let currentSlide = 0;
-        const slidesContainer = document.querySelector('.slides');
-        const slides = document.querySelectorAll('.slide');
-        const slideCount = slides.length;
-        const nextButton = document.querySelector('.next');
-        const prevButton = document.querySelector('.prev');
+        let intervalId = null;
 
-        function showSlide(n) {
-            slidesContainer.style.transform = `translateX(-${n * 100}%)`;
+        function slide() {
+            const slides = document.querySelectorAll('.slide');
+            const slider = document.querySelector('.slides');
+            let slideIndex = 0;
+            let slideWidth = slides[0].clientWidth; // 각 슬라이드의 너비
+
+            function updateSlidePosition() {
+                slider.style.transition = "transform 0.5s ease-in-out";
+                slider.style.transform = `translateX(${-slideIndex * slideWidth}px)`;
+            }
+
+            document.querySelector('.next').addEventListener('click', function() {
+                slideIndex++;
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                updateSlidePosition();
+            });
+
+            document.querySelector('.prev').addEventListener('click', function() {
+                slideIndex--;
+                if (slideIndex < 0) {
+                    slideIndex = slides.length - 1;
+                }
+                updateSlidePosition();
+            });
+
+            if(intervalId != null) {
+                clearInterval(intervalId);
+            }
+
+            // 자동 슬라이드 변경 추가 (2초마다)
+            intervalId = setInterval(function() {
+                slideIndex++;
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                updateSlidePosition();
+            }, 2000);
         }
+        window.addEventListener('resize', function() {
+            console.log("resize");
+            const slider = document.querySelector('.slides');
+            slider.style.transform = `translateX(0px)`;
+            slide();
+        });
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slideCount;
-            showSlide(currentSlide);
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-            showSlide(currentSlide);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showSlide(currentSlide);
-            setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드
-
-            nextButton.addEventListener('click', nextSlide);
-            prevButton.addEventListener('click', prevSlide);
+        document.addEventListener("DOMContentLoaded", function() {
+            slide();
         });
     </script>
 </head>
@@ -38,22 +61,13 @@
         <div class="content">
             <div class="slides">
                 <div class="slide">
-                    <div class="text">
-                        <h1>첫 번째 슬라이드</h1>
-                        <img src="/foodImg/res1.jpg" alt="이미지 1">
-                    </div>
+                    <img src="/foodImg/bn1.png" alt="이미지 1">
                 </div>
                 <div class="slide">
-                    <div class="text">
-                        <h1>두 번째 슬라이드</h1>
-                        <img src="/foodImg/res2.jpg" alt="이미지 2">
-                    </div>
+                    <img src="/foodImg/bn2.png" alt="이미지 2">
                 </div>
                 <div class="slide">
-                    <div class="text">
-                        <h1>세 번째 슬라이드</h1>
-                        <img src="/foodImg/res3.jpg" alt="이미지 3">
-                    </div>
+                    <img src="/foodImg/bn3.png" alt="이미지 3">
                 </div>
             </div>
         </div>
