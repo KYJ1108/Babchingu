@@ -3,6 +3,7 @@ package com.korea.babchingu.member;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.chat.ChatRoom;
 import com.korea.babchingu.comment.Comment;
+import com.korea.babchingu.follow.Follow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,12 +54,5 @@ public class Member {
     public void setCurrentUser(boolean currentUser) {
         isCurrentUser = currentUser;
     }
-
-    //팔로우
-//    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
-//    private List<Follow> followingList;
-//
-//    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
-//    private List<Follow> followerList;
 
 }
