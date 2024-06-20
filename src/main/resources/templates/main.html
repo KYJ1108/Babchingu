@@ -32,23 +32,6 @@
             prevButton.addEventListener('click', prevSlide);
         });
     </script>
-    <!--메인 배너-->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const isSearchModal = /*[[${isSearchModal}]]*/ false;
-            const searchModal = document.getElementById("searchModal");
-
-            if (isSearchModal) {
-                searchModal.showModal();
-            }
-        });
-
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const memberId = document.getElementById('memberId').value;
-            window.location.href = `/member/search?memberId=${encodeURIComponent(memberId)}`;
-        });
-    </script>
 </head>
 <div layout:fragment="content">
     <div class="slider">
