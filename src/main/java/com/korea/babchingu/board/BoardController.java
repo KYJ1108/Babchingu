@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +65,11 @@ public class BoardController {
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
+
+        // 현재 로그인한 사용자와 프로필 주인의 아이디를 비교하여 모델에 추가
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInMemberId = authentication.getName();
+        model.addAttribute("loggedInMemberId", loggedInMemberId);
 
         String loggedInUsername = principal.getName();
         model.addAttribute("loggedInUsername", loggedInUsername);
