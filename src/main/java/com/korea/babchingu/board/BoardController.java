@@ -90,7 +90,7 @@ public class BoardController {
             Member member = memberService.getMember(principal.getName());
             model.addAttribute("member", member);
         }
-        return "boardList_form";
+        return "redirect:/board/date";
     }
 
     // 장소 검색 - 지도 팝업창
@@ -192,16 +192,16 @@ public class BoardController {
 //    }
 
     @GetMapping("/date")
-    public String getBoardsOrderByDate(Model model) {
-        List<Board> board = boardService.getBoardsByCreateDate();
+    public String getBoardsOrderByDate(Model model, @RequestParam(value = "page", defaultValue = "0")int page) {
+        Page<Board> board = boardService.getBoardsByCreateDate(page);
         model.addAttribute("boards", board);
         model.addAttribute("sort", "date");
         return "boardList_form";
     }
 
     @GetMapping("/popular")
-    public String getBoardsOrderByPopular(Model model) {
-        List<Board> board = boardService.getBoardsByVoterSize();
+    public String getBoardsOrderByPopular(Model model, @RequestParam(value = "page", defaultValue = "0")int page) {
+        Page<Board> board = boardService.getBoardsByVoterSize(page);
         model.addAttribute("boards", board);
         model.addAttribute("sort", "popular");
         return "boardList_form";
