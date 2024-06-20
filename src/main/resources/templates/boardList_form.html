@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
+<head>
+    <script>
+        function submitForm() {
+            var selectElement = document.getElementById("sort");
+            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+            var url = selectedOption === "date" ? "/board/date" : "/board/popular";
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
 <div layout:fragment="content">
     <div class="filter-container">
         <div class="collapse bg-base-200">
@@ -86,13 +97,31 @@
             </a>
         </th:block>
     </div>
-    <script>
-        function submitForm() {
-            var selectElement = document.getElementById("sort");
-            var selectedOption = selectElement.options[selectElement.selectedIndex].value;
-            var url = selectedOption === "date" ? "/board/date" : "/board/popular";
-            window.location.href = url;
-        }
-    </script>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!boards.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!boards.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${boards.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, boards.totalPages-1)}"
+                th:if="${page >= boards.number-5 and page <= boards.number+5}"
+                th:classappend="${page == boards.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!boards.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${boards.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+
 </div>
+</body>
 </html>

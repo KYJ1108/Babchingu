@@ -928,3 +928,13 @@ div.feed_board{
 .small-font {
     font-size: smaller;
 }
+
+
+.post {
+    text-decoration: none;
+    color: inherit;
+}
+.post:hover {
+    text-decoration: none;
+    color: inherit;
+}
