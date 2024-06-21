@@ -100,8 +100,7 @@ text-align: right;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: rgba(0, 0, 0, 0.5);
     border: none;
     padding: 10px;
     cursor: pointer;
@@ -117,11 +116,6 @@ text-align: right;
     right: 10px;
 }
 
-.prev:hover,
-.next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
 .plus-container {
     margin-top: 15px;
     text-align: right;
@@ -130,8 +124,8 @@ text-align: right;
 .more-button {
     display: inline-block;
     padding: 5px 10px;
-    background-color: #BDBDBD;
-    color: #000;
+    background-color: #0f132a;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -139,8 +133,7 @@ text-align: right;
 }
 
 .more-button:hover {
-    color: white;
-    background-color: #424242;
+    background-color: #F7819F;
 }
 
 .content {
@@ -173,6 +166,18 @@ li {
 .option-icon {
     margin-right: 5px;
     /* 이미지와 텍스트 사이의 간격을 조절합니다 */
+}
+
+.btn_add{
+     background-color: #0f132a;
+     color: #ffffff;
+     border: none;
+     border-radius: 5px;
+     padding: 10px;
+}
+
+.btn_add:hover{
+    background-color: #F7819F;
 }
 
 /* boardList_form*/
