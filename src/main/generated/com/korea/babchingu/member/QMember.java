@@ -32,8 +32,11 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+<<<<<<< HEAD
+=======
     public final BooleanPath isCurrentUser = createBoolean("isCurrentUser");
 
+>>>>>>> daa3eabb64183a056a3a5d097ccfec6687e5e3ba
     public final StringPath loginId = createString("loginId");
 
     public final StringPath nickname = createString("nickname");
