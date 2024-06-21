@@ -117,7 +117,7 @@ public class MemberController {
         model.addAttribute("searchLoginId", searchLoginId);
         model.addAttribute("isSearchModal", isSearchModal);
 
-        return "redirect:/?memberId=%s".formatted(memberId);
+        return "layout";
     }
 
     @GetMapping("/profile")

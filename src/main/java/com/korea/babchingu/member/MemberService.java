@@ -48,16 +48,7 @@ public class MemberService {
 
         // Member 저장
         member = memberRepository.save(member);
-
-        // Profile 저장
-//        Profile profile = new Profile();
-//        profile.setMember(member); // 연관 관계 설정
-//        profile.setNickname("");
-//        profile.setImage(null);
-//        profile.setSex("");
-//        profile.setPhone("");
-//        profileRepository.save(profile);
-
+        
         return member;
     }
 
@@ -75,7 +66,7 @@ public class MemberService {
     }
 
     public List<Member> getSearchList(String keyword) {
-        return memberRepository.findByLoginIdContainingIgnoreCase(keyword);
+        return memberRepository.findByNicknameContainingIgnoreCase(keyword);
     }
 
     public Member findById(Long id) {

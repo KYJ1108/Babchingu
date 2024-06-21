@@ -49,8 +49,10 @@ public class MainController {
     @PostMapping("/search")
     public String search(Model model,@RequestParam String searchInput) {
 
-        List<Board> searchBoard = mainService.getSearchList(searchInput);
+        List<Board> searchBoard = mainService.getBoardSearchList(searchInput);
+        List<Member> searchMember = mainService.getMemberSearchList(searchInput);
         model.addAttribute("searchBoard", searchBoard);
+        model.addAttribute("searchMember", searchMember);
 
         return "search";
     }

@@ -144,9 +144,21 @@ public class BoardController {
         if (!board.getMember().getLoginId().equals(principal.getName())) {
             return "redirect:/board/%d".formatted(board.getId());
         }
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getUpdateDate());
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
+    }
+
+    @PostMapping("/delete/image/{deleteImageId}")
+    public String imageDelete(@PathVariable("deleteImageId") Long deleteImageId, @RequestParam("id") Long id) {
+        // 게시물 ID로 게시물을 가져옵니다.
+        Board board = boardService.getBoard(id);
+
+        // 이미지 삭제 서비스 호출
+        boardService.imageDelete(deleteImageId);
+
+        // 게시물 수정 페이지로 리디렉션
+        return "redirect:/board/modify/" + board.getId();
     }
 
     @PostMapping("/delete/{id}")
@@ -156,7 +168,8 @@ public class BoardController {
             return "redirect:/board/%d".formatted(board.getId());
         }
         boardService.delete(id);
-        return "redirect:/board/list";
+
+        return "redirect:/profile/%s".formatted(board.getMember().getLoginId());
     }
 
     @PreAuthorize("isAuthenticated()")
