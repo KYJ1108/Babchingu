@@ -46,7 +46,8 @@ public class AnswerController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
+        Answer answer = answerService.getAnswer(id);
         answerService.delete(id);
-        return "redirect:/";
+        return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
     }
 }

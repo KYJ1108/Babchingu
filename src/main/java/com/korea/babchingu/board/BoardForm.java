@@ -26,4 +26,6 @@ public class BoardForm {
     private Member member;
 
     private LocalDateTime createDate;
+
+    private LocalDateTime updateDate;
 }
