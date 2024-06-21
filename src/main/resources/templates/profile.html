@@ -12,10 +12,15 @@
             border-radius: 5px; /* 둥근 모서리 추가 */
             margin-bottom: 20px;
         }
+
         .profile {
-            display: flex;
             align-items: center;
             margin-bottom: 20px;
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
             flex-direction: row;
         }
 
@@ -87,76 +92,78 @@
     <div class="container">
         <div class="information">
             <p style="text-align: center;"><strong><span th:text="${member.nickname}"></span></strong></p>
-            <div class="profile" style="align-items: center;">
-                <div class="profile-photo">
-                    <img th:src="${member.url != null ? member.url : '/img/user.png'}" alt="Profile Image">
+            <div class="profile">
+                <div class="info">
+                    <div class="profile-photo">
+                        <img th:src="${member.url != null ? member.url : '/img/user.png'}" alt="Profile Image">
+                    </div>
+                    <div class="member-info">
+                        <p style="padding: 12.5px;"><strong>게시물  </strong> <span th:text="${#lists.size(member.boardList)}"></span></p>
+                            <button class="btn" onclick="my_modal_3_follower.showModal()">팔로워<span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></button>
+                            <dialog id="my_modal_3_follower" class="modal">
+                                <div class="modal-box">
+                                    <form method="dialog">
+                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                    </form>
+                                    <h3 class="font-bold text-lg">팔로워 목록</h3>
+                                    <p class="py-4">
+                                        <ul>
+                                            <li th:each="follow : ${myFollowers}">
+                                                <a th:href="@{|/profile/${follow.follower.loginId}|}"  class="flex flex-row items-center">
+                                                    <div th:if="${!#lists.isEmpty(member.url)}">
+                                                        <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.follower.url}"/>
+                                                    </div>
+                                                    <span th:text="${follow.follower.nickname}">닉네임</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </dialog>
+                        </p>
+                        <p>
+                            <button class="btn" onclick="my_modal_3.showModal()">팔로잉<span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></button>
+                            <dialog id="my_modal_3" class="modal">
+                                <div class="modal-box">
+                                    <form method="dialog">
+                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                    </form>
+                                    <h3 class="font-bold text-lg">팔로잉 목록</h3>
+                                    <p class="py-4">
+                                        <ul>
+                                            <li th:each="follow : ${myFollowing}">
+                                                <a th:href="@{|/profile/${follow.following.loginId}|}"  class="flex flex-row items-center">
+                                                    <div th:if="${!#lists.isEmpty(member.url)}">
+                                                        <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.following.url}"/>
+                                                    </div>
+                                                    <span th:text="${follow.following.nickname}">닉네임</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </dialog>
+                        </p>
+                    </div>
                 </div>
-                <div class="member-info">
-                    <p style="padding: 12.5px;"><strong>게시물  </strong> <span th:text="${#lists.size(member.boardList)}"></span></p>
-                        <button class="btn" onclick="my_modal_3_follower.showModal()">팔로워<span th:text="${myFollowers != null ? #lists.size(myFollowers) : 0}"></span></button>
-                        <dialog id="my_modal_3_follower" class="modal">
-                            <div class="modal-box">
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                </form>
-                                <h3 class="font-bold text-lg">팔로워 목록</h3>
-                                <p class="py-4">
-                                    <ul>
-                                        <li th:each="follow : ${myFollowers}">
-                                            <a th:href="@{|/profile/${follow.follower.loginId}|}"  class="flex flex-row items-center">
-                                                <div th:if="${!#lists.isEmpty(member.url)}">
-                                                    <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.follower.url}"/>
-                                                </div>
-                                                <span th:text="${follow.follower.nickname}">닉네임</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </p>
-                            </div>
-                        </dialog>
-                    </p>
-                    <p>
-                        <button class="btn" onclick="my_modal_3.showModal()">팔로잉<span th:text="${myFollowing != null ? #lists.size(myFollowing) : 0}"></span></button>
-                        <dialog id="my_modal_3" class="modal">
-                            <div class="modal-box">
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                </form>
-                                <h3 class="font-bold text-lg">팔로잉 목록</h3>
-                                <p class="py-4">
-                                    <ul>
-                                        <li th:each="follow : ${myFollowing}">
-                                            <a th:href="@{|/profile/${follow.following.loginId}|}"  class="flex flex-row items-center">
-                                                <div th:if="${!#lists.isEmpty(member.url)}">
-                                                    <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.following.url}"/>
-                                                </div>
-                                                <span th:text="${follow.following.nickname}">닉네임</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </p>
-                            </div>
-                        </dialog>
-                    </p>
+
+                <!-- 팔로우/언팔로우 버튼 -->
+                <div class="button-container" th:if="${loggedInMemberId != member.loginId}">
+                    <!-- 팔로우 버튼 -->
+                    <form id="followForm" th:action="@{/api/follow/{id}(id=${member.loginId})}" method="post">
+                        <button type="submit">팔로우</button>
+                    </form>
                 </div>
-            </div>
 
-            <!-- 팔로우/언팔로우 버튼 -->
-            <div class="button-container" th:if="${loggedInMemberId != member.loginId}">
-                <!-- 팔로우 버튼 -->
-                <form id="followForm" th:action="@{/api/follow/{id}(id=${member.loginId})}" method="post">
-                    <button type="submit">팔로우</button>
-                </form>
-            </div>
+                <!-- 프로필 수정 버튼 -->
+                <div class="button-container" th:if="${loggedInMemberId == member.loginId}">
+                    <a th:href="@{/modifyProfile}">프로필 수정</a>
+                </div>
 
-            <!-- 프로필 수정 버튼 -->
-            <div class="button-container" th:if="${loggedInMemberId == member.loginId}">
-                <a th:href="@{/modifyProfile}">프로필 수정</a>
-            </div>
-
-            <!-- 메시지 버튼 -->
-            <div class="button-container" th:if="${loggedInMemberId != member.loginId}">
-                <a th:href="@{|/chat/create/${member.id}|}">메시지</a>
+                <!-- 메시지 버튼 -->
+                <div class="button-container" th:if="${loggedInMemberId != member.loginId}">
+                    <a th:href="@{|/chat/create/${member.id}|}">메시지</a>
+                </div>
             </div>
         </div>
 

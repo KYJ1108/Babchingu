@@ -1,5 +1,6 @@
 package com.korea.babchingu.answer;
 
+import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.comment.Comment;
 import com.korea.babchingu.comment.CommentForm;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Optional;
+
+import static com.korea.babchingu.answer.QAnswer.answer;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,7 +50,8 @@ public class AnswerController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
+        Answer answer = answerService.getAnswer(id);
         answerService.delete(id);
-        return "redirect:/";
+        return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
     }
 }

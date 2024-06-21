@@ -44,15 +44,4 @@ public class Member {
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
     private String url; // 프로필 이미지 URL
-
-//    private boolean isCurrentUser; // 프로필
-//
-//    public boolean isCurrentUser() {
-//        return isCurrentUser;
-//    }
-//
-//    public void setCurrentUser(boolean currentUser) {
-//        isCurrentUser = currentUser;
-//    }
-
 }

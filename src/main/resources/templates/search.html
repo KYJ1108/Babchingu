@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content">
-    <div th:if="${searchMember != null}">
+    <div class="post-container" th:if="${searchMember != null}">
         <th:block th:each="member : ${searchMember}">
-            <a th:href="@{|/profile/${member.loginId}|}">
+            <a th:href="@{|/profile/${member.loginId}|}" class="flex flex-row items-center">
                 <div th:if="${!#lists.isEmpty(member.url)}">
-                    <img alt="follower profile image" class="round_img" th:src="${member.url}"/>
+                    <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${member.url}"/>
                 </div>
                 <div th:text="${member.nickname}" class="poster_id txt_id"></div>
             </a>

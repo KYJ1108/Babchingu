@@ -50,6 +50,7 @@ public class BoardService {
 
             imageRepository.save(img);
         }
+
         return board;
     }
 
@@ -86,7 +87,7 @@ public class BoardService {
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
-    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Set<String> categories,  LocalDateTime createDate) {
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Set<String> categories, LocalDateTime updateDate) {
         Board board = getBoard(id);
         board.setTitle(title);
         board.setContent(content);
@@ -94,18 +95,26 @@ public class BoardService {
         board.setJibun(jibun);
         board.setRestName(restName);
         board.setCategories(categories);
-        board.setCreateDate(LocalDateTime.now());
+        board.setUpdateDate(LocalDateTime.now());
 
         boardRepository.save(board);
 
-        for (MultipartFile image : images) {
-            Image img = new Image();
-            img.setBoard(board);
-            img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+        if (images == null && images.isEmpty()) {
+            for (MultipartFile image : images) {
+                Image img = new Image();
+                img.setBoard(board);
+                img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
 
-            imageRepository.save(img);
+                imageRepository.save(img);
+            }
         }
         return board;
+    }
+
+    public void imageDelete(Long deleteImageId) {
+        if (deleteImageId != null) {
+            imageRepository.deleteById(deleteImageId);
+        }
     }
 
     public void delete(Long id) {
