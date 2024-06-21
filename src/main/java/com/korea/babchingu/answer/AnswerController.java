@@ -1,5 +1,6 @@
 package com.korea.babchingu.answer;
 
+import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.board.Board;
 import com.korea.babchingu.comment.Comment;
 import com.korea.babchingu.comment.CommentForm;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Optional;
+
+import static com.korea.babchingu.answer.QAnswer.answer;
 
 @Controller
 @RequiredArgsConstructor
