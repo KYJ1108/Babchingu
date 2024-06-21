@@ -90,49 +90,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public String temp_url(MultipartFile file) {
-        if (!file.isEmpty()) {
-            try {
-                // 파일을 저장할 절대 경로 설정
-                String uploadDir = "src/main/resources/static/pimg";
-
-                // 디렉토리 생성 (이미 존재하면 생성하지 않음)
-                File directory = new File(uploadDir);
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                // 파일명 생성
-                String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
-                String filePath = uploadDir + "/" + fileName;
-
-                // 파일 저장
-                Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-
-                return "/pimg/" + fileName;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public void saveimage(Member member, String url) {
-        try{
-            String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
-            if(member.getUrl() != null){
-                File oldFile = new File(path+member.getUrl());
-                if(oldFile.exists()){
-                    oldFile.delete();
-                }
-            }
-            member.setUrl(url);
-            memberRepository.save(member);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
     public Member getMemberByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId).orElse(null);
     }
@@ -163,6 +120,23 @@ public class MemberService {
             // 파일 저장이 성공한 경우, Member 객체의 URL 업데이트
             String imageUrl = "/profile-images/" + fileName;
             member.setUrl(imageUrl);
+        }
+    }
+
+    // 안쓰는 이미지는 삭제
+    public void saveImage(Member member, String url) {
+        try{
+            String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
+            if(member.getUrl() != null){
+                File oldFile = new File(path+member.getUrl());
+                if(oldFile.exists()){
+                    oldFile.delete();
+                }
+            }
+            member.setUrl(url);
+            memberRepository.save(member);
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 
