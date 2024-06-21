@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +65,11 @@ public class BoardController {
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id, Model model, Principal principal) {
         Board board = boardService.getBoard(id);
+
+        // 현재 로그인한 사용자와 프로필 주인의 아이디를 비교하여 모델에 추가
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInMemberId = authentication.getName();
+        model.addAttribute("loggedInMemberId", loggedInMemberId);
 
         String loggedInUsername = principal.getName();
         model.addAttribute("loggedInUsername", loggedInUsername);
@@ -137,9 +144,21 @@ public class BoardController {
         if (!board.getMember().getLoginId().equals(principal.getName())) {
             return "redirect:/board/%d".formatted(board.getId());
         }
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getCreateDate());
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getUpdateDate());
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
+    }
+
+    @PostMapping("/delete/image/{deleteImageId}")
+    public String imageDelete(@PathVariable("deleteImageId") Long deleteImageId, @RequestParam("id") Long id) {
+        // 게시물 ID로 게시물을 가져옵니다.
+        Board board = boardService.getBoard(id);
+
+        // 이미지 삭제 서비스 호출
+        boardService.imageDelete(deleteImageId);
+
+        // 게시물 수정 페이지로 리디렉션
+        return "redirect:/board/modify/" + board.getId();
     }
 
     @PostMapping("/delete/{id}")
@@ -149,7 +168,8 @@ public class BoardController {
             return "redirect:/board/%d".formatted(board.getId());
         }
         boardService.delete(id);
-        return "redirect:/board/%d".formatted(board.getId());
+
+        return "redirect:/profile/%s".formatted(board.getMember().getLoginId());
     }
 
     @PreAuthorize("isAuthenticated()")

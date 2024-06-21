@@ -19,7 +19,7 @@
                     </div>
                     <a th:text="${board.member.nickname}" th:href="@{|/profile/${board.member.loginId}|}" class="poster_id txt_id"></a>
                     <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
-                    <div class="dropdown dropdown-end">
+                    <div class="dropdown dropdown-end" th:if="${loggedInMemberId == member.loginId}">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                             <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
                         </div>
@@ -29,8 +29,8 @@
                                 <a th:href="@{|/board/modify/${id}|}">수정</a>
                             </li>
                             <li>
-                                <form th:action="@{|/board/delete/${id}|}" method="post">
-                                    <input type="submit" style="color: red;" value="삭제">
+                                <form th:action="@{|/board/delete/${id}|}" method="post" style="display: inline;">
+                                    <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
                                 </form>
                             </li>
                         </ul>
@@ -39,7 +39,7 @@
 
                 <!--content-->
                 <section class="feed_imgs">
-                    <div style="margin-left: 20px;">
+                    <div style="margin-left: 25px; margin-right: 25px;">
                         <div class="card-text font-bold" th:text="${board.title}"></div>
                         <div id="boardAddress" th:text="${board.address}" class="small-font"></div>
                         <div th:text="${board.jibun}" class="small-font"></div>
@@ -48,7 +48,7 @@
                     </div>
                     <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
                     <div class="interactions">
-                        <div class="my_emotion" style="margin-left: 10px;">
+                        <div class="my_emotion" style="margin-left: 15px;">
                             <!--위에서 cdn을 링크로 삽입해서 여기서 클래스명으로 가져오면 사용할 수 있다.-->
                             <a th:href="@{|board/${board.id}/vote|}" class="recommend">
                                 <i class="fa-solid fa-heart" style="color: #ff0000;"></i>
@@ -77,16 +77,33 @@
                                             <div th:text="${comment.content}"></div>
                                         </div>
                                         <div class="flex-grow"></div> <!-- 이 부분을 추가하여 나머지 영역을 채우도록 설정 -->
-                                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" th:if="${loggedInMemberId == comment.member.loginId}">
                                             <img class="option-icon" src="/img/more.png"
                                                  style="width: 20px; height: 20px;">
                                         </div>
                                         <ul tabindex="0"
                                             class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                                            <li><a>수정</a></li>
                                             <li>
-                                                <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
-                                                    <input type="submit" style="color: red;" value="삭제">
+                                                <!-- 댓글 수정 모달 다이얼로그 -->
+                                                <button class="" onclick="document.getElementById('my_modal_1').showModal()">수정</button>
+                                                <dialog id="my_modal_1" class="modal">
+                                                    <div class="modal-box">
+                                                        <form method="dialog">
+                                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                        </form>
+                                                        <h3 class="font-bold text-lg">댓글 수정</h3>
+                                                        <form id="updateForm" th:action="@{|/comment/modify/${comment.id}|}" method="post">
+                                                            <textarea id="commentContent" name="content" class="textarea textarea-bordered w-full"></textarea>
+                                                            <div class="modal-action">
+                                                                <button type="submit" class="btn">저장</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </dialog>
+                                            </li>
+                                            <li>
+                                                <form th:action="@{|/comment/delete/${comment.id}|}" method="post" style="display: inline;">
+                                                    <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
                                                 </form>
                                             </li>
                                         </ul>
@@ -102,18 +119,35 @@
                                                     <div th:text="${answer.content}"></div>
                                                 </div>
                                                 <div class="flex-grow"></div>
-                                                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" th:if="${loggedInMemberId == answer.member.loginId}">
                                                     <img class="option-icon" src="/img/more.png"
                                                          style="width: 20px; height: 20px;">
                                                 </div>
                                                 <ul tabindex="0"
                                                     class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                                                    <li><a>수정</a></li>
-                                                    <li>
-                                                        <form th:action="@{|/comment/delete/${comment.id}|}" method="post">
-                                                            <input type="submit" style="color: red;" value="삭제">
-                                                        </form>
-                                                    </li>
+                                                <li>
+                                                    <!-- 대댓글 수정 모달 다이얼로그 -->
+                                                    <button class="" onclick="document.getElementById('my_modal_5').showModal()">수정</button>
+                                                    <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                                                        <div class="modal-box">
+                                                            <form method="dialog">
+                                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                            </form>
+                                                            <h3 class="font-bold text-lg">대댓글 수정</h3>
+                                                            <form id="updateForm2" th:action="@{|/answer/modify/${answer.id}|}" method="post">
+                                                                <textarea id="answerContent" name="content" class="textarea textarea-bordered w-full"></textarea>
+                                                                <div class="modal-action">
+                                                                    <button type="submit" class="btn">저장</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </dialog>
+                                                </li>
+                                                <li>
+                                                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display: inline;">
+                                                        <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
+                                                    </form>
+                                                </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -140,9 +174,19 @@
         <aside>
             <!--WIDGET - story-->
             <article class="widget stories">
-                <img th:each="images : ${board.images}" th:src="@{|${images.url}|}" alt="음식사진"
-                     style="width:100%; height:100%; margin: 5px;">
+                <div class="slider">
+                    <div class="content">
+                        <div class="slides">
+                            <div th:each="image, iterStat : ${board.images}" class="slide">
+                                <img th:src="@{|${image.url}|}" th:alt="음식사진" style="width:100%; height:100%; margin: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+                    <button class="next" onclick="changeSlide(1)">&#10095;</button>
+                </div>
             </article>
+
             <!--//WIDGET - story-->
             <article class="widget recommends">
                 <div id="containerMap" class="view_map">
@@ -154,5 +198,125 @@
         </aside>
     </main>
     </body>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=160268d49f0faa6e1c65fac9ce28c429&libraries=services"></script>
+    <script>
+        // HTML에서 해당 요소를 가져옵니다.
+        var mapContainer = document.getElementById('map');
+
+        // HTML에서 주소 값을 동적으로 가져오는 함수를 정의합니다.
+        function getAddressFromHTML() {
+            // HTML 요소에서 주소 값을 가져옵니다.
+            var addressElement = document.getElementById('boardAddress');
+            var address = addressElement.textContent;
+
+            // 가져온 주소 값을 지도를 표시하는 함수에 전달합니다.
+            searchAddressAndShowMap(address);
+        }
+
+        // 주소로 좌표를 검색하여 지도를 표시하는 함수를 정의합니다.
+        function searchAddressAndShowMap(address) {
+            // 주소-좌표 변환 객체를 생성합니다.
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            // 주소로 좌표를 검색합니다.
+            geocoder.addressSearch(address, function(result, status) {
+                // 정상적으로 검색이 완료된 경우
+                if (status === kakao.maps.services.Status.OK) {
+                    // 검색 결과의 첫 번째 항목을 가져와서 좌표를 생성합니다.
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 지도 옵션을 설정합니다.
+                    var mapOption = {
+                        center: coords, // 지도의 중심 좌표를 검색한 좌표로 설정합니다.
+                        level: 3 // 지도의 확대 레벨을 설정합니다. (0~14)
+                    };
+
+                    // 검색된 좌표를 중심으로 하는 지도 객체를 생성합니다.
+                    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                    // 검색된 좌표를 표시하는 마커를 생성합니다.
+                    var marker = new kakao.maps.Marker({
+                        position: coords, // 마커의 위치를 검색된 좌표로 설정합니다.
+                        map: map // 마커를 표시할 지도 객체를 설정합니다.
+                    });
+                } else {
+                    // 검색 결과가 없는 경우 또는 그 외의 오류가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+                    console.error('Geocoder failed: ' + status);
+                }
+            });
+        }
+        // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
+        var placePosition = new kakao.maps.LatLng(33.450701, 126.570667);
+
+        // 주소 값을 HTML에서 받아와서 지도를 표시하는 함수를 호출합니다.
+        getAddressFromHTML();
+    </script>
+    <script>
+        let intervalId = null;
+
+        function slide() {
+            const slides = document.querySelectorAll('.slide');
+            const slider = document.querySelector('.slides');
+            let slideIndex = 0;
+            let slideWidth = slides[0].clientWidth; // 각 슬라이드의 너비
+
+            function updateSlidePosition() {
+                slider.style.transition = "transform 0.5s ease-in-out";
+                slider.style.transform = `translateX(${-slideIndex * slideWidth}px)`;
+            }
+
+            document.querySelector('.next').addEventListener('click', function() {
+                slideIndex++;
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                updateSlidePosition();
+            });
+
+            document.querySelector('.prev').addEventListener('click', function() {
+                slideIndex--;
+                if (slideIndex < 0) {
+                    slideIndex = slides.length - 1;
+                }
+                updateSlidePosition();
+            });
+
+            if(intervalId != null) {
+                clearInterval(intervalId);
+            }
+
+        }
+        window.addEventListener('resize', function() {
+            console.log("resize");
+            const slider = document.querySelector('.slides');
+            slider.style.transform = `translateX(0px)`;
+            slide();
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            slide();
+        });
+    </script>
 </div>
+
+<script>
+    function openModalWithContent(commentId, content) {
+        // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
+        document.getElementById('commentContent').value = content;
+        // form action URL을 동적으로 설정
+        document.getElementById('updateForm').action = '/comment/modify/' + commentId;
+        // 모달 열기
+        document.getElementById('my_modal_1').showModal();
+    }
+
+    function openModalWithContent(answerId, content) {
+        // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
+        document.getElementById('answerContent').value = content;
+        // form action URL을 동적으로 설정
+        document.getElementById('updateForm1').action = '/answer/modify/' + answerId;
+        // 모달 열기
+        document.getElementById('my_modal_5').showModal();
+    }
+</script>
+
 </html>
