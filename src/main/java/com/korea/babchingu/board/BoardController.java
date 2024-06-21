@@ -156,7 +156,7 @@ public class BoardController {
             return "redirect:/board/%d".formatted(board.getId());
         }
         boardService.delete(id);
-        return "redirect:/board/%d".formatted(board.getId());
+        return "redirect:/board/list";
     }
 
     @PreAuthorize("isAuthenticated()")
