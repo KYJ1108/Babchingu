@@ -33,7 +33,12 @@ public class CommentController {
         Member member = memberService.getMember(principal.getName());
         Board board = boardService.getBoard(id);
         if (bindingResult.hasErrors()) {
-            return "board_detail";
+            // 필드 검증 오류가 있는 경우 처리
+            return "redirect:/board/%d".formatted(board.getId());
+        }
+        if (commentForm.getContent().trim().isEmpty()) {
+            // 댓글 내용이 비어 있는 경우 처리
+            return "redirect:/board/%d".formatted(board.getId());
         }
         model.addAttribute("board", board);
         Comment comment = this.commentService.create(board, commentForm.getContent(), member);
