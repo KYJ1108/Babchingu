@@ -36,20 +36,26 @@
             <input type="email" class="form-control" id="email" name="email" th:value="${member.email}" required>
         </div>
 
-        <!-- 프로필 이미지 업로드 -->
-        <div class="form-group">
-            <label for="file">Profile Image</label>
-            <input type="file" class="form-control-file" id="file" name="file">
-        </div>
-
         <!-- 현재 프로필 이미지 미리보기 -->
         <div class="form-group" th:if="${member.url}">
             <label>Current Profile Image</label><br>
             <img th:src="@{${member.url}}" class="img-thumbnail" style="max-width: 200px;">
         </div>
 
+        <!-- 프로필 이미지 업로드 -->
+        <div class="form-group">
+            <label for="file">Profile Image</label>
+            <input type="file" class="form-control-file" id="file" name="file">
+        </div>
+
+<!--        <form id="image_save_form" th:action="@{|/member/imageSaveform|}" method="post">-->
+<!--            <input type="hidden" name="url" th:value="${url}">-->
+<!--            <input type="submit" value="이미지 저장">-->
+<!--        </form>-->
+
         <!-- 저장 버튼 -->
         <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a class="btn btn-cen" th:href="@{/profile}">프로필 변경 취소</a>
     </form>
 </div>
 

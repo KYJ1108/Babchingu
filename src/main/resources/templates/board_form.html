@@ -1,6 +1,6 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content" class="w-[800px] mx-auto flex flex-col gap-7">
-    <form th:action="@{/board/create}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
+    <form th:action="@{/board/create}" th:object="${boardForm}" id="boardForm" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
         <!--  제목 & 내용  -->
         <div>
             <img class="option-icon" src="/img/w.png" style="width:20px;height:20px;">
@@ -8,8 +8,21 @@
         </div>
         <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
-        <textarea name="content" class="input" th:field="*{content}" th:vlaue="*{content}" placeholder="내용을 입력해주세요"></textarea>
-        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+
+
+
+
+        <input type="hidden" name="content" id="editor-body">
+        <div id="editor">
+<!--            <textarea name="content" class="input" th:field="*{content}" placeholder="내용을 입력해주세요"></textarea>-->
+<!--            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>-->
+        </div>
+
+
+
+
+
+
 
         <!-- 장소 입력 -->
         <ul>
@@ -59,7 +72,7 @@
             </div>
         </div>
 
-        <input type="submit" class="btn" value="게시물 등록">
+        <input type="button" class="btn" value="게시물 등록" onclick="boardForm()">
 
         <!-- 회원 정보 -->
         <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
@@ -89,5 +102,36 @@
         });
     </script>
     <!--  지도 script 끝  -->
+
+    <!-- toast UI Editor -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <!-- Editor's Style -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+    <script>
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '500px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical'
+      });
+
+      editor.getMarkdown();
+    </script>
+
+    <script>
+    function boardForm() {
+
+        const form = document.getElementById("boardForm");
+        const editorBody = document.getElementById("editor-body");
+        const text = editor.getMarkdown();
+
+        editorBody.value = text;
+
+        form.submit();
+
+    }
+    </script>
 </div>
 </html>

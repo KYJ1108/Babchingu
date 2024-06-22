@@ -152,20 +152,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}"
-                                          class="post_comment" method="post">
-                                            <textarea name="content" type="in" placeholder="대댓글 달기..."
-                                                      class="no-border"></textarea>
-                                        <button type="submit">게시</button>
+                                    <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" class="post_comment" method="post">
+                                            <textarea name="content" type="in" placeholder="대댓글 달기..." class="no-border"></textarea>
+                                        <button class="btnPost" type="submit">게시</button>
                                     </form>
                                 </div>
                             </div>
                         </section>
                     </div>
-                    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" id="post"
-                          class="post_comment" method="post">
+                    <form th:action="@{|/comment/create/${id}|}" th:object="${commentForm}" id="post" class="post_comment" method="post">
                         <textarea name="content" type="in" placeholder="댓글 달기..." class="no-border"></textarea>
-                        <button id="btnPost" type="submit">게시</button>
+                        <button class="btnPost" type="submit">게시</button>
                     </form>
                 </div>
             </article>
@@ -318,5 +315,4 @@
         document.getElementById('my_modal_5').showModal();
     }
 </script>
-
 </html>

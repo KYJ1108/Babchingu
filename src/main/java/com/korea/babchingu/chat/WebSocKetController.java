@@ -39,13 +39,18 @@ public class WebSocKetController {
     @MessageMapping("/talk/{id}")
     @SendTo("/sub/talk/{id}")
     public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
-        LocalDateTime createDate = message.getCreateDate();
+
         Optional<ChatRoom> _chatRoom = chatRoomRepository.findById(id);
         if(!_chatRoom.isEmpty()) {
             ChatRoom chatRoom = _chatRoom.get();
             Member member = memberService.getMember(message.getSender());
-            ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
+            ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(LocalDateTime.now()).build();
             chatMessageRepository.save(chatMessage);
+            LocalDateTime createDate = LocalDateTime.now();
+            message.setSenderImgUrl(member.getUrl());
+            message.setSender(member.getNickname());
+            message.setCreateDate(createDate);
+
             return message;
         }
         return null;
@@ -61,10 +66,15 @@ public class WebSocKetController {
         if(chatRoom == null) {
             chatRoom = ChatRoom.builder().member1(me).member2(you).build();
             chatRoomRepository.save(chatRoom);
+            model.addAttribute("chatroom",chatRoom);
+        }else{
+            model.addAttribute("chatroom",chatRoom);
         }
 
-       model.addAttribute("chatroom",chatRoom);
+
         model.addAttribute("user",me);
+        model.addAttribute("opponentName", you.getNickname());
+
        return "chatroom";
     }
 }
