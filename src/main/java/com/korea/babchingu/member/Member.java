@@ -44,4 +44,5 @@ public class Member {
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
     private String url; // 프로필 이미지 URL
+
 }
