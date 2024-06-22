@@ -105,6 +105,17 @@ public class MemberService {
                 directory.mkdirs();
             }
 
+            // 기존 프로필 이미지 삭제
+            String currentImageUrl = member.getUrl();
+            if (currentImageUrl != null && !currentImageUrl.isEmpty()) {
+                String currentImagePath = uploadDir + currentImageUrl.substring(currentImageUrl.lastIndexOf("/"));
+                File currentImageFile = new File(currentImagePath);
+                if (currentImageFile.exists()) {
+                    currentImageFile.delete();
+                }
+            }
+
+
             // 파일명 생성
             String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
             String filePath = uploadDir + "/" + fileName;
@@ -120,23 +131,6 @@ public class MemberService {
             // 파일 저장이 성공한 경우, Member 객체의 URL 업데이트
             String imageUrl = "/profile-images/" + fileName;
             member.setUrl(imageUrl);
-        }
-    }
-
-    // 안쓰는 이미지는 삭제
-    public void saveImage(Member member, String url) {
-        try{
-            String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
-            if(member.getUrl() != null){
-                File oldFile = new File(path+member.getUrl());
-                if(oldFile.exists()){
-                    oldFile.delete();
-                }
-            }
-            member.setUrl(url);
-            memberRepository.save(member);
-        }catch (IOException e){
-            e.printStackTrace();
         }
     }
 
