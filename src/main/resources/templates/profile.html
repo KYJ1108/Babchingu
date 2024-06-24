@@ -138,10 +138,8 @@
                                     <p class="py-4">
                                         <ul>
                                             <li th:each="follow : ${myFollowers}">
-                                                <a th:href="@{|/profile/${follow.follower.loginId}|}"  class="flex flex-row items-center">
-                                                    <div th:if="${!#lists.isEmpty(member.url)}">
-                                                        <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.follower.url}"/>
-                                                    </div>
+                                                <a th:href="@{/profile/{loginId}(loginId=${follow.follower.loginId})}" class="flex flex-row items-center">
+                                                    <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.follower.url}" />
                                                     <span th:text="${follow.follower.nickname}">닉네임</span>
                                                 </a>
                                             </li>
@@ -161,10 +159,8 @@
                                     <p class="py-4">
                                         <ul>
                                             <li th:each="follow : ${myFollowing}">
-                                                <a th:href="@{|/profile/${follow.following.loginId}|}"  class="flex flex-row items-center">
-                                                    <div th:if="${!#lists.isEmpty(member.url)}">
-                                                        <img alt="follower profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.following.url}"/>
-                                                    </div>
+                                                <a th:href="@{/profile/{loginId}(loginId=${follow.following.loginId})}" class="flex flex-row items-center">
+                                                    <img alt="following profile image" class="round_img" style="height: 60px; width: 60px; margin: 10px;" th:src="${follow.following.url}" />
                                                     <span th:text="${follow.following.nickname}">닉네임</span>
                                                 </a>
                                             </li>
