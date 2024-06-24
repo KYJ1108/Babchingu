@@ -38,7 +38,8 @@
         .page-link:focus{z-index:3;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.page-item:first-child
             .page-link{margin-left:0;border-top-left-radius:.25rem;border-bottom-left-radius:.25rem}
             .page-item:last-child .page-link{border-top-right-radius:.25rem;border-bottom-right-radius:.25rem}
-            .page-item.active .page-link{z-index:3;color:#fff;background-color:#007bff;border-color:#007bff}
+            .page-item.active .page-link{z-index:3;color:#fff;background-color:#0f132a;}
+            .page-item.active:hover .page-link:hover{background-color:#F7819F;}
             .page-item.disabled .page-link{color:#6c757d;pointer-events:none;cursor:auto;background-color:#fff;border-color:#dee2e6}
             .pagination-lg .page-link{padding:.75rem 1.5rem;font-size:1.25rem;line-height:1.5}
             .pagination-lg .page-item:first-child .page-link{border-top-left-radius:.3rem;border-bottom-left-radius:.3rem}
@@ -82,12 +83,15 @@
         display: flex;
         justify-content: center;
         margin-bottom: 100px;
-    }
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 100px;
-    }
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 100px;
+        }
+        #sortForm{
+            margin-left: 10%;
+        }
     </style>
 </head>
 <body>
