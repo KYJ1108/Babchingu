@@ -22,35 +22,38 @@
     <div class="message-box-header flex justify-between items-center">
         <strong>메시지</strong>
         <!-- You can open the modal using ID.showModal() method -->
-        <div onclick="searchModal.showModal()">
-            <img class="option-icon" src="/img/search.png" style="width: 20px; height: 20px;">
-        </div>
+<!--        <div onclick="searchModal.showModal()">-->
+<!--            <img class="option-icon" src="/img/search.png" style="width: 20px; height: 20px;">-->
+<!--        </div>-->
 
-        <dialog id="searchModal" class="modal">
-            <div class="modal-box">
-                <!-- 모달 닫기 버튼 -->
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="searchModal.close()">✕</button>
+<!--        <dialog id="searchModal" class="modal">-->
+<!--            <div class="modal-box">-->
+<!--                &lt;!&ndash; 모달 닫기 버튼 &ndash;&gt;-->
+<!--                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="searchModal.close()">✕</button>-->
 
-                <!-- 검색 폼 -->
-                <form th:action="@{/member/search}" class="flex items-center gap-2" method="post">
-                    <input type="hidden" id="isSearchModal" name="isSearchModal" th:value="${isSearchModal}">
-                    <input type="text" name="memberId" placeholder="회원 검색">
-                    <input type="submit" value="검색">
-                </form>
+<!--                &lt;!&ndash; 검색 폼 &ndash;&gt;-->
+<!--                <form th:action="@{/member/search}" class="flex items-center gap-2" method="post">-->
+<!--                    <input type="hidden" id="isSearchModal" name="isSearchModal" th:value="${isSearchModal}">-->
+<!--                    <input type="text" name="memberId" placeholder="회원 검색">-->
+<!--                    <input type="submit" value="검색">-->
+<!--                </form>-->
 
-                <!-- 검색 결과 목록 -->
-                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-gray-100  p-[10px] flex w-full', itemAnchorClass='inline-block w-full h-full'">
-                    <li th:each="member : ${searchLoginId}" th:class="${itemHover}">
-                        <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.nickname}" th:class="${itemAnchorClass}"></a>
-                    </li>
-                </ul>
-            </div>
-        </dialog>
+<!--                &lt;!&ndash; 검색 결과 목록 &ndash;&gt;-->
+<!--                <ul th:if="${searchLoginId != null}" th:with="itemHover='hover:bg-gray-100  p-[10px] flex w-full', itemAnchorClass='inline-block w-full h-full'">-->
+<!--                    <li th:each="member : ${searchLoginId}" th:class="${itemHover}">-->
+<!--                        <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.nickname}" th:class="${itemAnchorClass}"></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </dialog>-->
 
     </div>
     <div class="message-box-content">
         <div th:each="member : ${memberList}">
-            <a th:href="@{|/chat/create/${member.id}|}" th:text="${member.nickname}"></a>
+            <a th:href="@{|/chat/create/${member.id}|}" class="flex flex-row items-center">
+                <img class="round_img" style="height: 35px; width: 35px; margin: 5px;" th:src="${member.url}" alt="profile">
+                <span th:text="${member.nickname}"></span>
+            </a>
         </div>
     </div>
 </div>

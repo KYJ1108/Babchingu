@@ -23,11 +23,6 @@ public class CommentController {
     private final BoardService boardService;
     private final MemberService memberService;
 
-    @ModelAttribute("memberList")
-    public List<Member> member(){
-        List<Member> memberList = memberService.findAll();
-        return memberList;
-    }
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult, Principal principal) {
         Member member = memberService.getMember(principal.getName());

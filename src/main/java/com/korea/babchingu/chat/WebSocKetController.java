@@ -16,16 +16,14 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,6 +33,14 @@ public class WebSocKetController {
     private final ChatMessageRepository chatMessageRepository;
     private final MemberRepository memberRepository;
     private final AlarmRepository alarmRepository;
+
+    @ModelAttribute("memberList")
+    public List<Member> member(Principal principal) {
+        if (principal != null) {
+            return memberService.findChatMembersByPrincipal(principal);
+        }
+        return null; // 또는 빈 리스트를 반환하거나 기본값을 설정할 수 있습니다.
+    }
 
     @MessageMapping("/talk/{id}")
     @SendTo("/sub/talk/{id}")
