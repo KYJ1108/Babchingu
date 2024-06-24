@@ -50,6 +50,7 @@ public class WebSocKetController {
             message.setSenderImgUrl(member.getUrl());
             message.setSender(member.getNickname());
             message.setCreateDate(createDate);
+            message.setLoginId(member.getLoginId());
 
             return message;
         }
