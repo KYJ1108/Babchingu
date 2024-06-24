@@ -155,7 +155,7 @@ public class MemberController {
         // 사용자가 로그인되어 있는지 확인
         if (principal == null){
             // 사용자가 로그인되어 있지 않은 경우 처리
-            return "redirect:/member/login";
+            return "redirect:/login";
         }
 
         // 현재 로그인한 사용자의 아이디를 가져옴
