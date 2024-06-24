@@ -20,11 +20,11 @@ public class Follow {
     private Long id;
 
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "follower_id")
     private Member follower;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "following_id")
     private Member following;
 }
