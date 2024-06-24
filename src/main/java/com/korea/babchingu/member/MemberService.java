@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -151,5 +152,14 @@ public class MemberService {
         }else{
             throw new DataNotFoundException("User not found");
         }
+    }
+
+    public List<Member> findChatMembers(Long memberId) {
+        return memberRepository.findChatMembers(memberId);
+    }
+
+    public List<Member> findChatMembersByPrincipal(Principal principal) {
+        Optional<Member> member = memberRepository.findByLoginId(principal.getName());
+        return memberRepository.findChatMembers(member.get().getId());
     }
 }
