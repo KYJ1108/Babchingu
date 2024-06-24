@@ -37,6 +37,20 @@ public class MemberController {
         return memberService.findAll();
     }
 
+    @ModelAttribute("memberUrl")
+    public String memberUrl(Principal principal) {
+        if (principal == null) {
+            return "/path/to/default/memberUrl"; // 로그인하지 않은 경우 기본 URL 반환
+        }
+        Member member = memberService.getMember(principal.getName());
+        if (member != null && member.getLoginId().equals(principal.getName())) {
+            String memberUrl = member.getUrl();
+            return memberUrl;
+        }else {
+            return "/path/to/default/memberUrl";
+        }
+    }
+
     @GetMapping("/signup")
     public String signupForm(MemberForm memberForm) {
         return "signup";
