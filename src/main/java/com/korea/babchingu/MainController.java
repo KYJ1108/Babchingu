@@ -45,6 +45,7 @@ public class MainController {
             return "/path/to/default/memberUrl";
         }
     }
+
     @GetMapping("/")
     public String main(Model model, Principal principal) {
         if (principal != null) {
