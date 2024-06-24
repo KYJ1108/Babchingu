@@ -48,10 +48,8 @@
             <input type="file" class="form-control-file" id="file" name="file">
         </div>
 
-<!--        <form id="image_save_form" th:action="@{|/member/imageSaveform|}" method="post">-->
-<!--            <input type="hidden" name="url" th:value="${url}">-->
-<!--            <input type="submit" value="이미지 저장">-->
-<!--        </form>-->
+        <!--비밀번호 변경-->
+        <a class="btn btn-cen" th:href="@{/modifyPassword}">비밀번호 변경</a>
 
         <!-- 저장 버튼 -->
         <button type="submit" class="btn btn-primary">Save Changes</button>
