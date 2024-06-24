@@ -33,14 +33,13 @@ body {
     /* post-box를 가로로 정렬하기 위해 flex 컨테이너로 설정 */
     justify-content: space-between;
     /* 각 post-box를 컨테이너 양쪽 끝에 배치 */
-    gap: 10px;
+    gap: 20px;
 }
 
 .post-box {
     width: 100%;
     /* 각 박스의 너비를 30%로 설정하여 가로로 세 개가 보이도록 함 */
     height: 100%;
-    padding: 20px;
     /* 내부 여백 설정 */
     align-items: center;
 }
