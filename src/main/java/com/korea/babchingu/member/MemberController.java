@@ -111,6 +111,36 @@ public class MemberController {
         return "redirect:/member/login";
     }
 
+    @GetMapping("/modifyPassword")
+    public String modifyPw(){
+        return "modifyPassword_form";
+    }
+
+    @PostMapping("/modifyPassword")
+    public String changePassword(org.springframework.ui.Model model, Principal principal,
+                                 @RequestParam("currentPassword")String currentPassword,
+                                 @RequestParam("newPassword")String newPassword,
+                                 @RequestParam("confirmPassword")String confirmPassword){
+        if (!newPassword.equals(confirmPassword)){
+//             비밀번호가 일치하지 않음.
+            model.addAttribute("error", "새로운 비밀번호와 새로운 비밀번호 확인이 일치하지 않습니다.");
+            return "modifyPassword_form";
+        }
+        try {
+            // 현재 사용자의 아이디를 얻어옴
+            String member = principal.getName();
+            // 사용자의 비밀번호 변경을 memberService를 통해 처리
+            memberService.changePassword(member, currentPassword, newPassword);
+            return "login";
+        } catch (CustomException e){
+            // 비밀번호 변경 중에 예외가 발생한 경우 에러 메시지를 받아와서 비밀번호 변경 페이지로
+            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+            return "modifyPassword_form";
+        }
+    }
+
+
+
     @PostMapping("/member/search")
     public String search(Model model, @RequestParam String memberId, @RequestParam(value = "isSearchModal", required = false) String isSearchModal) {
         List<Member> searchLoginId = memberService.getSearchList(memberId);
@@ -125,7 +155,7 @@ public class MemberController {
         // 사용자가 로그인되어 있는지 확인
         if (principal == null){
             // 사용자가 로그인되어 있지 않은 경우 처리
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
 
         // 현재 로그인한 사용자의 아이디를 가져옴
@@ -191,7 +221,7 @@ public class MemberController {
         // 현재 로그인한 사용자의 아이디를 가져옴
         String memberId = principal.getName();
 
-        // userService를 사용하여 사용자 정보를 가져옴
+        // memberService를 사용하여 사용자 정보를 가져옴
         Member member = memberService.getMember(memberId);
         String nickname = member.getNickname();
         model.addAttribute("member", member);

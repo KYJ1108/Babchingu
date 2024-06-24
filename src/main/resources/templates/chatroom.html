@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
-    <title>Document</title>
+    <title>Chatting</title>
 </head>
 
 <body>
@@ -31,10 +31,12 @@
                 <div th:if="${!#lists.isEmpty(chatroom.chatMessageList)}">
                     <div th:each="message : ${chatroom.chatMessageList}">
                         <div th:if="${message.sender.loginId != user.loginId}">
-                            <div class="chat chat-start" id="me">
+                            <div class="chat chat-start">
                                 <div class="chat-image avatar">
                                     <div class="w-10 rounded-full">
-                                        <img alt="profile" th:src="${message.sender.url}" />
+                                        <a th:href="@{|/profile/${message.sender.loginId}|}">
+                                            <img alt="profile" th:src="${message.sender.url}" />
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="chat-header">
@@ -44,25 +46,17 @@
                                     <div th:text="${message.message}"></div>
                                 </div>
                                 <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50" th:text="${message.createDate}"></time>
+                                    <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
                                 </div>
                             </div>
                         </div>
                         <div th:if="${message.sender.loginId == user.loginId}">
                             <div class="chat chat-end">
-                                <div class="chat-image avatar">
-                                    <div class="w-10 rounded-full">
-                                        <img alt="profile" th:src="${message.sender.url}" />
-                                    </div>
-                                </div>
-                                <div class="chat-header">
-                                    <div th:text="${message.sender.nickname}"></div>
-                                </div>
                                 <div class="chat-bubble">
                                     <div th:text="${message.message}"></div>
                                 </div>
                                 <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50" th:text="${message.createDate}"></time>
+                                    <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
                                 </div>
                             </div>
                         </div>
@@ -73,13 +67,12 @@
                 </div>
             </div>
             <div class="flex flex-row items-center">
-                <input id="message" type="text" class="border border-gray-300 w-full rounded-lg p-2 mb-4" />
-                <div class="flex gap-5">
-                    <button id="sendButton" class="bg-blue-400 text-white font-semibold w-full px-4 py-2 rounded-lg"
-                        onclick="sendChat()">전송
-                    </button>
-                </div>
+                <input id="message" type="text" class="border border-gray-300 w-full rounded-lg p-2" style="height: 40px;" />
+                <button id="sendButton" onclick="sendChat()" style="height: 40px; display: flex; align-items: center; justify-content: center; padding: 0 10px;">
+                    <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
+                </button>
             </div>
+
         </div>
         <div>
 
@@ -115,40 +108,31 @@
             }
 
             function showChat(chatMessageDto) {
-
-                console.log("=========================================>>>>");
-                console.log(chatMessageDto);
-                console.log(chatMessageDto.senderImgUrl);
-
                const sender = [[${user.nickname}]];
+               const formattedDate = formatTime(chatMessageDto.createDate);
                if (chatMessageDto.sender == sender) {
                     $("#greetings").append(
-                        "<div class='chat chat-start flex flex-row items-start'>" +
-                            "<div class='w-10 rounded-full'>" +
-                                "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
-                            "</div>" +
-                            "<div>" +
-                                "<div class='chat-header'>" + chatMessageDto.sender +
-                                "</div>" +
-                                "<div class='chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                                "<div class='chat-footer opacity-50'>" +
-                                    " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time>" +
-                                "</div>" +
-                            "</div>"+
+                        "<div class = 'chat chat-end  flex flex-col items-end'>" +
+                            "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
+                            "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
                         "</div>"
                     );
                } else {
                     $("#greetings").append(
-                        "<div class='chat chat-end flex flex-row items-end'>" +
-                            "<div class='w-10 rounded-full'>" +
-                                "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
+                        "<div class='chat chat-start flex flex-row items-center'>" +
+                            "<div class='chat-image avatar'>" +
+                                "<div class='w-10 rounded-full'>" +
+                                    "<a href='/profile/" + chatMessageDto.loginId + "'>" +
+                                        "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
+                                    "</a>" +
+                                "</div>" +
                             "</div>" +
                             "<div>" +
                                 "<div class='chat-header'>" + chatMessageDto.sender +
                                 "</div>" +
-                                "<div class='chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
+                                "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
                                 "<div class='chat-footer opacity-50'>" +
-                                    " <time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time>" +
+                                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
                                 "</div>" +
                             "</div>"+
                         "</div>"
@@ -157,6 +141,23 @@
                var messageContainer = document.getElementById("messages");
                messageContainer.scrollTop = messageContainer.scrollHeight;
            }
+
+           // 시간을 원하는 형식으로 포맷하는 함수
+            function formatTime(rawDate) {
+                const date = new Date(rawDate); // 문자열을 Date 객체로 변환
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const ampm = hours >= 12 ? '오후' : '오전';
+                const formattedHours = hours % 12 || 12; // 0시를 12시로 변환
+                const formattedMinutes = padNumber(minutes); // 분을 두 자리로 패딩
+
+                return `${ampm} ${formattedHours}:${formattedMinutes}`;
+            }
+
+            // 숫자를 두 자리로 패딩하는 함수
+            function padNumber(number) {
+                return number.toString().padStart(2, '0');
+            }
 
 
 
