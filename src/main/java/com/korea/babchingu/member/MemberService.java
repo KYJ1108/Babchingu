@@ -137,4 +137,19 @@ public class MemberService {
     public Member findByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId).orElseThrow();
     }
+
+    public void changePassword(String member, String oldPassword, String newPassword) throws CustomException{
+        Optional<Member> userOptional = memberRepository.findByLoginId(member);
+        if (userOptional.isPresent()){
+            Member mem = userOptional.get();
+            if (passwordEncoder.matches(oldPassword, mem.getPassword())){
+                mem.setPassword(passwordEncoder.encode(newPassword));
+                memberRepository.save(mem);
+            }else{
+                throw new CustomException(ErrorCode.INVALID_PASSWORD);
+            }
+        }else{
+            throw new DataNotFoundException("User not found");
+        }
+    }
 }
