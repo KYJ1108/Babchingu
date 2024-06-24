@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ko">
-
+<html lang="ko" layout:decorate="~{layout}">
+<div layout:fragment="content">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,8 +18,7 @@
 </head>
 
 <body>
-    <div class="bg-gray-100 flex items-center justify-center h-screen">
-
+    <div class=" flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
             <div class="flex flex-row items-center">
                 <a href="/" style="display: flex; align-items: center;">
@@ -182,5 +181,5 @@
         </script>
     </div>
 </body>
-
+</div>
 </html>

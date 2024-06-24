@@ -33,8 +33,11 @@ public class MemberController {
     private final FollowRepository followRepository;
 
     @ModelAttribute("memberList")
-    public List<Member> member(){
-        return memberService.findAll();
+    public List<Member> member(Principal principal) {
+        if (principal != null) {
+            return memberService.findChatMembersByPrincipal(principal);
+        }
+        return null; // 또는 빈 리스트를 반환하거나 기본값을 설정할 수 있습니다.
     }
 
     @ModelAttribute("memberUrl")
