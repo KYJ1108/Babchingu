@@ -231,13 +231,4 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/imageSaveform")
-    public String imageSaveform(Principal principal, @RequestParam(value = "url",defaultValue = "")String url){
-        if(url.isBlank())
-            return "redirect:/user/profile";
-        Member member = memberService.getMember(principal.getName());
-        memberService.saveImage(member,url);
-        return "redirect:/user/profile";
-    }
-
 }
