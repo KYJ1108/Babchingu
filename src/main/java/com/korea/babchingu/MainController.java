@@ -28,6 +28,21 @@ public class MainController {
         List<Member> memberList = memberService.findAll();
         return memberList;
     }
+
+    @ModelAttribute("memberUrl")
+    public String memberUrl(Principal principal) {
+        if (principal == null) {
+            return "/path/to/default/memberUrl"; // 로그인하지 않은 경우 기본 URL 반환
+        }
+
+        Member member = memberService.getMember(principal.getName());
+        if (member != null && member.getLoginId().equals(principal.getName())) {
+            String memberUrl = member.getUrl();
+            return memberUrl;
+        }else {
+            return "/path/to/default/memberUrl";
+        }
+    }
     @GetMapping("/")
     public String main(Model model, Principal principal) {
         if (principal != null) {
