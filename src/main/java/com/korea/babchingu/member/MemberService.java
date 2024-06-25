@@ -17,10 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -160,7 +157,11 @@ public class MemberService {
 
     public List<Member> findChatMembersByPrincipal(Principal principal) {
         Optional<Member> member = memberRepository.findByLoginId(principal.getName());
-        return memberRepository.findChatMembers(member.get().getId());
+        if (member.isPresent()) {
+            return memberRepository.findChatMembers(member.get().getId());
+        } else {
+            throw new NoSuchElementException("No member found for the given principal: " + principal.getName());
+        }
     }
 
     public String temp_save(MultipartFile file) {
