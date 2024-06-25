@@ -162,4 +162,20 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByLoginId(principal.getName());
         return memberRepository.findChatMembers(member.get().getId());
     }
+
+    public String temp_save(MultipartFile file) {
+        if (!file.isEmpty())
+            try {
+                String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
+                File fileFolder = new File( path + "/image");
+                if (!fileFolder.exists())
+                    fileFolder.mkdirs();
+                String filePath = "/image/" + UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
+                file.transferTo(Paths.get(path + filePath));
+                return filePath;
+            } catch (IOException ignored) {
+                ignored.printStackTrace();
+            }
+        return null;
+    }
 }

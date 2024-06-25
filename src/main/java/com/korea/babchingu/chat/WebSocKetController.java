@@ -42,6 +42,21 @@ public class WebSocKetController {
         return null; // 또는 빈 리스트를 반환하거나 기본값을 설정할 수 있습니다.
     }
 
+    @ModelAttribute("memberUrl")
+    public String memberUrl(Principal principal) {
+        if (principal == null) {
+            return "/path/to/default/memberUrl"; // 로그인하지 않은 경우 기본 URL 반환
+        }
+
+        Member member = memberService.getMember(principal.getName());
+        if (member != null && member.getLoginId().equals(principal.getName())) {
+            String memberUrl = member.getUrl();
+            return memberUrl;
+        }else {
+            return "/path/to/default/memberUrl";
+        }
+    }
+
     @MessageMapping("/talk/{id}")
     @SendTo("/sub/talk/{id}")
     public ChatMessageDto message(ChatMessageDto message, @DestinationVariable("id") Long id) throws Exception {
