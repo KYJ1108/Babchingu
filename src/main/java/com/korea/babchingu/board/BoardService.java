@@ -6,6 +6,7 @@ import com.korea.babchingu.image.ImageRepository;
 import com.korea.babchingu.member.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,26 +35,29 @@ public class BoardService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName,  Set<String> categories, Member member, LocalDateTime createDate) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
         board.setAddress(address);
         board.setJibun(jibun);
         board.setRestName(restName);
-        board.setCategories(categories);
         board.setMember(member);
-        board.setCreateDate(LocalDateTime.now());
-
 
         List<Image> imageEntities = new ArrayList<>();
 
         for (MultipartFile image : images) {
-            Image img = new Image();
-            img.setBoard(board);
-            img.setUrl(storeImage(image)); // 이미지를 저장하고 URL을 설정하는 메서드 호출 (아래에서 구현 필요)
-
-            imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
+            try {
+                Image img = new Image();
+                img.setBoard(board);
+                String imageUrl = storeImage(image); // 이미지를 저장하고 URL을 반환하는 메서드 호출
+                img.setUrl(imageUrl);
+                imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
+            } catch (Exception e) {
+                // 예외 처리: 이미지 저장 실패 시
+                // 예외 처리 방법에 따라 추가적인 로직을 넣어줄 수 있음
+                e.printStackTrace(); // 예외 내용을 로그로 남기거나 적절히 처리
+            }
         }
 
         // Board 엔티티에 이미지 리스트를 설정
@@ -65,18 +71,23 @@ public class BoardService {
     }
 
     private String storeImage(MultipartFile file) {
-        if (!file.isEmpty())
+        if (!file.isEmpty()){
             try {
-                String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
-                File fileFolder = new File( path + "/image");
-                if (!fileFolder.exists())
+                ClassPathResource classPathResource = new ClassPathResource("static/image");
+                String path = classPathResource.getPath(); // static/image
+                File fileFolder = new File(path);
+                if (!fileFolder.exists()){
                     fileFolder.mkdirs();
-                String filePath = "/image/" + UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
-                file.transferTo(Paths.get(path + filePath));
-                return filePath;
+                }
+                String filename = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
+                String filePath = path + "/" + filename;
+                file.transferTo(Paths.get(filePath));
+                String imageUrl = "http://13.209.60.77:8080/image/"+ filename;
+                return imageUrl;
             } catch (IOException ignored) {
                 ignored.printStackTrace();
             }
+        }
         return null;
     }
 
@@ -99,15 +110,13 @@ public class BoardService {
     }
 
     @Transactional
-    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Set<String> categories, LocalDateTime updateDate) {
+    public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName) {
         Board board = getBoard(id);
         board.setTitle(title);
         board.setContent(content);
         board.setAddress(address);
         board.setJibun(jibun);
         board.setRestName(restName);
-        board.setCategories(categories);
-        board.setUpdateDate(LocalDateTime.now());
 
 
         List<Image> imageEntities = new ArrayList<>();
@@ -132,6 +141,7 @@ public class BoardService {
         return board;
     }
 
+    @Transactional
     public void imageDelete(Long deleteImageId) {
         if (deleteImageId != null) {
             imageRepository.deleteById(deleteImageId);
@@ -161,24 +171,6 @@ public class BoardService {
         return boardRepository.findTop3ByOrderByVoterDesc(); // 리포지토리에 정의된 메소드 예시
     }
 
-    public List<Board> filterByCategories(List<String> categories) {
-        // categories가 비어있을 경우 모든 게시물 반환
-        if (categories == null || categories.isEmpty()) {
-            return boardRepository.findAll();
-        }
-
-        // 선택된 카테고리들로 필터링된 게시물 조회
-        return boardRepository.findByCategoriesIn(categories);
-    }
-
-//    public Page<Board> getBoardsByCreateDate(Pageable pageable) {
-//        return boardRepository.findAllByOrderByCreateDateDesc(pageable);
-//    }
-//
-//    public Page<Board> getBoardsByVoterSize(Pageable pageable) {
-//        return boardRepository.findAllByOrderByVoterSizeDesc(pageable);
-//    }
-
     public Page<Board> getBoardsByCreateDate(int page) {
         Pageable pageable = PageRequest.of(page, 10);
         return boardRepository.findAllByOrderByCreateDateDesc(pageable);
@@ -188,4 +180,5 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, 10);
         return boardRepository.findAllByOrderByVoterSizeDesc(pageable);
     }
+
 }

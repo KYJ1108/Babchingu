@@ -98,7 +98,6 @@ public class MemberService {
             // 파일을 저장할 절대 경로 설정
             ClassPathResource classPathResource = new ClassPathResource("static/profile-images");
             String path = classPathResource.getPath();
-            //String uploadDir = "src/main/resources/static/profile-images";
 
             // 디렉토리 생성 (이미 존재하면 생성하지 않음)
             System.out.println("path : " + path);
@@ -116,7 +115,6 @@ public class MemberService {
                     currentImageFile.delete();
                 }
             }
-
 
             // 파일명 생성
             String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];

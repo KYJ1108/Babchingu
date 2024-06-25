@@ -31,7 +31,7 @@ public class Board {
     private String jibun; // 지번 주소
     private String restName;
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Image> images;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
@@ -45,16 +45,10 @@ public class Board {
 
     @ManyToMany
     Set<Member> voter;
+
     @CreatedDate
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime updateDate;
-
-    @ElementCollection
-    private Set<String> categories = new HashSet<>();
-
-    public int getVoterSize() {
-        return this.voter.size();
-    }
 }

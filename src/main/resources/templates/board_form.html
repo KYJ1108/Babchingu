@@ -9,20 +9,9 @@
         <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
 
-
-
-
         <input type="hidden" name="content" id="editor-body">
         <div id="editor">
-<!--            <textarea name="content" class="input" th:field="*{content}" placeholder="내용을 입력해주세요"></textarea>-->
-<!--            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>-->
         </div>
-
-
-
-
-
-
 
         <!-- 장소 입력 -->
         <ul>

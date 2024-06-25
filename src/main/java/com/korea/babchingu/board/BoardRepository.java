@@ -15,8 +15,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b LEFT JOIN b.voter v GROUP BY b.id ORDER BY COUNT(v) DESC")
     List<Board> findTop3ByOrderByVoterDesc();
 
-    List<Board> findByCategoriesIn(List<String> categories);
-
     // 최신순 정렬
     @Query("SELECT b FROM Board b ORDER BY b.createDate DESC")
     Page<Board> findAllByOrderByCreateDateDesc(Pageable pageable);

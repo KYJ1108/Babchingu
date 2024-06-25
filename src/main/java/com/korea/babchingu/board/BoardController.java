@@ -3,6 +3,7 @@ package com.korea.babchingu.board;
 import com.korea.babchingu.image.Image;
 import com.korea.babchingu.member.Member;
 import com.korea.babchingu.member.MemberService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,6 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
-//    private final TagService tagService;
-//    private final BoardTagService boardTagService;
     private final MemberService memberService;
 
     @ModelAttribute("memberList")
@@ -69,13 +68,8 @@ public class BoardController {
             return "board_form";
         }
 
-        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), member, boardForm.getCreateDate());
-        // 해시태그 저장
-//        String[] tagNames = tags.split(",");
-//        for (String tagName : tagNames){
-//            Tag tag = tagService.saveTag(tagName.trim());
-//            boardTagService.saveBoardTag(board, tag);
-//        }
+        Board board = boardService.create(boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), member);
+
         return "redirect:/board/%d".formatted(board.getId());
     }
 
@@ -161,11 +155,12 @@ public class BoardController {
         if (!board.getMember().getLoginId().equals(principal.getName())) {
             return "redirect:/board/%d".formatted(board.getId());
         }
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName(), boardForm.getCategories(), boardForm.getUpdateDate());
+        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }
 
+    @Transactional
     @PostMapping("/delete/image/{deleteImageId}")
     public String imageDelete(@PathVariable("deleteImageId") Long deleteImageId, @RequestParam("id") Long id) {
         // 게시물 ID로 게시물을 가져옵니다.
@@ -201,32 +196,6 @@ public class BoardController {
         }
         return String.format("redirect:/board/%s", id);
     }
-
-    @PostMapping("/filter")
-    public ResponseEntity<List<Board>> filterBoardByCategories(@RequestParam("categories") List<String> categories) {
-        // 선택된 카테고리 정보(categories)를 이용하여 게시물 필터링 로직을 수행
-        List<Board> filteredBoards = boardService.filterByCategories(categories);
-
-        // 필터링된 결과를 JSON 형태로 응답
-        return ResponseEntity.ok(filteredBoards);
-    }
-
-//    @GetMapping
-//    public String getFilteredBoards(@RequestParam(defaultValue = "0") int page,
-//                                    @RequestParam(defaultValue = "Latest") String sort,
-//                                    Model model) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<Board> boards;
-////
-////        if ("Popular".equals(sort)) {
-////            boards = boardService.getBoardsByVoterSize(pageable);
-////        } else {
-////            boards = boardService.getBoardsByCreateDate(pageable);
-////        }
-//
-////        model.addAttribute("boards", boards);
-//        return "boardList";
-//    }
 
     @GetMapping("/date")
     public String getBoardsOrderByDate(Model model, @RequestParam(value = "page", defaultValue = "0")int page) {
