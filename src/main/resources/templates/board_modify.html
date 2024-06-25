@@ -1,6 +1,6 @@
 <html lang="ko" layout:decorate="~{layout}">
 <div layout:fragment="content" class="w-[800px] mx-auto flex flex-col gap-7">
-    <form th:action="@{|/board/modify/${id}|}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data">
+    <form th:action="@{|/board/modify/${id}|}" th:object="${boardForm}" class="flex flex-col gap-7" method="post" enctype="multipart/form-data" id="boardForm">
         <!--  제목 & 내용  -->
         <div>
             <img class="option-icon" src="/img/w.png" style="width:20px;height:20px;">
@@ -9,7 +9,7 @@
         <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
 
-        <input type="hidden" name="content" id="boardForm">
+        <input type="hidden" name="content" id="editor-body">
         <div id="editor"></div>
 
 
@@ -39,26 +39,10 @@
             <div class="flex flex-row items-center">
                 <img th:src="@{${image.url}}" alt="Image">
                 <div class="flex-grow"></div>
-                <form th:action="@{|/board/delete/image/${image.id}|}" method="post">
-                    <input type="hidden" name="id" th:value="${boardId}">
-                    <input type="image" style="height: 17px; width: 17px;" src="/img/garbage.png" alt="Delete">
-                </form>
             </div>
         </div>
 
-        <!--  해시태그  -->
-        <!--        <div class="mb-3">-->
-        <!--            <img class="option-icon" src="/img/s.png" style="width:20px;height:20px;">-->
-        <!--            <div class="mb-3">-->
-        <!--                <label for="hashtags" class="form-label">해시태그</label>-->
-        <!--                <div>-->
-        <!--                    <input type="text" id="hashtags" class="input" placeholder="Enter로 추가해보세요.">-->
-        <!--                    <div id="hashtags-container"></div>-->
-        <!--                    <input type="hidden" id="hashtags-hidden" name="tags" />-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <input type="submit" class="btn" value="게시물 수정">
+        <input type="button" class="btn" value="게시물 수정" onclick="aaa()">
 
         <!-- 회원 정보 -->
         <input type="hidden" id="memberId" name="memberId" th:value="${memberId}">
@@ -90,66 +74,22 @@
     </script>
     <!--  지도 script 끝  -->
 
-    <!--  해시태그  -->
-    <script>
-        <script>
-        const hashtagsInput = document.getElementById("hashtags");
-        const hashtagsContainer = document.getElementById("hashtags-container");
-        const hiddenHashtagsInput = document.getElementById("hashtags-hidden");
-
-        let hashtags = [];
-
-        function addHashtag(tag) {
-            tag = tag.replace(/[\[\]]/g, '').trim();
-            if(tag && !hashtags.includes(tag)) {
-                const span = document.createElement("span");
-                span.innerText = "#" + tag + " ";
-                span.classList.add("hashtag");
-
-                const removeButton = document.createElement("button");
-                removeButton.innerText = "x";
-                removeButton.classList.add("remove-button");
-                removeButton.addEventListener("click", () => {
-                    hashtagsContainer.removeChild(span);
-                    hashtags = hashtags.filter((hashtag) => hashtag !== tag);
-                    hiddenHashtagsInput.value = hashtags.join(",");
-                });
-
-                span.appendChild(removeButton);
-                hashtagsContainer.appendChild(span);
-                hashtags.push(tag);
-                hiddenHashtagsInput.value = hashtags.join(",");
-            }
-        }
-
-        hashtagsInput.addEventListener("keydown", (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const tag = hashtagsInput.value.trim();
-                if (tag) {
-                    addHashtag(tag);
-                    hashtagsInput.value = "";
-                }
-            }
-        });
-    </script>
     <!-- toast UI Editor -->
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <!-- Editor's Style -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script>
+    <script th:inline="javascript">
         const Editor = toastui.Editor;
         const editor = new Editor({
             el: document.querySelector('#editor'),
             height: '500px',
             initialEditType: 'markdown',
-            previewStyle: 'vertical'
+            previewStyle: 'vertical',
+            initialValue: [[${boardForm.content}]]
         });
 
         editor.getMarkdown();
-    </script>
-    <script>
-        function boardForm() {
+        function aaa() {
 
             const form = document.getElementById("boardForm");
             const editorBody = document.getElementById("editor-body");
@@ -159,6 +99,9 @@
 
             form.submit();
         }
+    </script>
+    <script>
+
     </script>
 </div>
 </html>
