@@ -39,13 +39,13 @@
         <!-- 현재 프로필 이미지 미리보기 -->
         <div class="form-group" th:if="${member.url}">
             <label>Current Profile Image</label><br>
-            <img th:src="@{${member.url}}" class="img-thumbnail" style="max-width: 200px;">
+            <img th:src="@{${member.url}}" class="img-thumbnail" id="currentImage" style="max-width: 200px;">
         </div>
 
         <!-- 프로필 이미지 업로드 -->
         <div class="form-group">
             <label for="file">Profile Image</label>
-            <input type="file" class="form-control-file" id="file" name="file">
+            <input type="file" class="img form-control-file" id="file" name="file">
         </div>
 
         <!--비밀번호 변경-->
@@ -61,5 +61,22 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    const fileInput = document.getElementById('file');
+    const currentImage = document.getElementById('currentImage');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            currentImage.src = '';
+        }
+    });
+</script>
 </body>
 </html>

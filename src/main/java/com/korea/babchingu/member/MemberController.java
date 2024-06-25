@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -279,6 +280,15 @@ public class MemberController {
             return "modifyProfile";
         }
 
+    }
+
+    @PostMapping("/imageform")
+    public String imageform(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        String url = null;
+        if(file.getContentType().contains("image"))
+            url = memberService.temp_save(file);
+        redirectAttributes.addFlashAttribute("url",url);
+        return "redirect:/modifyProfile";
     }
 
 }
