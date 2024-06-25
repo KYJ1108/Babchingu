@@ -87,7 +87,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(Model model, @RequestParam String username, @RequestParam String password) {
+    public String login(Model model, @RequestParam String username, @RequestParam String password, Principal principal) {
         UserDetails userDetails = myUserDetailService.loadUserByUsername(username);
 
         if (userDetails == null) {
@@ -252,11 +252,9 @@ public class MemberController {
                                 @RequestParam("nickname") String nickname,
                                 @RequestParam("email") String email,
                                 @RequestParam("file") MultipartFile file) {
-        try {
-            // 현재 로그인한 사용자 정보 가져오기
-            String memberId = principal.getName();
-            Member member = memberService.getMember(memberId);
 
+        try {
+            Member member = memberService.getMember(principal.getName());
             // 파일이 업로드된 경우에만 처리
             if (!file.isEmpty()) {
                 // 프로필 이미지 저장 및 URL 업데이트
@@ -265,8 +263,12 @@ public class MemberController {
 
             // 프로필 정보 업데이트
             memberService.updateProfile(member, nickname, email, member.getUrl());
+            if(member.getNickname() == null || member.getUrl() == null) {
+                return "redirect:/modifyProfile";
+            }
 
             return "redirect:/profile";
+
         } catch (IOException e) {
             // 파일 업로드 실패 시 처리
             model.addAttribute("error", "파일 업로드에 실패했습니다.");
@@ -276,6 +278,7 @@ public class MemberController {
             model.addAttribute("error", "프로필 업데이트에 실패했습니다: " + e.getMessage());
             return "modifyProfile";
         }
+
     }
 
 }
