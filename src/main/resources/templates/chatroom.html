@@ -79,7 +79,7 @@
     </div>
     <script th:inline="javascript">
         function connect() {
-            var socket = new SockJS("http://localhost:8080/ws-stomp");
+            var socket = new SockJS("http://13.209.60.77:8080/ws-stomp");
             stompClient = Stomp.over(socket);
             const roomId = [[${ chatroom.id }]]
             console.log(roomId);
