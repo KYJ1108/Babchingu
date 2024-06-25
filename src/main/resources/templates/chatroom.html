@@ -57,18 +57,17 @@
                                 <div th:text="${message.message}"></div>
                             </div>
                             <div class="chat-footer opacity-50">
-                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
-                        <div th:if="${message.sender.loginId == user.loginId}">
-                            <div class="chat chat-end">
-                                <div class="chat-bubble">
-                                    <div th:text="${message.message}"></div>
-                                </div>
-                                <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50"
-                                        th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
-                                </div>
+                    </div>
+                    <div th:if="${message.sender.loginId == user.loginId}">
+                        <div class="chat chat-end">
+                            <div class="chat-bubble">
+                                <div th:text="${message.message}"></div>
+                            </div>
+                            <div class="chat-footer opacity-50">
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
                     </div>
@@ -84,8 +83,23 @@
                 <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
             </button>
         </div>
-
-        <script>
+    </div>
+</div>
+    <div>
+        <script th:inline="javascript">
+            function connect() {
+                var socket = new SockJS("http://localhost:8080/ws-stomp");
+                stompClient = Stomp.over(socket);
+                const roomId = [[${ chatroom.id }]]
+                console.log(roomId);
+                stompClient.connect({}, function (frame) {
+                    console.log('웹소켓 연결 성공:', frame);
+                    //구독
+                    stompClient.subscribe('/sub/talk/' + roomId, function (chatMessageDto) {
+                        showChat(JSON.parse(chatMessageDto.body));
+                    });
+                });
+            }
             //html 에서 입력값, roomId 를 받아서 Controller 로 전달
             function sendChat() {
                 const roomId = [[${ chatroom.id }]]
@@ -180,5 +194,4 @@
         </script>
     </div>
 </body>
-
 </html>
