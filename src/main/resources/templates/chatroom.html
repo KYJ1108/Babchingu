@@ -46,7 +46,7 @@
                                 <div th:text="${message.message}"></div>
                             </div>
                             <div class="chat-footer opacity-50">
-                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                                 <div th:text="${message.message}"></div>
                             </div>
                             <div class="chat-footer opacity-50">
-                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
                     </div>
@@ -72,11 +72,9 @@
                 <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
             </button>
         </div>
-
     </div>
-    <div>
-
-    </div>
+</div>
+<div>
     <script th:inline="javascript">
         function connect() {
             var socket = new SockJS("http://13.209.60.77:8080/ws-stomp");
@@ -91,8 +89,6 @@
                 });
             });
         }
-
-
         //html 에서 입력값, roomId 를 받아서 Controller 로 전달
         function sendChat() {
             const roomId = [[${ chatroom.id }]]
@@ -108,45 +104,50 @@
         }
 
         function showChat(chatMessageDto) {
-           const sender = [[${user.nickname}]];
-           const formattedDate = formatTime(chatMessageDto.createDate);
-           if (chatMessageDto.sender == sender) {
+            const sender = [[${ user.nickname }]];
+            const formattedDate = formatTime(chatMessageDto.createDate);
+            if (chatMessageDto.sender == sender) {
                 $("#greetings").append(
                     "<div class = 'chat chat-end  flex flex-col items-end'>" +
-                        "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                        "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                    "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
+                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
                     "</div>"
                 );
-           } else {
+            } else {
                 $("#greetings").append(
                     "<div class='chat chat-start flex flex-row items-center'>" +
-                        "<div class='chat-image avatar'>" +
-                            "<div class='w-10 rounded-full'>" +
-                                "<a href='/profile/" + chatMessageDto.loginId + "'>" +
-                                    "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
-                                "</a>" +
-                            "</div>" +
-                        "</div>" +
-                        "<div>" +
-                            "<div class='chat-header'>" + chatMessageDto.sender +
-                            "</div>" +
-                            "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
-                            "<div class='chat-footer opacity-50'>" +
-                                "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
-                            "</div>" +
-                        "</div>"+
+                    "<div class='chat-image avatar'>" +
+                    "<div class='w-10 rounded-full'>" +
+                    "<a href='/profile/" + chatMessageDto.loginId + "'>" +
+                    "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
+                    "</a>" +
+                    "</div>" +
+                    "</div>" +
+                    "<div>" +
+                    "<div class='chat-header'>" + chatMessageDto.sender +
+                    "</div>" +
+                    "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
+                    "<div class='chat-footer opacity-50'>" +
+                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                    "</div>" +
+                    "</div>" +
                     "</div>"
                 );
-           }
-           var messageContainer = document.getElementById("messages");
-           messageContainer.scrollTop = messageContainer.scrollHeight;
-       }
+            }
+            var messageContainer = document.getElementById("messages");
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
 
-       // 시간을 원하는 형식으로 포맷하는 함수
+        // 시간을 원하는 형식으로 포맷하는 함수
         function formatTime(rawDate) {
             const date = new Date(rawDate); // 문자열을 Date 객체로 변환
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
+
+            // UTC 시간을 한국 표준시로 변환
+            const offset = 9 * 60; // KST는 UTC+9 시간대이므로 9시간을 분으로 변환
+            const kstDate = new Date(date.getTime() + offset * 60000); // 한국 시간으로 변환
+
+            const hours = kstDate.getUTCHours();
+            const minutes = kstDate.getUTCMinutes();
             const ampm = hours >= 12 ? '오후' : '오전';
             const formattedHours = hours % 12 || 12; // 0시를 12시로 변환
             const formattedMinutes = padNumber(minutes); // 분을 두 자리로 패딩
@@ -182,5 +183,4 @@
     </script>
 </div>
 </body>
-
 </html>

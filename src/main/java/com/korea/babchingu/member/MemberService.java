@@ -130,7 +130,7 @@ public class MemberService {
             }
 
             // 파일 저장이 성공한 경우, Member 객체의 URL 업데이트
-            String imageUrl = "/profile-images/" + fileName;
+            String imageUrl = "http://13.209.60.77:8080/profile-images/" + fileName;
             member.setUrl(imageUrl);
         }
     }
