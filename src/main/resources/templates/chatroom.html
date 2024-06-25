@@ -18,36 +18,25 @@
 </head>
 
 <body>
-    <div class="bg-gray-100 flex items-center justify-center h-screen">
+<div class="bg-gray-100 flex items-center justify-center h-screen">
 
-        <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
-            <div class="flex flex-row items-center">
-                <a href="/" style="display: flex; align-items: center;">
-                    <img alt="나가기" src="/img/left-arrow.png" style="height: 20px; width: 20px; margin: 15px;">
-                </a>
-                <h1 class="text-2xl font-bold mb-4" style="margin: 0;"><span th:text="${opponentName}"></h1>
-            </div>
-            <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
-                <div th:if="${!#lists.isEmpty(chatroom.chatMessageList)}">
-                    <div th:each="message : ${chatroom.chatMessageList}">
-                        <div th:if="${message.sender.loginId != user.loginId}">
-                            <div class="chat chat-start">
-                                <div class="chat-image avatar">
-                                    <div class="w-10 rounded-full">
-                                        <a th:href="@{|/profile/${message.sender.loginId}|}">
-                                            <img alt="profile" th:src="${message.sender.url}" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="chat-header">
-                                    <div th:text="${message.sender.nickname}"></div>
-                                </div>
-                                <div class="chat-bubble">
-                                    <div th:text="${message.message}"></div>
-                                </div>
-                                <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50"
-                                        th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
+        <div class="flex flex-row items-center">
+            <a href="/" style="display: flex; align-items: center;">
+                <img alt="나가기" src="/img/left-arrow.png" style="height: 20px; width: 20px; margin: 15px;">
+            </a>
+            <h1 class="text-2xl font-bold mb-4" style="margin: 0;"><span th:text="${opponentName}"></h1>
+        </div>
+        <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
+            <div th:if="${!#lists.isEmpty(chatroom.chatMessageList)}">
+                <div th:each="message : ${chatroom.chatMessageList}">
+                    <div th:if="${message.sender.loginId != user.loginId}">
+                        <div class="chat chat-start">
+                            <div class="chat-image avatar">
+                                <div class="w-10 rounded-full">
+                                    <a th:href="@{|/profile/${message.sender.loginId}|}">
+                                        <img alt="profile" th:src="${message.sender.url}" />
+                                    </a>
                                 </div>
                             </div>
                             <div class="chat-header">
@@ -57,18 +46,17 @@
                                 <div th:text="${message.message}"></div>
                             </div>
                             <div class="chat-footer opacity-50">
-                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
-                        <div th:if="${message.sender.loginId == user.loginId}">
-                            <div class="chat chat-end">
-                                <div class="chat-bubble">
-                                    <div th:text="${message.message}"></div>
-                                </div>
-                                <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50"
-                                        th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
-                                </div>
+                    </div>
+                    <div th:if="${message.sender.loginId == user.loginId}">
+                        <div class="chat chat-end">
+                            <div class="chat-bubble">
+                                <div th:text="${message.message}"></div>
+                            </div>
+                            <div class="chat-footer opacity-50">
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a hh:mm')}"></time>
                             </div>
                         </div>
                     </div>
@@ -84,8 +72,23 @@
                 <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
             </button>
         </div>
-
-        <script>
+    </div>
+</div>
+    <div>
+        <script th:inline="javascript">
+            function connect() {
+                var socket = new SockJS("http://localhost:8080/ws-stomp");
+                stompClient = Stomp.over(socket);
+                const roomId = [[${ chatroom.id }]]
+                console.log(roomId);
+                stompClient.connect({}, function (frame) {
+                    console.log('웹소켓 연결 성공:', frame);
+                    //구독
+                    stompClient.subscribe('/sub/talk/' + roomId, function (chatMessageDto) {
+                        showChat(JSON.parse(chatMessageDto.body));
+                    });
+                });
+            }
             //html 에서 입력값, roomId 를 받아서 Controller 로 전달
             function sendChat() {
                 const roomId = [[${ chatroom.id }]]
@@ -180,5 +183,4 @@
         </script>
     </div>
 </body>
-
 </html>
