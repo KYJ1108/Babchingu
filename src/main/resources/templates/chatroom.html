@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" th:href="@{|/styles.css|}">
     <link th:href="@{|https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css|}" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/bccde956fc.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -18,169 +18,169 @@
 </head>
 
 <body>
-    <div class=" flex items-center justify-center">
-        <input type="hidden" id="memberUrl" name="memberUrl" th:value="${memberUrl}">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
-            <div class="flex flex-row items-center">
-                <a href="/" style="display: flex; align-items: center;">
-                    <img alt="나가기" src="/img/left-arrow.png" style="height: 20px; width: 20px; margin: 15px;">
-                </a>
-                <h1 class="text-2xl font-bold mb-4" style="margin: 0;"><span th:text="${opponentName}"></h1>
-            </div>
-            <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
-                <div th:if="${!#lists.isEmpty(chatroom.chatMessageList)}">
-                    <div th:each="message : ${chatroom.chatMessageList}">
-                        <div th:if="${message.sender.loginId != user.loginId}">
-                            <div class="chat chat-start">
-                                <div class="chat-image avatar">
-                                    <div class="w-10 rounded-full">
-                                        <a th:href="@{|/profile/${message.sender.loginId}|}">
-                                            <img alt="profile" th:src="${message.sender.url}" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="chat-header">
-                                    <div th:text="${message.sender.nickname}"></div>
-                                </div>
-                                <div class="chat-bubble">
-                                    <div th:text="${message.message}"></div>
-                                </div>
-                                <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+<div class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[800px]">
+        <div class="flex flex-row items-center">
+            <a href="/" style="display: flex; align-items: center;">
+                <img alt="나가기" src="/img/left-arrow.png" style="height: 20px; width: 20px; margin: 15px;">
+            </a>
+            <h1 class="text-2xl font-bold mb-4" style="margin: 0;"><span th:text="${opponentName}"></h1>
+        </div>
+        <div id="messages" class="w-[100%] h-[85%] overflow-y-auto mb-4">
+            <div th:if="${!#lists.isEmpty(chatroom.chatMessageList)}">
+                <div th:each="message : ${chatroom.chatMessageList}">
+                    <div th:if="${message.sender.loginId != user.loginId}">
+                        <div class="chat chat-start">
+                            <div class="chat-image avatar">
+                                <div class="w-10 rounded-full">
+                                    <a th:href="@{|/profile/${message.sender.loginId}|}">
+                                        <img alt="profile" th:src="${message.sender.url}" />
+                                    </a>
                                 </div>
                             </div>
+                            <div class="chat-header">
+                                <div th:text="${message.sender.nickname}"></div>
+                            </div>
+                            <div class="chat-bubble">
+                                <div th:text="${message.message}"></div>
+                            </div>
+                            <div class="chat-footer opacity-50">
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
+                            </div>
                         </div>
-                        <div th:if="${message.sender.loginId == user.loginId}">
-                            <div class="chat chat-end">
-                                <div class="chat-bubble">
-                                    <div th:text="${message.message}"></div>
-                                </div>
-                                <div class="chat-footer opacity-50">
-                                    <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
-                                </div>
+                    </div>
+                    <div th:if="${message.sender.loginId == user.loginId}">
+                        <div class="chat chat-end">
+                            <div class="chat-bubble">
+                                <div th:text="${message.message}"></div>
+                            </div>
+                            <div class="chat-footer opacity-50">
+                                <time class="text-xs opacity-50" th:text="${#temporals.format(message.createDate, 'a HH:mm')}"></time>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="greetings">
-                    <div id="images"></div>
-                </div>
             </div>
-            <div class="flex flex-row items-center">
-                <input id="message" type="text" class="border border-gray-300 w-full rounded-lg p-2" style="height: 40px;" />
-                <button id="sendButton" onclick="sendChat()" style="height: 40px; display: flex; align-items: center; justify-content: center; padding: 0 10px;">
-                    <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
-                </button>
+            <div id="greetings">
+                <div id="images"></div>
             </div>
-
         </div>
-        <div>
-
+        <div class="flex flex-row items-center">
+            <input id="message" type="text" class="border border-gray-300 w-full rounded-lg p-2" style="height: 40px;" />
+            <button id="sendButton" onclick="sendChat()" style="height: 40px; display: flex; align-items: center; justify-content: center; padding: 0 10px;">
+                <img alt="전송" src="/img/arrow-up.png" style="height: 40px; width: 40px;">
+            </button>
         </div>
-        <script th:inline="javascript">
-            function connect() {
-                var socket = new SockJS("http://localhost:8080/ws-stomp");
-                stompClient = Stomp.over(socket);
-                const roomId = [[${ chatroom.id }]]
-                console.log(roomId);
-                stompClient.connect({}, function (frame) {
-                    console.log('웹소켓 연결 성공:', frame);
-                    //구독
-                    stompClient.subscribe('/sub/talk/' + roomId, function (chatMessageDto) {
-                        showChat(JSON.parse(chatMessageDto.body));
-                    });
-                });
-            }
 
-
-            //html 에서 입력값, roomId 를 받아서 Controller 로 전달
-            function sendChat() {
-                const roomId = [[${ chatroom.id }]]
-                const sender = [[${ user.loginId }]]
-                if ($("#message").val() != "") {
-                    stompClient.send("/pub/talk/" + roomId, {},
-                        JSON.stringify({
-                            'message': $("#message").val(),
-                            'sender': sender
-                        }));
-                }
-                $("#message").val('');
-            }
-
-            function showChat(chatMessageDto) {
-               const sender = [[${user.nickname}]];
-               const formattedDate = formatTime(chatMessageDto.createDate);
-               if (chatMessageDto.sender == sender) {
-                    $("#greetings").append(
-                        "<div class = 'chat chat-end  flex flex-col items-end'>" +
-                            "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                            "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
-                        "</div>"
-                    );
-               } else {
-                    $("#greetings").append(
-                        "<div class='chat chat-start flex flex-row items-center'>" +
-                            "<div class='chat-image avatar'>" +
-                                "<div class='w-10 rounded-full'>" +
-                                    "<a href='/profile/" + chatMessageDto.loginId + "'>" +
-                                        "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
-                                    "</a>" +
-                                "</div>" +
-                            "</div>" +
-                            "<div>" +
-                                "<div class='chat-header'>" + chatMessageDto.sender +
-                                "</div>" +
-                                "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
-                                "<div class='chat-footer opacity-50'>" +
-                                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
-                                "</div>" +
-                            "</div>"+
-                        "</div>"
-                    );
-               }
-               var messageContainer = document.getElementById("messages");
-               messageContainer.scrollTop = messageContainer.scrollHeight;
-           }
-
-           // 시간을 원하는 형식으로 포맷하는 함수
-            function formatTime(rawDate) {
-                const date = new Date(rawDate); // 문자열을 Date 객체로 변환
-                const hours = date.getHours();
-                const minutes = date.getMinutes();
-                const ampm = hours >= 12 ? '오후' : '오전';
-                const formattedHours = hours % 12 || 12; // 0시를 12시로 변환
-                const formattedMinutes = padNumber(minutes); // 분을 두 자리로 패딩
-
-                return `${ampm} ${formattedHours}:${formattedMinutes}`;
-            }
-
-            // 숫자를 두 자리로 패딩하는 함수
-            function padNumber(number) {
-                return number.toString().padStart(2, '0');
-            }
-
-
-
-            $(function () {
-                $("#message").keyup(function (event) {
-                    if (event.keyCode === 13) {
-                        sendChat();
-                    }
-                });
-            });
-
-            // 페이지 로드 후 실행되는 부분
-            document.addEventListener('DOMContentLoaded', function () {
-                connect();
-
-                // 채팅창의 div 요소를 가져옵니다.
-                var messageContainer = document.getElementById("messages");
-
-                // 스크롤을 아래로 이동시킵니다.
-                messageContainer.scrollTop = messageContainer.scrollHeight;
-            });
-        </script>
     </div>
-</body>
+    <div>
+
+    </div>
+    <script th:inline="javascript">
+        function connect() {
+            var socket = new SockJS("http://localhost:8080/ws-stomp");
+            stompClient = Stomp.over(socket);
+            const roomId = [[${ chatroom.id }]]
+            console.log(roomId);
+            stompClient.connect({}, function (frame) {
+                console.log('웹소켓 연결 성공:', frame);
+                //구독
+                stompClient.subscribe('/sub/talk/' + roomId, function (chatMessageDto) {
+                    showChat(JSON.parse(chatMessageDto.body));
+                });
+            });
+        }
+
+
+        //html 에서 입력값, roomId 를 받아서 Controller 로 전달
+        function sendChat() {
+            const roomId = [[${ chatroom.id }]]
+            const sender = [[${ user.loginId }]]
+            if ($("#message").val() != "") {
+                stompClient.send("/pub/talk/" + roomId, {},
+                    JSON.stringify({
+                        'message': $("#message").val(),
+                        'sender': sender
+                    }));
+            }
+            $("#message").val('');
+        }
+
+        function showChat(chatMessageDto) {
+           const sender = [[${user.nickname}]];
+           const formattedDate = formatTime(chatMessageDto.createDate);
+           if (chatMessageDto.sender == sender) {
+                $("#greetings").append(
+                    "<div class = 'chat chat-end  flex flex-col items-end'>" +
+                        "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
+                        "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                    "</div>"
+                );
+           } else {
+                $("#greetings").append(
+                    "<div class='chat chat-start flex flex-row items-center'>" +
+                        "<div class='chat-image avatar'>" +
+                            "<div class='w-10 rounded-full'>" +
+                                "<a href='/profile/" + chatMessageDto.loginId + "'>" +
+                                    "<img src='" + chatMessageDto.senderImgUrl + "' alt='profile'>" +
+                                "</a>" +
+                            "</div>" +
+                        "</div>" +
+                        "<div>" +
+                            "<div class='chat-header'>" + chatMessageDto.sender +
+                            "</div>" +
+                            "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
+                            "<div class='chat-footer opacity-50'>" +
+                                "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                            "</div>" +
+                        "</div>"+
+                    "</div>"
+                );
+           }
+           var messageContainer = document.getElementById("messages");
+           messageContainer.scrollTop = messageContainer.scrollHeight;
+       }
+
+       // 시간을 원하는 형식으로 포맷하는 함수
+        function formatTime(rawDate) {
+            const date = new Date(rawDate); // 문자열을 Date 객체로 변환
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? '오후' : '오전';
+            const formattedHours = hours % 12 || 12; // 0시를 12시로 변환
+            const formattedMinutes = padNumber(minutes); // 분을 두 자리로 패딩
+
+            return `${ampm} ${formattedHours}:${formattedMinutes}`;
+        }
+
+        // 숫자를 두 자리로 패딩하는 함수
+        function padNumber(number) {
+            return number.toString().padStart(2, '0');
+        }
+
+
+
+        $(function () {
+            $("#message").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    sendChat();
+                }
+            });
+        });
+
+        // 페이지 로드 후 실행되는 부분
+        document.addEventListener('DOMContentLoaded', function () {
+            connect();
+
+            // 채팅창의 div 요소를 가져옵니다.
+            var messageContainer = document.getElementById("messages");
+
+            // 스크롤을 아래로 이동시킵니다.
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+    </script>
 </div>
+</body>
+
 </html>
