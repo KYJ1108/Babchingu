@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,9 +28,15 @@ public class MainController {
     @ModelAttribute("memberList")
     public List<Member> member(Principal principal) {
         if (principal != null) {
-            return memberService.findChatMembersByPrincipal(principal);
+            try {
+                return memberService.findChatMembersByPrincipal(principal);
+            } catch (NoSuchElementException e) {
+                // 로그를 남기거나, 예외 처리를 추가할 수 있습니다.
+                // 예외 발생 시 빈 리스트 반환
+                return Collections.emptyList();
+            }
         }
-        return null; // 또는 빈 리스트를 반환하거나 기본값을 설정할 수 있습니다.
+        return Collections.emptyList(); // 빈 리스트를 반환하여 예외를 방지합니다.
     }
 
     @ModelAttribute("memberUrl")

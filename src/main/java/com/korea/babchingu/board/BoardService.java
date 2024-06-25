@@ -4,6 +4,7 @@ import com.korea.babchingu.DataNotFoundException;
 import com.korea.babchingu.image.Image;
 import com.korea.babchingu.image.ImageRepository;
 import com.korea.babchingu.member.Member;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ public class BoardService {
     private final ResourceLoader resourceLoader;
     private final ImageRepository imageRepository;
 
+    @Transactional
     public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName,  Set<String> categories, Member member, LocalDateTime createDate) {
         Board board = new Board();
         board.setTitle(title);
@@ -41,16 +43,24 @@ public class BoardService {
         board.setMember(member);
         board.setCreateDate(LocalDateTime.now());
 
-        boardRepository.save(board);
+
+        List<Image> imageEntities = new ArrayList<>();
 
         for (MultipartFile image : images) {
             Image img = new Image();
             img.setBoard(board);
-            img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+            img.setUrl(storeImage(image)); // 이미지를 저장하고 URL을 설정하는 메서드 호출 (아래에서 구현 필요)
 
-            imageRepository.save(img);
+            imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
         }
 
+        // Board 엔티티에 이미지 리스트를 설정
+        board.setImages(imageEntities);
+
+        // 이미지 엔티티들을 저장
+        imageRepository.saveAll(imageEntities);
+
+        boardRepository.save(board);
         return board;
     }
 
@@ -87,6 +97,8 @@ public class BoardService {
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
+
+    @Transactional
     public Board update(Long id, String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Set<String> categories, LocalDateTime updateDate) {
         Board board = getBoard(id);
         board.setTitle(title);
@@ -97,17 +109,26 @@ public class BoardService {
         board.setCategories(categories);
         board.setUpdateDate(LocalDateTime.now());
 
-        boardRepository.save(board);
 
+        List<Image> imageEntities = new ArrayList<>();
         if (images == null && images.isEmpty()) {
             for (MultipartFile image : images) {
                 Image img = new Image();
                 img.setBoard(board);
-                img.setUrl(storeImage(image)); // 또는 img.setImageData(image.getBytes());
+                img.setUrl(storeImage(image)); // 이미지를 저장하고 URL을 설정하는 메서드 호출 (아래에서 구현 필요)
 
-                imageRepository.save(img);
+                imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
             }
         }
+
+
+        // Board 엔티티에 이미지 리스트를 설정
+        board.setImages(imageEntities);
+
+        // 이미지 엔티티들을 저장
+        imageRepository.saveAll(imageEntities);
+
+        boardRepository.save(board);
         return board;
     }
 

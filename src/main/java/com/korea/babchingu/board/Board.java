@@ -31,7 +31,7 @@ public class Board {
     private String jibun; // 지번 주소
     private String restName;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Image> images;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
