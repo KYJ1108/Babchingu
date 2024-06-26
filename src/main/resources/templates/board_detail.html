@@ -20,7 +20,7 @@
                     </div>
                     <a th:text="${board.member.nickname}" th:href="@{|/profile/${board.member.loginId}|}" class="poster_id txt_id"></a>
                     <p th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="gray-text"></p>
-                    <div class="dropdown dropdown-end" th:if="${loggedInMemberId == member.loginId}">
+                    <div class="dropdown dropdown-end" th:if="${loggedInMemberId == board.member.loginId}">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                             <img class="option-icon" src="/img/more.png" style="width: 20px; height: 20px;">
                         </div>
