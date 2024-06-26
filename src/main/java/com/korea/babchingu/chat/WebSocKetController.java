@@ -70,7 +70,7 @@ public class WebSocKetController {
             LocalDateTime createDate = LocalDateTime.now();
             message.setSenderImgUrl(member.getUrl());
             message.setSender(member.getNickname());
-            message.setCreateDate(createDate);
+            message.setSendTime(createDate);
             message.setLoginId(member.getLoginId());
 
             return message;

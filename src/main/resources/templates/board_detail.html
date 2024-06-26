@@ -295,25 +295,24 @@
             slide();
         });
     </script>
+    <script>
+        function openModalWithContent(commentId, content) {
+            // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
+            document.getElementById('commentContent').value = content;
+            // form action URL을 동적으로 설정
+            document.getElementById('updateForm').action = '/comment/modify/' + commentId;
+            // 모달 열기
+            document.getElementById('my_modal_1').showModal();
+        }
+
+        function openModalWithContent(answerId, content) {
+            // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
+            document.getElementById('answerContent').value = content;
+            // form action URL을 동적으로 설정
+            document.getElementById('updateForm1').action = '/answer/modify/' + answerId;
+            // 모달 열기
+            document.getElementById('my_modal_5').showModal();
+        }
+    </script>
 </div>
-
-<script>
-    function openModalWithContent(commentId, content) {
-        // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
-        document.getElementById('commentContent').value = content;
-        // form action URL을 동적으로 설정
-        document.getElementById('updateForm').action = '/comment/modify/' + commentId;
-        // 모달 열기
-        document.getElementById('my_modal_1').showModal();
-    }
-
-    function openModalWithContent(answerId, content) {
-        // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
-        document.getElementById('answerContent').value = content;
-        // form action URL을 동적으로 설정
-        document.getElementById('updateForm1').action = '/answer/modify/' + answerId;
-        // 모달 열기
-        document.getElementById('my_modal_5').showModal();
-    }
-</script>
 </html>

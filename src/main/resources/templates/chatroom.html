@@ -97,7 +97,8 @@
                 stompClient.send("/pub/talk/" + roomId, {},
                     JSON.stringify({
                         'message': $("#message").val(),
-                        'sender': sender
+                        'sender': sender,
+                        'sendTime' : formattedDate
                     }));
             }
             $("#message").val('');
@@ -105,12 +106,12 @@
 
         function showChat(chatMessageDto) {
             const sender = [[${ user.nickname }]];
-            const formattedDate = formatTime(chatMessageDto.createDate);
+            const formattedDate = formatTime(chatMessageDto.sendTime);
             if (chatMessageDto.sender == sender) {
                 $("#greetings").append(
                     "<div class = 'chat chat-end  flex flex-col items-end'>" +
                     "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                    "<time class='text-xs opacity-50' text='${#temporals.format(" + chatMessageDto.sendTime + ", 'a hh:mm')}'>" + "</time>" +
                     "</div>"
                 );
             } else {
@@ -128,7 +129,7 @@
                     "</div>" +
                     "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
                     "<div class='chat-footer opacity-50'>" +
-                    "<time class='text-xs opacity-50'>" + formattedDate + "</time>" +
+                    "<time class='text-xs opacity-50' text='${#temporals.format(" + chatMessageDto.sendTime + ", 'a hh:mm')}'>" + "</time>" +
                     "</div>" +
                     "</div>" +
                     "</div>"
@@ -140,27 +141,16 @@
 
         // 시간을 원하는 형식으로 포맷하는 함수
         function formatTime(rawDate) {
-            const date = new Date(rawDate); // 문자열을 Date 객체로 변환
-
-            // UTC 시간을 한국 표준시로 변환
-            const offset = 9 * 60; // KST는 UTC+9 시간대이므로 9시간을 분으로 변환
-            const kstDate = new Date(date.getTime() + offset * 60000); // 한국 시간으로 변환
-
-            const hours = kstDate.getUTCHours();
-            const minutes = kstDate.getUTCMinutes();
-            const ampm = hours >= 12 ? '오후' : '오전';
-            const formattedHours = hours % 12 || 12; // 0시를 12시로 변환
-            const formattedMinutes = padNumber(minutes); // 분을 두 자리로 패딩
-
-            return `${ampm} ${formattedHours}:${formattedMinutes}`;
+           var currentDate = new Date();
+           currentDate.setTime(currentDate.getTime() + (9 * 60 * 60 * 1000));
+           var formattedDate = new Date(currentDate).toISOString(); // ISO 형식으로 변환
+           return formattedDate;
         }
 
         // 숫자를 두 자리로 패딩하는 함수
         function padNumber(number) {
             return number.toString().padStart(2, '0');
         }
-
-
 
         $(function () {
             $("#message").keyup(function (event) {
