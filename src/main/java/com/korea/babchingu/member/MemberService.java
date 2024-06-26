@@ -6,6 +6,7 @@ import com.korea.babchingu.board.BoardRepository;
 import com.korea.babchingu.follow.Follow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,10 +96,12 @@ public class MemberService {
     public void saveProfileImage(Member member, MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             // 파일을 저장할 절대 경로 설정
-            String uploadDir = "src/main/resources/static/profile-images";
+            ClassPathResource classPathResource = new ClassPathResource("static/profile-images");
+            String path = classPathResource.getPath();
 
             // 디렉토리 생성 (이미 존재하면 생성하지 않음)
-            File directory = new File(uploadDir);
+            System.out.println("path : " + path);
+            File directory = new File(path);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
@@ -106,17 +109,16 @@ public class MemberService {
             // 기존 프로필 이미지 삭제
             String currentImageUrl = member.getUrl();
             if (currentImageUrl != null && !currentImageUrl.isEmpty()) {
-                String currentImagePath = uploadDir + currentImageUrl.substring(currentImageUrl.lastIndexOf("/"));
+                String currentImagePath = path + currentImageUrl.substring(currentImageUrl.lastIndexOf("/"));
                 File currentImageFile = new File(currentImagePath);
                 if (currentImageFile.exists()) {
                     currentImageFile.delete();
                 }
             }
 
-
             // 파일명 생성
             String fileName = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
-            String filePath = uploadDir + "/" + fileName;
+            String filePath = path + "/" + fileName;
 
             // 파일 저장
             try {
@@ -127,7 +129,7 @@ public class MemberService {
             }
 
             // 파일 저장이 성공한 경우, Member 객체의 URL 업데이트
-            String imageUrl = "/profile-images/" + fileName;
+            String imageUrl = "http://13.209.60.77:8080/profile-images/" + fileName;
             member.setUrl(imageUrl);
         }
     }

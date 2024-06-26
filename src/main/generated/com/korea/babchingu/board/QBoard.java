@@ -26,8 +26,6 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final ListPath<com.korea.babchingu.answer.Answer, com.korea.babchingu.answer.QAnswer> answerList = this.<com.korea.babchingu.answer.Answer, com.korea.babchingu.answer.QAnswer>createList("answerList", com.korea.babchingu.answer.Answer.class, com.korea.babchingu.answer.QAnswer.class, PathInits.DIRECT2);
 
-    public final SetPath<String, StringPath> categories = this.<String, StringPath>createSet("categories", String.class, StringPath.class, PathInits.DIRECT2);
-
     public final ListPath<com.korea.babchingu.comment.Comment, com.korea.babchingu.comment.QComment> commentList = this.<com.korea.babchingu.comment.Comment, com.korea.babchingu.comment.QComment>createList("commentList", com.korea.babchingu.comment.Comment.class, com.korea.babchingu.comment.QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");

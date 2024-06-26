@@ -9,20 +9,9 @@
         <input type="title" name="title" class="input" th:field="*{title}" th:value="*{title}" placeholder="제목을 입력해주세요">
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
 
-
-
-
         <input type="hidden" name="content" id="editor-body">
         <div id="editor">
-<!--            <textarea name="content" class="input" th:field="*{content}" placeholder="내용을 입력해주세요"></textarea>-->
-<!--            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>-->
         </div>
-
-
-
-
-
-
 
         <!-- 장소 입력 -->
         <ul>
@@ -44,32 +33,6 @@
         <input type="file" id="images" name="images" multiple>
         <div th:each="image : ${images}">
             <img th:src="${image.url}" alt="Image">
-        </div>
-
-        <!--  카테고리 설정  -->
-        <div>
-            <img class="option-icon" src="/img/filter.png" style="width:20px;height:20px;">
-            <label for="images">카테고리 설정</label>
-        </div>
-        <div class="category-content">
-            <div class="category">
-                <span onclick="toggleCategory('food')"><b>음식</b></span><br>
-                <label><input type="checkbox" value="한식"> 한식</label>
-                <label><input type="checkbox" value="중식"> 중식</label>
-                <label><input type="checkbox" value="일식"> 일식</label>
-                <label><input type="checkbox" value="아시아"> 아시아</label>
-                <label><input type="checkbox" value="양식"> 양식</label>
-                <label><input type="checkbox" value="디저트"> 디저트</label>
-            </div>
-
-            <hr>
-
-            <div class="category">
-                <span onclick="toggleCategory('gender')"><b>성별</b></span><br>
-                <label><input type="checkbox" value="여"> 여</label>
-                <label><input type="checkbox" value="남"> 남</label>
-                <label><input type="checkbox" value="무관"> 무관</label>
-            </div>
         </div>
 
         <input type="button" class="btn" value="게시물 등록" onclick="boardForm()">
