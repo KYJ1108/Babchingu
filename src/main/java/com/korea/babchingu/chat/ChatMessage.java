@@ -27,9 +27,6 @@ public class ChatMessage {
 
     private String message; // 메시지
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
-    private Image image;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;

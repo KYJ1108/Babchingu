@@ -118,27 +118,36 @@ public class BoardService {
         board.setJibun(jibun);
         board.setRestName(restName);
 
+        // 기존 이미지 삭제
+        if (board.getImages() != null && !board.getImages().isEmpty()) {
+            imageRepository.deleteAll(board.getImages());
+            board.getImages().clear();
+        }
 
+        // 새 이미지 저장
         List<Image> imageEntities = new ArrayList<>();
-        if (images == null && images.isEmpty()) {
+        if (images != null && !images.isEmpty()) {
             for (MultipartFile image : images) {
-                Image img = new Image();
-                img.setBoard(board);
-                img.setUrl(storeImage(image)); // 이미지를 저장하고 URL을 설정하는 메서드 호출 (아래에서 구현 필요)
-
-                imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
+                if (!image.isEmpty()) {
+                    String imageUrl = storeImage(image);
+                    if (imageUrl != null) {
+                        Image img = new Image();
+                        img.setBoard(board);
+                        img.setUrl(imageUrl);
+                        imageEntities.add(img);
+                    }
+                }
             }
         }
 
-
-        // Board 엔티티에 이미지 리스트를 설정
+        // 새 이미지 엔티티를 보드에 설정
         board.setImages(imageEntities);
 
-        // 이미지 엔티티들을 저장
+        // 이미지 엔티티 저장
         imageRepository.saveAll(imageEntities);
 
-        boardRepository.save(board);
-        return board;
+        // 변경 사항 저장
+        return boardRepository.save(board);
     }
 
     @Transactional

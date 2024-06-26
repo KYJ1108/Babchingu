@@ -28,8 +28,6 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.korea.babchingu.image.QImage image;
-
     public final StringPath message = createString("message");
 
     public final com.korea.babchingu.member.QMember sender;
@@ -53,7 +51,6 @@ public class QChatMessage extends EntityPathBase<ChatMessage> {
     public QChatMessage(Class<? extends ChatMessage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.chatRoom = inits.isInitialized("chatRoom") ? new QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
-        this.image = inits.isInitialized("image") ? new com.korea.babchingu.image.QImage(forProperty("image"), inits.get("image")) : null;
         this.sender = inits.isInitialized("sender") ? new com.korea.babchingu.member.QMember(forProperty("sender")) : null;
     }
 

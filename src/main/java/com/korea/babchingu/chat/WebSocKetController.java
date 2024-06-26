@@ -65,12 +65,12 @@ public class WebSocKetController {
         if(!_chatRoom.isEmpty()) {
             ChatRoom chatRoom = _chatRoom.get();
             Member member = memberService.getMember(message.getSender());
-            ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(LocalDateTime.now()).build();
+            LocalDateTime createDate = message.getCreateDate();
+            ChatMessage chatMessage = ChatMessage.builder().sender(member).message(message.getMessage()).chatRoom(chatRoom).createDate(createDate).build();
             chatMessageRepository.save(chatMessage);
-            LocalDateTime createDate = LocalDateTime.now();
             message.setSenderImgUrl(member.getUrl());
             message.setSender(member.getNickname());
-            message.setSendTime(createDate);
+            message.setCreateDate(createDate);
             message.setLoginId(member.getLoginId());
 
             return message;
