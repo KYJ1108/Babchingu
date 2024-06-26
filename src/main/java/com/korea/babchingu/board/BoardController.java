@@ -155,7 +155,17 @@ public class BoardController {
         if (!board.getMember().getLoginId().equals(principal.getName())) {
             return "redirect:/board/%d".formatted(board.getId());
         }
-        boardService.update(id, boardForm.getTitle(), boardForm.getContent(), images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
+        // 업로드된 이미지 파일들을 로그로 출력
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile image : images) {
+                System.out.println("Received file: " + image.getOriginalFilename());
+            }
+        } else {
+            System.out.println("No images received");
+        }
+        // 수정된 내용을 서비스로 전달
+        boardService.update(id, boardForm.getTitle(), content, images, boardForm.getAddress(), boardForm.getJibun(), boardForm.getRestName());
+
         model.addAttribute("board", board);
         return "redirect:/board/%d".formatted(board.getId());
     }

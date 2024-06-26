@@ -30,14 +30,16 @@
             <img class="option-icon" src="/img/p.png" style="width:20px;height:20px;">
             <label for="images">이미지</label>
         </div>
-        <input type="file" id="images" name="images" multiple>
-        <div th:each="image : ${images}">
-            <div class="flex flex-row items-center">
-                <img th:src="@{${image.url}}" alt="Image">
-                <div class="flex-grow"></div>
-            </div>
+
+        <div class="form-group">
+            <input type="file" class="img form-control-file" id="file" name="images"multiple>
         </div>
 
+        <div class="form-group" th:each="image : ${images}">
+            <img th:src="@{${image.url}}" class="img-thumbnail" id="currentImage" alt="Image"style="max-width: 200px;">
+        </div>
+
+        <!--수정 버튼-->
         <input type="button" class="btn" value="게시물 수정" onclick="aaa()">
 
         <!-- 회원 정보 -->
@@ -96,8 +98,23 @@
             form.submit();
         }
     </script>
+<!--실시간 이미지-->
     <script>
+        const fileInput = document.getElementById('file');
+        const currentImage = document.getElementById('currentImage');
 
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                currentImage.src = '';
+            }
+        });
     </script>
 </div>
 </html>
