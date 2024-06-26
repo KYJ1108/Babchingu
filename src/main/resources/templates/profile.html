@@ -193,7 +193,7 @@
         <h2 style="text-align: center;"><strong>올린 게시물</strong></h2>
             <div class="posts">
                 <!-- 각 게시물에 링크 추가 -->
-                <div th:each="post : ${member.boardList}" class="postPro">
+                <div th:each="post : ${memberPosts}" class="postPro">
                     <a th:href="@{|/board/${post.id}|}"> <!-- 게시물로 이동하는 링크 -->
                         <div style="flex: 1; overflow: hidden;">
                             <div th:if="${not #lists.isEmpty(post.images)}" style="height: 300px;">
