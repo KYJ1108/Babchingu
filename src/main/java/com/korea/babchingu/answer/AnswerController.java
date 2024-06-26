@@ -46,8 +46,11 @@ public class AnswerController {
     }
 
     @PostMapping("/modify/{id}")
-    public String update(@PathVariable("id") Long id, @RequestParam("content") String content) {
+    public String update(@PathVariable("id") Long id, @RequestParam("content") String content, Principal principal) {
         Answer answer = answerService.update(id, content);
+        if (!answer.getMember().getLoginId().equals(principal.getName())) {
+            return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
+        }
         return "redirect:/board/%d".formatted(answer.getComment().getBoard().getId());
     }
 

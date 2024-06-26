@@ -82,7 +82,7 @@ public class BoardService {
                 String filename = UUID.randomUUID().toString() + "." + file.getContentType().split("/")[1];
                 String filePath = path + "/" + filename;
                 file.transferTo(Paths.get(filePath));
-                String imageUrl = "http://13.209.60.77:8080/image/"+ filename;
+                String imageUrl = "http://babchingu.kro.kr:8080/image/"+ filename;
                 return imageUrl;
             } catch (IOException ignored) {
                 ignored.printStackTrace();
