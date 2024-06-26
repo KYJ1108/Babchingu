@@ -51,5 +51,4 @@ public class Board {
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime updateDate;
-
 }

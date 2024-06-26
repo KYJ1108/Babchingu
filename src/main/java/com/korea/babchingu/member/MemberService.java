@@ -75,7 +75,9 @@ public class MemberService {
     public List<Board> getMemberPosts(String loginId) {
         Member member = memberRepository.findByLoginId(loginId).orElse(null);
         if (member != null){
-            return boardRepository.findByMember(member);
+            List<Board> memberPosts = boardRepository.findByMember(member);
+            memberPosts.sort(Comparator.comparing(Board::getCreateDate).reversed()); // 최신순으로 정렬
+            return memberPosts;
         }
         return Collections.emptyList();
     }
