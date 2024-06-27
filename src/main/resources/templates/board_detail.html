@@ -86,15 +86,15 @@
                                             class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                                             <li>
                                                 <!-- 댓글 수정 모달 다이얼로그 -->
-                                                <button class="" onclick="document.getElementById('my_modal_1').showModal()">수정</button>
-                                                <dialog id="my_modal_1" class="modal">
+                                                <button class="" onclick="document.getElementById('comment_modal_${comment.id}').showModal()">수정</button>
+                                                <dialog id="'comment_modal_'+${comment.id}" class="modal">
                                                     <div class="modal-box">
                                                         <form method="dialog">
                                                             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                         </form>
                                                         <h3 class="font-bold text-lg">댓글 수정</h3>
-                                                        <form id="updateForm" th:action="@{|/comment/modify/${comment.id}|}" method="post">
-                                                            <textarea id="commentContent" name="content" class="textarea textarea-bordered w-full"></textarea>
+                                                        <form id="updateForm_${comment.id}" action="" method="post">
+                                                            <textarea id="commentContent_${comment.id}" name="content" class="textarea textarea-bordered w-full"></textarea>
                                                             <div class="modal-action">
                                                                 <button type="submit" class="btn">저장</button>
                                                             </div>
@@ -127,16 +127,16 @@
                                                 <ul tabindex="0"
                                                     class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                                                 <li>
-                                                    <!-- 대댓글 수정 모달 다이얼로그 -->
-                                                    <button class="" onclick="document.getElementById('my_modal_5').showModal()">수정</button>
-                                                    <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                                                    <!-- 대댓글 수정 버튼과 모달 다이얼로그 -->
+                                                    <button class="btnEditAnswer" onclick="document.getElementById('answer_modal_${answer.id}').showModal()">수정</button>
+                                                    <dialog id="answer_modal_${answer.id}" class="modal modal-bottom sm:modal-middle">
                                                         <div class="modal-box">
                                                             <form method="dialog">
                                                                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                             </form>
                                                             <h3 class="font-bold text-lg">대댓글 수정</h3>
-                                                            <form id="updateForm2" th:action="@{|/answer/modify/${answer.id}|}" method="post">
-                                                                <textarea id="answerContent" name="content" class="textarea textarea-bordered w-full"></textarea>
+                                                            <form id="updateForm_${answer.id}" th:action="@{|/answer/modify/${answer.id}|}" method="post">
+                                                                <textarea id="answerContent_${answer.id}" name="content" class="textarea textarea-bordered w-full"></textarea>
                                                                 <div class="modal-action">
                                                                     <button type="submit" class="btn">저장</button>
                                                                 </div>
@@ -296,22 +296,23 @@
         });
     </script>
     <script>
-        function openModalWithContent(commentId, content) {
+        function openCommentModalWithContent(comment.id, content) {
             // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
-            document.getElementById('commentContent').value = content;
+            document.getElementById('commentContent_' + comment.id).value = content;
             // form action URL을 동적으로 설정
-            document.getElementById('updateForm').action = '/comment/modify/' + commentId;
+            document.getElementById('updateForm_' + comment.id).action = '/comment/modify/' + comment.id;
             // 모달 열기
-            document.getElementById('my_modal_1').showModal();
+            document.getElementById('comment_modal_' + comment.id).showModal();
         }
 
-        function openModalWithContent(answerId, content) {
-            // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
-            document.getElementById('answerContent').value = content;
-            // form action URL을 동적으로 설정
-            document.getElementById('updateForm1').action = '/answer/modify/' + answerId;
-            // 모달 열기
-            document.getElementById('my_modal_5').showModal();
+
+        function openAnswerModalWithContent(answerId, content) {
+            // 현재 대댓글 내용을 textarea에 설정
+            document.getElementById('answerContent_' + answerId).value = content;
+            // form action URL 동적 설정
+            document.getElementById('updateForm_' + answerId).action = '/answer/modify/' + answerId;
+            // 모달 다이얼로그 열기
+            document.getElementById('answer_modal_' + answerId).showModal();
         }
     </script>
 </div>

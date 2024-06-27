@@ -14,9 +14,7 @@ public class ChatMessageDto {
 
     private String senderImgUrl;
 
-    private LocalDateTime createDate;
-
-    private String sendTime;
+    private LocalDateTime sendTime;
 
     private String loginId;
 }
