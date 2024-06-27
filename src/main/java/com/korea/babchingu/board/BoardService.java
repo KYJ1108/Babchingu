@@ -67,7 +67,9 @@ public class BoardService {
     private String storeImage(MultipartFile file) {
         if (!file.isEmpty())
             try {
-                String path = resourceLoader.getResource("classpath:/static").getFile().getPath();
+
+//                String path = resourceLoader.getResource("/static").getFile().getPath();
+                String path = "src/main/resources/static";
                 File fileFolder = new File( path + "/image");
                 if (!fileFolder.exists())
                     fileFolder.mkdirs();
