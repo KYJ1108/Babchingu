@@ -102,7 +102,7 @@
                     JSON.stringify({
                         'message': $("#message").val(),
                         'sender': sender,
-                        'sendTime' : formattedDate
+                        'createDate' : formattedDate
                     }));
             }
             $("#message").val('');
@@ -114,7 +114,7 @@
                 $("#greetings").append(
                     "<div class = 'chat chat-end  flex flex-col items-end'>" +
                     "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                    "<time class='text-xs opacity-50'>" + chatMessageDto.sendTime + "</time>" +
+                    "<time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time>" +
                     "</div>"
                 );
             } else {
@@ -132,7 +132,7 @@
                     "</div>" +
                     "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
                     "<div class='chat-footer opacity-50'>" +
-                    "<time class='text-xs opacity-50'>" + chatMessageDto.sendTime + "</time>" +
+                    "<time class='text-xs opacity-50'>" + chatMessageDto.createDate + "</time>" +
                     "</div>" +
                     "</div>" +
                     "</div>"
