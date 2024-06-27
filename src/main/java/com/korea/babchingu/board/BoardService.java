@@ -35,7 +35,7 @@ public class BoardService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName,  Set<String> categories, Member member, LocalDateTime createDate) {
+    public Board create(String title, String content, List<MultipartFile> images, String address, String jibun, String restName, Member member) {
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
