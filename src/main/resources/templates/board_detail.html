@@ -86,15 +86,15 @@
                                             class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                                             <li>
                                                 <!-- 댓글 수정 모달 다이얼로그 -->
-                                                <button class="" onclick="document.getElementById('comment_modal_${comment.id}').showModal()">수정</button>
-                                                <dialog id="'comment_modal_'+${comment.id}" class="modal">
+                                                <button class="" th:onclick="openCommentModalWithContent([[${comment.id}]]);">수정</button>
+                                                <dialog th:id="'my_modal_' + ${comment.id}" class="modal">
                                                     <div class="modal-box">
                                                         <form method="dialog">
                                                             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                         </form>
                                                         <h3 class="font-bold text-lg">댓글 수정</h3>
-                                                        <form id="updateForm_${comment.id}" action="" method="post">
-                                                            <textarea id="commentContent_${comment.id}" name="content" class="textarea textarea-bordered w-full"></textarea>
+                                                        <form id="updateForm" th:action="@{|/comment/modify/${comment.id}|}" method="post">
+                                                            <textarea th:id="'comment-content-' + ${comment.id}" name="content" class="textarea textarea-bordered w-full" th:text="${comment.content}"></textarea>
                                                             <div class="modal-action">
                                                                 <button type="submit" class="btn">저장</button>
                                                             </div>
@@ -126,35 +126,35 @@
                                                 </div>
                                                 <ul tabindex="0"
                                                     class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                                                <li>
-                                                    <!-- 대댓글 수정 버튼과 모달 다이얼로그 -->
-                                                    <button class="btnEditAnswer" onclick="document.getElementById('answer_modal_${answer.id}').showModal()">수정</button>
-                                                    <dialog id="answer_modal_${answer.id}" class="modal modal-bottom sm:modal-middle">
-                                                        <div class="modal-box">
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                                            </form>
-                                                            <h3 class="font-bold text-lg">대댓글 수정</h3>
-                                                            <form id="updateForm_${answer.id}" th:action="@{|/answer/modify/${answer.id}|}" method="post">
-                                                                <textarea id="answerContent_${answer.id}" name="content" class="textarea textarea-bordered w-full"></textarea>
-                                                                <div class="modal-action">
-                                                                    <button type="submit" class="btn">저장</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </dialog>
-                                                </li>
-                                                <li>
-                                                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display: inline;">
-                                                        <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
-                                                    </form>
-                                                </li>
+                                                    <li>
+                                                        <!-- 대댓글 수정 모달 다이얼로그 -->
+                                                        <button class="" th:onclick="openAnswerModalWithContent([[${answer.id}]]);">수정</button>
+                                                        <dialog th:id="'my_modal_' + ${answer.id}" class="modal modal-bottom sm:modal-middle">
+                                                            <div class="modal-box">
+                                                                <form method="dialog">
+                                                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                                </form>
+                                                                <h3 class="font-bold text-lg">대댓글 수정</h3>
+                                                                <form id="updateForm2" th:action="@{|/answer/modify/${answer.id}|}" method="post">
+                                                                    <textarea th:id="'answer-content-' + ${answer.id}" name="content" class="textarea textarea-bordered w-full" th:text="${answer.content}"></textarea>
+                                                                    <div class="modal-action">
+                                                                        <button type="submit" class="btn">저장</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </dialog>
+                                                    </li>
+                                                    <li>
+                                                        <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display: inline;">
+                                                            <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
+                                                        </form>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" class="post_comment" method="post">
-                                            <textarea name="content" type="in" placeholder="대댓글 달기..." class="no-border"></textarea>
+                                        <textarea name="content" type="in" placeholder="대댓글 달기..." class="no-border"></textarea>
                                         <button class="btnPost" type="submit">게시</button>
                                     </form>
                                 </div>
@@ -296,24 +296,23 @@
         });
     </script>
     <script>
-        function openCommentModalWithContent(comment.id, content) {
-            // 모달을 열기 전에 textarea에 현재 댓글 내용을 설정
-            document.getElementById('commentContent_' + comment.id).value = content;
+        function openCommentModalWithContent(commentId) {
             // form action URL을 동적으로 설정
-            document.getElementById('updateForm_' + comment.id).action = '/comment/modify/' + comment.id;
+            document.getElementById('updateForm').action = '/comment/modify/' + commentId;
             // 모달 열기
-            document.getElementById('comment_modal_' + comment.id).showModal();
+            document.getElementById('my_modal_' + commentId).showModal();
         }
 
 
-        function openAnswerModalWithContent(answerId, content) {
-            // 현재 대댓글 내용을 textarea에 설정
-            document.getElementById('answerContent_' + answerId).value = content;
-            // form action URL 동적 설정
-            document.getElementById('updateForm_' + answerId).action = '/answer/modify/' + answerId;
-            // 모달 다이얼로그 열기
-            document.getElementById('answer_modal_' + answerId).showModal();
+        function openAnswerModalWithContent(answerId) {
+            console.log(answerId);
+
+            // form action URL을 동적으로 설정
+            document.getElementById('updateForm').action = '/answer/modify/' + answerId;
+            // 모달 열기
+            document.getElementById('my_modal_' + answerId).showModal();
         }
+
     </script>
 </div>
 </html>
