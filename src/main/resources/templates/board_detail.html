@@ -126,35 +126,35 @@
                                                 </div>
                                                 <ul tabindex="0"
                                                     class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                                                <li>
-                                                    <!-- 대댓글 수정 모달 다이얼로그 -->
-                                                    <button class="" th:onclick="openAnswerModalWithContent([[${answer.id}]]);">수정</button>
-                                                    <dialog th:id="'my_modal_' + ${answer.id}" class="modal modal-bottom sm:modal-middle">
-                                                        <div class="modal-box">
-                                                            <form method="dialog">
-                                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                                            </form>
-                                                            <h3 class="font-bold text-lg">대댓글 수정</h3>
-                                                            <form id="updateForm2" th:action="@{|/answer/modify/${answer.id}|}" method="post">
-                                                                <textarea th:id="'answer-content-' + ${answer.id}" name="content" class="textarea textarea-bordered w-full" th:value="${answer.content}"></textarea>
-                                                                <div class="modal-action">
-                                                                    <button type="submit" class="btn">저장</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </dialog>
-                                                </li>
-                                                <li>
-                                                    <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display: inline;">
-                                                        <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
-                                                    </form>
-                                                </li>
+                                                    <li>
+                                                        <!-- 대댓글 수정 모달 다이얼로그 -->
+                                                        <button class="" th:onclick="openAnswerModalWithContent([[${answer.id}]]);">수정</button>
+                                                        <dialog th:id="'my_modal_' + ${answer.id}" class="modal modal-bottom sm:modal-middle">
+                                                            <div class="modal-box">
+                                                                <form method="dialog">
+                                                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                                </form>
+                                                                <h3 class="font-bold text-lg">대댓글 수정</h3>
+                                                                <form id="updateForm2" th:action="@{|/answer/modify/${answer.id}|}" method="post">
+                                                                    <textarea th:id="'answer-content-' + ${answer.id}" name="content" class="textarea textarea-bordered w-full" th:text="${answer.content}"></textarea>
+                                                                    <div class="modal-action">
+                                                                        <button type="submit" class="btn">저장</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </dialog>
+                                                    </li>
+                                                    <li>
+                                                        <form th:action="@{|/answer/delete/${answer.id}|}" method="post" style="display: inline;">
+                                                            <input type="submit" class="w-full" style="color: red; text-align: left;" value="삭제">
+                                                        </form>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <form th:action="@{|/answer/create/${comment.id}|}" th:object="${answerForm}" class="post_comment" method="post">
-                                            <textarea name="content" type="in" placeholder="대댓글 달기..." class="no-border"></textarea>
+                                        <textarea name="content" type="in" placeholder="대댓글 달기..." class="no-border"></textarea>
                                         <button class="btnPost" type="submit">게시</button>
                                     </form>
                                 </div>

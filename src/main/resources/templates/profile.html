@@ -185,6 +185,7 @@
                 <!-- 프로필 수정 버튼 -->
                 <div class="button-container" th:if="${loggedInMemberId == member.loginId}">
                     <a th:href="@{/modifyProfile}">프로필 수정</a>
+                    <a th:href="@{/board/create}">게시글 작성</a>
                 </div>
             </div>
         </div>
