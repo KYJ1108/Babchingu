@@ -64,6 +64,9 @@ public class MainController {
         if (member.getNickname() == null) {
             return "redirect:/modifyProfile";
         }
+        if(member.getUrl() == null) {
+            return "redirect:/modifyProfile";
+        }
         // 인기 있는 게시물 가져오기 (좋아요 순으로 상위 3개)
         List<Board> popularBoards = mainService.getPopularBoards();
         model.addAttribute("popularBoards", popularBoards);

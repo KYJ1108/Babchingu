@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +32,8 @@ public class Board {
     private String jibun; // 지번 주소
     private String restName;
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Image> images;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
@@ -45,16 +46,10 @@ public class Board {
 
     @ManyToMany
     Set<Member> voter;
+
     @CreatedDate
     @Column(name = "create_date")
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime updateDate;
-
-    @ElementCollection
-    private Set<String> categories = new HashSet<>();
-
-    public int getVoterSize() {
-        return this.voter.size();
-    }
 }

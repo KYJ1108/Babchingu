@@ -27,11 +27,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User user = super.loadUser(userRequest);
 
-        // 계정 -> sub
-        // 비밀번호 -> ""
-        // 닉네임 -> name
-        // email -> email
-
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         MySocialUser mySocialUser;
@@ -56,11 +51,12 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
             memberRepository.save(member);
         }
+        return super.loadUser(userRequest);
 
-        return new DefaultOAuth2User(
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")),
-                user.getAttributes(),
-                "sub");
+//        return new DefaultOAuth2User(
+//                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")),
+//                user.getAttributes(),
+//                "sub");
     }
 
     public MySocialUser googleService(OAuth2User user) {
@@ -79,7 +75,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> kakaoAccount = user.getAttribute("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
         String name = (String) profile.get("nickname");
-
         String email = (String) kakaoAccount.get("email");
 
         return new MySocialUser(sub, pass, name, email);

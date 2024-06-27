@@ -16,5 +16,6 @@ public class ChatMessageDto {
 
     private LocalDateTime createDate;
 
+
     private String loginId;
 }
