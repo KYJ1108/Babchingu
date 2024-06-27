@@ -44,20 +44,15 @@ public class BoardService {
         board.setRestName(restName);
         board.setMember(member);
 
+
         List<Image> imageEntities = new ArrayList<>();
 
         for (MultipartFile image : images) {
-            try {
-                Image img = new Image();
-                img.setBoard(board);
-                String imageUrl = storeImage(image); // 이미지를 저장하고 URL을 반환하는 메서드 호출
-                img.setUrl(imageUrl);
-                imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
-            } catch (Exception e) {
-                // 예외 처리: 이미지 저장 실패 시
-                // 예외 처리 방법에 따라 추가적인 로직을 넣어줄 수 있음
-                e.printStackTrace(); // 예외 내용을 로그로 남기거나 적절히 처리
-            }
+            Image img = new Image();
+            img.setBoard(board);
+            img.setUrl(storeImage(image)); // 이미지를 저장하고 URL을 설정하는 메서드 호출 (아래에서 구현 필요)
+
+            imageEntities.add(img); // 이미지를 이미지 엔티티 리스트에 추가
         }
 
         // Board 엔티티에 이미지 리스트를 설정

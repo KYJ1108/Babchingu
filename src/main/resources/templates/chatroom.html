@@ -76,7 +76,7 @@
 <div>
     <script th:inline="javascript">
         function connect() {
-            var socket = new SockJS("http://babchingu.kro.kr:8080/ws-stomp");
+            var socket = new SockJS("http://localhost:8080/ws-stomp");
             stompClient = Stomp.over(socket);
             const roomId = [[${ chatroom.id }]]
             console.log(roomId);
@@ -109,12 +109,13 @@
         }
 
         function showChat(chatMessageDto) {
+        const time = formatTime(chatMessageDto.sendTime);
             const sender = [[${ user.nickname }]];
             if (chatMessageDto.sender === sender) {
                 $("#greetings").append(
                     "<div class = 'chat chat-end  flex flex-col items-end'>" +
                     "<div class = 'chat-bubble mr-2'>" + chatMessageDto.message + "</div>" +
-                    "<time class='text-xs opacity-50'>" + chatMessageDto.sendTime + "</time>" +
+                    "<time class='text-xs opacity-50'>" + time + "</time>" +
                     "</div>"
                 );
             } else {
@@ -132,7 +133,7 @@
                     "</div>" +
                     "<div class='chat-bubble'>" + chatMessageDto.message + "</div>" +
                     "<div class='chat-footer opacity-50'>" +
-                    "<time class='text-xs opacity-50'>" + chatMessageDto.sendTime + "</time>" +
+                    "<time class='text-xs opacity-50'>" + time + "</time>" +
                     "</div>" +
                     "</div>" +
                     "</div>"
@@ -160,6 +161,26 @@
             // 스크롤을 아래로 이동시킵니다.
             messageContainer.scrollTop = messageContainer.scrollHeight;
         });
+
+
+            function formatTime(sendTime) {
+                const date = new Date(sendTime); // sendTime은 Date 형식으로 파싱 가능해야 합니다.
+
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+
+                // 오전/오후 구분
+                const ampm = hours >= 12 ? '오후' : '오전';
+
+                // 12시간 형식으로 변환
+                const formattedHours = hours % 12 || 12;
+
+                // 분이 한 자리일 경우 두 자리로 포맷
+                const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+                return `${ampm} ${formattedHours}:${formattedMinutes}`;
+            }
+
     </script>
 </div>
 </body>
