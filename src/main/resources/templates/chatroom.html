@@ -76,7 +76,7 @@
 <div>
     <script th:inline="javascript">
         function connect() {
-            var socket = new SockJS("http://localhost:8080/ws-stomp");
+            var socket = new SockJS("http://babchingu.kro.kr:8080/ws-stomp");
             stompClient = Stomp.over(socket);
             const roomId = [[${ chatroom.id }]]
             console.log(roomId);
@@ -164,7 +164,7 @@
 
 
             function formatTime(sendTime) {
-                const date = new Date(sendTime); // sendTime은 Date 형식으로 파싱 가능해야 합니다.
+                const date = new Date(sendTime);
 
                 const hours = date.getHours();
                 const minutes = date.getMinutes();

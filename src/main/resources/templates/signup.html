@@ -15,6 +15,18 @@
             max-width: 680px;
             width: 80%;
             margin: 120px auto;
+            position: relative;
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/sUqMP6O.png') no-repeat center center;
+            background-size: 100%;
+            opacity: 0.3; /* 로고의 투명도 설정 */
+            z-index: -1;
         }
 
         h1{
@@ -256,6 +268,9 @@
 </head>
 <body>
 <div class="container">
+    <!-- 배경 이미지용 div 추가 -->
+    <div class="background"></div>
+
     <!-- Heading -->
     <h1>SIGN UP</h1>
 
