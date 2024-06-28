@@ -1,11 +1,14 @@
 <div class="container">
+    <!-- 배경 이미지용 div 추가 -->
+    <div class="background"></div>
+
     <!-- Heading -->
     <h1>SIGN UP</h1>
 
     <!-- Links -->
     <ul class="links">
         <li>
-            <a th:href="@{/login}">SIGN IN</a>
+            <a th:href="@{/login}">로그인</a>
         </li>
         <li>
             <a th:href="@{/signup}">RESET</a>
@@ -37,28 +40,25 @@
 
 
         <!-- sign in button -->
-        <button class="signup__btn">Sign up</button>
+        <button class="signup__btn">가입하기</button>
     </form>
-    <!-- separator -->
-    <div class="separator">
-        <p>OR</p>
-    </div>
-    <!-- google button -->
-    <!-- google button -->
-    <button class="google__btn">
-        <a class="fa fa-google" href="/oauth2/authorization/google">Sign in with Google</a>
-    </button>
-    <!-- kakao button -->
-    <button class="kakao__btn">
-        <a class="fa fa-kakao" href="/oauth2/authorization/kakao"> Sign in with kakao</a>
-    </button>
-    <!-- naver button -->
-    <button class="naver__btn">
-        <a class="fa fa-naver" href="/oauth2/authorization/naver"> Sign in with naver</a>
-    </button>
 </div>
 
 <style>
+    .container{
+        position: relative;
+    }
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://i.imgur.com/sUqMP6O.png') no-repeat center center;
+        background-size: 100%;
+        opacity: 0.3; /* 로고의 투명도 설정 */
+        z-index: -1;
+    }
     body{
         font-family: 'Montserrat', sans-serif;
         background:white;

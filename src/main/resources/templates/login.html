@@ -1,4 +1,7 @@
 <div class="container">
+    <!-- 배경 이미지용 div 추가 -->
+    <div class="background"></div>
+
     <!-- Heading -->
     <h1>SIGN IN</h1>
 
@@ -40,10 +43,6 @@
     <button class="google__btn">
         <a class="fa fa-google" href="/oauth2/authorization/google">Sign in with Google</a>
     </button>
-    <!-- kakao button -->
-    <button class="kakao__btn">
-        <a class="fa fa-kakao" href="/oauth2/authorization/kakao"> Sign in with kakao</a>
-    </button>
 </div>
 
 
@@ -58,6 +57,19 @@
         max-width:680px;
         width:80%;
         margin:120px auto;
+        position: relative;
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://i.imgur.com/sUqMP6O.png') no-repeat center center;
+        background-size: 100%;
+        opacity: 0.3; /* 로고의 투명도 설정 */
+        z-index: -1;
     }
 
     h1{
@@ -231,9 +243,7 @@
         }
     }
 
-    .google__btn,
-    .kakao__btn,
-    .naver__btn{
+    .google__btn{
         display:block;
         width:90%;
         max-width:680px;
@@ -246,7 +256,7 @@
         border:none;
         line-height:40px;
         &.google__btn {
-            background: #5b90f0;
+            background: #0f132a;
             color: white;
             box-shadow: 0 15px 30px rgba(#5b90f0, .36);
             transition: .2s linear;
@@ -259,36 +269,6 @@
             }
             &:hover {
                 box-shadow: 0 0 0 rgba(#5b90f0, .0);
-            }
-        }
-        &.kakao__btn {
-            background: #f2e858;
-            color: white;
-            box-shadow: 0 15px 30px rgba(#25282d, .36);
-            transition: .2s linear;
-            a {
-                font-size: 20px;
-                padding: 0 5px 0 0;
-                color: gray;
-                text-decoration: none;
-            }
-            &:hover {
-                box-shadow: 0 0 0 rgba(#25282d, .0);
-            }
-        }
-        &.naver__btn {
-            background: #03C75A;
-            color: white;
-            box-shadow: 0 15px 30px rgba(#25282d, .36);
-            transition: .2s linear;
-            a {
-                font-size: 20px;
-                padding: 0 5px 0 0;
-                color: white;
-                text-decoration: none;
-            }
-            &:hover {
-                box-shadow: 0 0 0 rgba(#02B155;, .0);
             }
         }
     }
