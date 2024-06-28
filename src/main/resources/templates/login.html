@@ -8,13 +8,13 @@
     <!-- Links -->
     <ul class="links">
         <li>
-            <a th:href="@{/signup}">SIGN UP</a>
+            <a th:href="@{/signup}">회원가입</a>
         </li>
         <li>
-            <a th:href="@{/login}">RESET</a>
+            <a th:href="@{/login}">초기화</a>
         </li>
         <li>
-            <a th:href="@{/findPw}">FIND PW</a>
+            <a th:href="@{/findPw}">비밀번호 찾기</a>
         </li>
     </ul>
 
@@ -27,12 +27,13 @@
         <!-- password input -->
         <div class="input__block">
             <input type="password" placeholder="Password" class="input" name="password" id="password" />
+            <!-- Toggle password visibility icon -->
+            <span class="eyes" onclick="togglePasswordVisibility()">👀</span>
             <!-- 로그인이 올바르지 않을 경우 메시지 -->
             <p th:if="${param.error}" class="error-message">로그인에 실패하였습니다.</p>
-
         </div>
         <!-- sign in button -->
-        <button class="signin__btn" sec:authorize="isAnonymous()">Sign in</button>
+        <button class="signin__btn" sec:authorize="isAnonymous()">로그인</button>
     </form>
     <!-- separator -->
     <div class="separator">
@@ -47,9 +48,9 @@
 
 
 <style>
-    body{
+    body {
         font-family: 'Montserrat', sans-serif;
-        background:white;
+        background: white;
     }
 
     .container{
@@ -72,234 +73,216 @@
         z-index: -1;
     }
 
-    h1{
-        color:#e91e63;
-        font-size:48px;
-        letter-spacing:-3px;
-        text-align:center;
-        margin:120px 0 80px 0 ;
-        transition:.2s linear;
+    h1 {
+        color: #e91e63;
+        font-size: 48px;
+        letter-spacing: -3px;
+        text-align: center;
+        margin: 120px 0 80px 0;
+        transition: .2s linear;
     }
 
-    .links{
-        list-style-type:none;
-        li{
-            display:inline-block;
-            margin:0 20px 0 0;
-            transition:.2s linear;
-            &:nth-child(2){
-                opacity : .6;
-                &:hover{
-                    opacity : 1;
-                }
-            }
-            &:nth-child(3){
-                opacity : .6;
-                float:right;
-                &:hover{
-                    opacity : 1;
-                }
-            }
-            a{
-                text-decoration:none;
-                color:#0f132a;
-                font-weight:bolder;
-                text-align:center;
-                cursor : pointer;
-            }
-        }
-    }
-    .links2{
-        list-style-type:none;
-        li{
-            display:inline-block;
-            margin:0 20px 0 0;
-            transition:.2s linear;
-            a{
-                text-decoration:none;
-                color:#0f132a;
-                font-weight:bolder;
-                text-align:center;
-                cursor : pointer;
-            }
-        }
+    .links {
+        list-style-type: none;
     }
 
-    form{
-        width:100%;
-        max-width:680px;
-        margin:40px auto 10px;
-        .input__block{
-            margin:20px auto;
-            display:block;
-            position:relative;
-            &.first-input__block{
-                &::before{
-                    content:"";
-                    position:absolute;
-                    top:-15px;
-                    left:50px;
-                    display:block;
-                    width:0;
-                    height:0;
-                    background:transparent;
-                    border-left:15px solid transparent;
-                    border-right:15px solid transparent;
-                    border-bottom:15px solid rgba(#0f132a,.1);
-                    transition:.2s linear;
-                }
-            }
-            &.signin-input__block{
-                &::before{
-                    content:"";
-                    position:absolute;
-                    top:-15px;
-                    left:150px;
-                display:block;
-                    width:0;
-                    height:0;
-                    background:transparent;
-                    border-left:15px solid transparent;
-                    border-right:15px solid transparent;
-                    border-bottom:15px solid rgba(#0f132a,.1);
-                    transition:.2s linear;
-                }
-            }
-            input{
-                display:block;
-                width:90%;
-                max-width:680px;
-                height:50px;
-                margin:0 auto;
-                border-radius:8px;
-                border:none;
-                background: rgba(#0f132a,.1);
-                color : rgba(#0f132a,.3);
-                padding:0 0 0 15px;
-                font-size:14px;
-                font-family: 'Montserrat', sans-serif;
-                &:focus,
-                &:active{
-                    outline:none;
-                    border:none;
-                    color : rgba(#0f132a,1);
-                }
-                &.repeat__password{
-                    opacity : 0;
-                    display : none;
-                    transition:.2s linear;
-                }
-            }
-        }
-        .signin__btn{
-            background:#e91e63;
-            color:white;
-            display:block;
-            width:92.5%;
-            max-width:680px;
-            height:50px;
-            border-radius:8px;
-            margin:0 auto;
-            border:none;
-            cursor:pointer;
-            font-size:14px;
-            font-family: 'Montserrat', sans-serif;
-            box-shadow:0 15px 30px rgba(#e91e63,.36);
-            transition:.2s linear;
-            &:hover{
-                box-shadow:0 0 0 rgba(#e91e63,.0);
-            }
-        }
+    .links li {
+        display: inline-block;
+        margin: 0 20px 0 0;
+        transition: .2s linear;
     }
 
-    .separator{
-        display:block;
-        margin:30px auto 10px;
-        text-align:center;
-        height:40px;
-        position:relative;
-        background:transparent;
-        color: rgba(#0f132a,.4);
-        font-size:13px;
-        width:90%;
-        max-width:680px;
-        &::before{
-            content:"";
-            position:absolute;
-            top:8px;
-            left:0;
-            background: rgba(#0f132a,.2);
-            height:1px;
-            width:45%;
-        }
-        &::after{
-            content:"";
-            position:absolute;
-            top:8px;
-            right:0;
-            background: rgba(#0f132a,.2);
-            height:1px;
-            width:45%;
-        }
+    .links li:nth-child(2) {
+        opacity: .6;
     }
 
-    .google__btn{
-        display:block;
-        width:90%;
-        max-width:680px;
-        margin:20px auto;
-        height:50px;
-        cursor:pointer;
-        font-size:14px;
+    .links li:nth-child(2):hover {
+        opacity: 1;
+    }
+
+    .links li:nth-child(3) {
+        opacity: .6;
+        float: right;
+    }
+
+    .links li:nth-child(3):hover {
+        opacity: 1;
+    }
+
+    .links a {
+        text-decoration: none;
+        color: #0f132a;
+        font-weight: bolder;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    form {
+        width: 100%;
+        max-width: 680px;
+        margin: 40px auto 10px;
+    }
+
+    .input__block {
+        margin: 20px auto;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .input__block.first-input__block::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 50px;
+        display: block;
+        width: 0;
+        height: 0;
+        background: transparent;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 15px solid rgba(15, 19, 42, .1);
+        transition: .2s linear;
+    }
+
+    .input__block.signin-input__block::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 150px;
+        display: block;
+        width: 0;
+        height: 0;
+        background: transparent;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 15px solid rgba(15, 19, 42, .1);
+        transition: .2s linear;
+    }
+
+    .input__block input {
+        display: block;
+        width: calc(100% - 40px);
+        height: 50px;
+        margin: 0 auto;
+        border-radius: 8px;
+        border: none;
+        background: rgba(15, 19, 42, .1);
+        color: rgba(15, 19, 42, 1); /* 텍스트 색상을 항상 검정색으로 설정 */
+        padding: 0 15px;
+        font-size: 14px;
         font-family: 'Montserrat', sans-serif;
-        border-radius:8px;
-        border:none;
-        line-height:40px;
-        &.google__btn {
-            background: #0f132a;
-            color: white;
-            box-shadow: 0 15px 30px rgba(#5b90f0, .36);
-            transition: .2s linear;
-            text-decoration: none;
-            a {
-                font-size: 20px;
-                padding: 0 5px 0 0;
-                color: white;
-                text-decoration: none;
-            }
-            &:hover {
-                box-shadow: 0 0 0 rgba(#5b90f0, .0);
-            }
-        }
     }
 
+    .input__block input:focus,
+    .input__block input:active {
+        outline: none;
+        border: none;
+        color: rgba(15, 19, 42, 1); /* 포커스 상태에서도 검정색 유지 */
+    }
 
-    footer{
-        p{
-        text-align:center;
-            .fa{
-                color: #e91e63;
-                }
-            a{
-                text-decoration:none;
-                font-size:17px;
-                margin:0 5px;
-                .fa-facebook{
-                    color:#3b5998;
-                }
-                .fa-twitter{
-                    color:#1da1f2;
-                }
-                .fa-instagram{
-                    color:#f77737;
-                }
-                .fa-linkedin{
-                    color:#0077b5;
-                }
-                .fa-behance{
-                    color:#1769ff;
-                }
-            }
-        }
-   }
+    .input__block .eyes {
+        position: absolute;
+        right: 15px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .signin__btn {
+        background: #e91e63;
+        color: white;
+        display: block;
+        width: 92.5%;
+        max-width: 680px;
+        height: 50px;
+        border-radius: 8px;
+        margin: 0 auto;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        box-shadow: 0 15px 30px rgba(233, 30, 99, .36);
+        transition: .2s linear;
+    }
+
+    .signin__btn:hover {
+        box-shadow: 0 0 0 rgba(233, 30, 99, 0);
+    }
+
+    .separator {
+        display: block;
+        margin: 30px auto 10px;
+        text-align: center;
+        height: 40px;
+        position: relative;
+        background: transparent;
+        color: rgba(15, 19, 42, .4);
+        font-size: 13px;
+        width: 90%;
+        max-width: 680px;
+    }
+
+    .separator::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 0;
+        background: rgba(15, 19, 42, .2);
+        height: 1px;
+        width: 45%;
+    }
+
+    .separator::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        right: 0;
+        background: rgba(15, 19, 42, .2);
+        height: 1px;
+        width: 45%;
+    }
+
+    .google__btn {
+        display: block;
+        width: 90%;
+        max-width: 680px;
+        margin: 20px auto;
+        height: 50px;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 8px;
+        border: none;
+        line-height: 40px;
+    }
+
+    .google__btn.google__btn {
+        background: #5b90f0;
+        color: white;
+        box-shadow: 0 15px 30px rgba(91, 144, 240, .36);
+        transition: .2s linear;
+        text-decoration: none;
+    }
+
+    .google__btn.google__btn a {
+        font-size: 20px;
+        padding: 0 5px 0 0;
+        color: white;
+        text-decoration: none;
+    }
+
+    .google__btn.google__btn:hover {
+        box-shadow: 0 0 0 rgba(91, 144, 240, 0);
+    }
+
 </style>
+<script>
+    function togglePasswordVisibility() {
+    var passwordInput = document.getElementById('password');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+    } else {
+        passwordInput.type = 'password';
+    }
+}
+</script>
